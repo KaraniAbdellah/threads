@@ -1,8 +1,13 @@
 import express from "express";
 import mongoose from "mongoose";
 import 'dotenv/config';
+import authRouter from "./routes/auth.routes.js";
 
 const server = express();
+server.use(express());
+server.use("/api/auth", authRouter);
+
+
 
 
 server.listen(process.env.PORT, (err) => {
