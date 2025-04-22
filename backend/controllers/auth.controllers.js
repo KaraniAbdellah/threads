@@ -1,8 +1,16 @@
 import express from "express";
 import mongoose from "mongoose";
 
-const auth = async (req, res) => {
-    res.json("Hello Auth");
-}
+const signup = async (req, res) => {
+  res.json("Hello signup");
+};
 
-export {auth};
+const logout = async (req, res) => {
+  res.json("Hello LogOut");
+};
+
+const login = async (req, res) => {
+  res.json("Hello Login");
+};
+
+export { signup, logout, login };
