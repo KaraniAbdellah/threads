@@ -3,22 +3,48 @@ import mongoose, { mongo } from "mongoose";
 const UserSchema = new mongoose.Schema({
     user_name: {
         type: String,
-        required: [true, "user name required"]
+        required: [true, "user name required"],
+        unique: false
     },
     email: {
         type: String,
-        required: [true, "email required"]
+        required: [true, "email required"],
+        unique: true,   
     },
     password: {
-        type: Number,
-        required: [true, "password required"]
+        type: String,
+        required: [true, "password required"],
+        minlength: 6,
     },
-    posts: {
-        // type: Object.getPrototypeOf(),
-        required: [true, "posts required"]
-    }
-});
 
-const UserModel = mongoose.model("user", UserSchema);
+    profileImage: {
+        type: String,
+        required: [false, "profileImage required"],
+        default: ""
+    },
+    coverImage: {
+        type: String,
+        required: [false, "coverImage required"],
+        default: ""
+    },
+    
+    followers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            default: [] // 0 followers
+        }
+    ],
+    following: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            default: [] // 0 followers
+        }
+    ],
+
+}, {timestamps: true});
+
+const UserModel = mongoose.model("User", UserSchema);
 
 export default UserModel;

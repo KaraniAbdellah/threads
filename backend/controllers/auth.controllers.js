@@ -1,16 +1,103 @@
 import express from "express";
 import mongoose from "mongoose";
+import UserModel from "../models/User.js";
+import bcrypt, { hash } from "bcrypt";
+import generateCookie from "../lib/utils/generateCookie.js";
 
 const signup = async (req, res) => {
-  res.json("Hello signup");
+  console.log("Request Come From Postman");
+  try {
+    console.log(req.body);
+    const { email, password, user_name } = req.body;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // Please enter a valid email address (e.g. example@domain.com)
+    if (!emailRegex.test(email) || !user_name || !password || password < 6) {
+      res.status(400).send({ message: "All Filieds Required" });
+      return;
+    }
+
+    const exiting_user = await UserModel.findOne({ email: email });
+    if (exiting_user) {
+      res.status(400).send({ message: exiting_user });
+      return;
+    }
+
+    // hash password
+    const slatNumber = await bcrypt.genSalt(10);
+    const hashed_password = await bcrypt.hash(password, slatNumber);
+    if (!hashed_password) {
+      res.status(400).send({ message: "Can Not Hash The Password" });
+    }
+
+    // Create new user
+    const new_user = new UserModel({
+      user_name: user_name,
+      email: email,
+      password: hashed_password,
+    });
+    console.log(new_user);
+
+    if (new_user) {
+      generateCookie(new_user._id, res);
+      await UserModel.create(new_user);
+      res.status(201).send({
+        user_name: new_user.user_name,
+        email: new_user.email,
+        profileImage: new_user.profileImage,
+        coverImage: new_user.coverImage,
+        followers: new_user.followers,
+        following: new_user.following,
+      });
+      return;
+    } else {
+      res.status(400).send({ message: "Can Not Create User" });
+      return;
+    }
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send({ message: error.message });
+  }
 };
 
 const logout = async (req, res) => {
-  res.json("Hello LogOut");
+  try {
+    res.cookie("jwt", "", { maxAge: 0 });
+    res.status(200).send({ message: "Log Out Succeffully" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send({ message: error.message });
+  }
 };
 
 const login = async (req, res) => {
-  res.json("Hello Login");
+  console.log("request come to login");
+  try {
+    const { email, password } = req.body;
+    const user = await UserModel.findOne({ email: email });
+    const is_password_correct = await bcrypt.compare(
+      password,
+      user?.password || ""
+    );
+    if (!user || !is_password_correct) {
+      res.status(400).send({ message: "Wrong Credential" });
+      return;
+    }
+    generateCookie(user._id, res);
+    res.status(200).send(user);
+    return;
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send({ message: error.message });
+  }
 };
 
-export { signup, logout, login };
+const get_me = async (req, res) => {
+  try {
+    return res.status(200).send(req.user);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send({ message: error.message });
+  }
+}
+
+export { signup, logout, login, get_me };
