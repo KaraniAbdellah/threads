@@ -11,7 +11,7 @@ const signup = async (req, res) => {
     const { email, password, user_name } = req.body;
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     // Please enter a valid email address (e.g. example@domain.com)
-    if (!emailRegex.test(email) || !user_name || !password || password < 6) {
+    if (!emailRegex.test(email) || !user_name || !password || password.length < 6) {
       res.status(400).send({ message: "All Filieds Required" });
       return;
     }
