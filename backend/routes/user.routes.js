@@ -8,7 +8,7 @@ import {
 } from "../controllers/user.controllers.js";
 
 const userRouter = express.Router();
-userRouter.get("/profile/:username", protect_middlware, get_user_profile);
+userRouter.get("/profile/:user_id", protect_middlware, get_user_profile);
 userRouter.get("/suggested", protect_middlware, get_suggested_users);
 userRouter.get("/follow/:id", protect_middlware, follow_unfollow);
 userRouter.get("/profile/:username", protect_middlware, update_user_profile);

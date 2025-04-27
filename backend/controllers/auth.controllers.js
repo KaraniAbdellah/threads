@@ -18,7 +18,7 @@ const signup = async (req, res) => {
 
     const exiting_user = await UserModel.findOne({ email: email });
     if (exiting_user) {
-      res.status(400).send({ message: exiting_user });
+      res.status(400).send({ message: "User Already Exit" });
       return;
     }
 

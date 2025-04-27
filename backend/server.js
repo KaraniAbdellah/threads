@@ -10,7 +10,7 @@ const server = express();
 server.use(express.json());
 server.use(cookieParser());
 server.use("/api/auth", authRouter);
-server.use("/api/users", userRouter);
+server.use("/api/user", userRouter);
 
 
 
