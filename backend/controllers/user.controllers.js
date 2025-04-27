@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import UserModel from "../models/User.js";
+import NotificationModel from "../models/Notification.js";
 import bcrypt, { hash } from "bcrypt";
 
 
@@ -27,7 +28,7 @@ const follow_unfollow = async (req, res) => {
         const id = req.params.id;
         const user_to_modify = await UserModel.findById(id);
         const current_user = await UserModel.findById(req.user._id);
-        if (id == req.user._id) return res.status(400).send({error: "You Can Follow or Unfollow Yourself"});
+        if (id == req.user._id.toString()) return res.status(400).send({error: "You Can Follow or Unfollow Yourself"});
         
         if (!current_user || !user_to_modify) res.status(400).send({error: "Can Not Find Users"});
 
@@ -36,17 +37,22 @@ const follow_unfollow = async (req, res) => {
             // Unfollow User
             await UserModel.findByIdAndUpdate(id, {$pull: {followers: req.user._id}});
             await UserModel.findByIdAndUpdate(req.user._id, {$pull: {following: id}});
-            res.status(200).send({message: "Unfollow Succefully"});
+            return res.status(200).send({user_id: user_to_modify._id});
         } else {
             // Follow User
             await UserModel.findByIdAndUpdate(id, {$push: {followers: req.user._id}});
             await UserModel.findByIdAndUpdate(req.user._id, {$push: {following: id}});
             // Send Notification To User
-            res.status(200).send({message: "follow Succefully"});
+            const new_notification = new NotificationModel({
+                from: req.user_id,
+                to: user_to_modify._id,
+            });
+            await new_notification.create();
+            return res.status(200).send({user_id: user_to_modify._id});
         }
     } catch (error) {
         console.error(error.message);
-        res.status(500).send({error: error.message});
+        return res.status(500).send({error: error.message});
     }
 }
 const update_user_profile = async (req, res) => {
