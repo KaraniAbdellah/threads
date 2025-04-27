@@ -37,18 +37,28 @@ const follow_unfollow = async (req, res) => {
             // Unfollow User
             await UserModel.findByIdAndUpdate(id, {$pull: {followers: req.user._id}});
             await UserModel.findByIdAndUpdate(req.user._id, {$pull: {following: id}});
-            return res.status(200).send({user_id: user_to_modify._id});
+            // We Should Be Remove Notification
+            // const to_delete_notification = await NotificationModel.findOne({
+            //     from: req.user._id,
+            //     to: user_to_modify._id,
+            //     type: 'follow',
+            // })
+            // console.log(to_delete_notification);
+            // await NotificationModel.findByIdAndDelete(to_delete_notification._id);
+
+            return res.status(200).send({user_id: user_to_modify._id, message: "Unfollow User"});
         } else {
             // Follow User
             await UserModel.findByIdAndUpdate(id, {$push: {followers: req.user._id}});
             await UserModel.findByIdAndUpdate(req.user._id, {$push: {following: id}});
             // Send Notification To User
             const new_notification = new NotificationModel({
-                from: req.user_id,
+                from: req.user._id,
                 to: user_to_modify._id,
+                type: "follow"
             });
-            await new_notification.create();
-            return res.status(200).send({user_id: user_to_modify._id});
+            await new_notification.save();
+            return res.status(200).send({user_id: user_to_modify._id, message: "Follow User"});
         }
     } catch (error) {
         console.error(error.message);
