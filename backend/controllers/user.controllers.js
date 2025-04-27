@@ -18,7 +18,16 @@ const get_user_profile = async (req, res) => {
 }
 const get_suggested_users = async (req, res) => {
     try {
-        
+        const userId = req.user._id;
+        const following_users = await UserModel.findById(userId).select("following");
+        console.log(following_users);
+
+        const users = await UserModel.aggregate([
+            {$match: {_id: {$ne: userId}}},
+            {$simple: {size: 10}}
+        ]);
+        const filtred_users = users.filter((user) => !following_users.includes(user._id));
+
     } catch (error) {
         
     }
