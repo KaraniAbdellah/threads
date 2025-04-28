@@ -1,8 +1,11 @@
 import express from "express";
 import mongoose from "mongoose";
 import "dotenv/config";
+
 import authRouter from "./routes/auth.routes.js";
 import userRouter from "./routes/user.routes.js";
+import postRouter from "./routes/post.routes.js";
+
 import { connectDb } from "./config/db.js";
 import cookieParser from "cookie-parser";
 import {v2 as cloudinary} from "cloudinary";
@@ -19,6 +22,7 @@ server.use(express.json());
 server.use(cookieParser());
 server.use("/api/auth", authRouter);
 server.use("/api/user", userRouter);
+server.use("/api/post", );
 
 
 
