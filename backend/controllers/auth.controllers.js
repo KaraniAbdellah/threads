@@ -43,8 +43,8 @@ const signup = async (req, res) => {
       res.status(201).send({
         user_name: new_user.user_name,
         email: new_user.email,
-        profileImage: new_user.profileImage,
-        coverImage: new_user.coverImage,
+        profile_image: new_user.profile_image,
+        cover_image: new_user.cover_image,
         followers: new_user.followers,
         following: new_user.following,
       });

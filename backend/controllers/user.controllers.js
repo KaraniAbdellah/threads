@@ -1,8 +1,11 @@
 import express from "express";
 import mongoose from "mongoose";
+import {v2 as cloudinary} from "cloudinary";
+
+
+import bcrypt, { hash } from "bcrypt";
 import UserModel from "../models/User.js";
 import NotificationModel from "../models/Notification.js";
-import bcrypt, { hash } from "bcrypt";
 
 
 const get_user_profile = async (req, res) => {
@@ -16,22 +19,26 @@ const get_user_profile = async (req, res) => {
         res.status(500).send({error: error.message});
     }
 }
+
 const get_suggested_users = async (req, res) => {
     try {
         const userId = req.user._id;
         const following_users = await UserModel.findById(userId).select("following");
-        console.log(following_users);
 
         const users = await UserModel.aggregate([
             {$match: {_id: {$ne: userId}}},
-            {$simple: {size: 10}}
+            {$sample: {size: 10}}
         ]);
-        const filtred_users = users.filter((user) => !following_users.includes(user._id));
-
+        const filtred_users = users.filter((user) => !following_users.following.includes(user._id));
+        const suggested_users = filtred_users.slice(0, 4);
+        suggested_users.forEach((user) => user.password = null);
+        res.status(200).send(suggested_users);
     } catch (error) {
-        
+        console.error(error.message);
+        res.status(500).send({error: error.message});
     }
 }
+
 const follow_unfollow = async (req, res) => {
     try {
         const id = req.params.id;
@@ -74,9 +81,50 @@ const follow_unfollow = async (req, res) => {
         return res.status(500).send({error: error.message});
     }
 }
+
 const update_user_profile = async (req, res) => {
     try {
-        // const 
+        const user = await UserModel.findByIdAndUpdate(req.params.user_id,req.body);
+        if (!user) return res.status(400).send({message: "User Not Found"});
+
+        const {user_name, email, new_password, current_password, bio, link} = req.body;
+        let {profile_image, cover_image} = req.body;
+
+        if (!new_password || !current_password || !user_name || !email || !new_password.length < 6) {
+            return res.status(400).send({message: "All Filieds Required"});
+        }
+        
+        const is_match = await bcrypt.compare(current_password, user.password);
+        if (!is_match) return res.status(400).send({message: "The Current Password does Not Correct"});
+
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(new_password, salt);
+
+        if (profile_image) {
+            if (user.profile_image) {
+                await cloudinary.uploader.destroy(user.profile_image.split("/").pop().split(".")[0]);
+            }
+            const uploaded_res_profile = await cloudinary.uploader.upload(profile_image);
+            user.profile_image = uploaded_res_profile.secure_url;
+        }
+
+        if (cover_image) {
+            if (user.cover_image) {
+                await cloudinary.uploader.destroy(user.cover_image.split("/").pop().split(".")[0]);
+            }
+            const uploaded_res_cover = await cloudinary.uploader.upload(cover_image);
+            user.cover_image = uploaded_res_cover.secure_url;
+        }
+
+        user.user_name = user_name || user.user_name;
+        user.email = email || user.email;
+        user.bio = bio || user.bio;
+        user.link = link || user.link;
+
+        user = await user.save();
+        user.password = null;
+        return res.status(200).send(user);
+ 
     } catch (error) {
         
     }

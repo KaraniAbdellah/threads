@@ -17,14 +17,14 @@ const UserSchema = new mongoose.Schema({
         minlength: 6,
     },
 
-    profileImage: {
+    profile_image: {
         type: String,
-        required: [false, "profileImage required"],
+        required: [false, "profile_image required"],
         default: ""
     },
-    coverImage: {
+    cover_image: {
         type: String,
-        required: [false, "coverImage required"],
+        required: [false, "cover_image required"],
         default: ""
     },
     

@@ -5,6 +5,14 @@ import authRouter from "./routes/auth.routes.js";
 import userRouter from "./routes/user.routes.js";
 import { connectDb } from "./config/db.js";
 import cookieParser from "cookie-parser";
+import {v2 as cloudinary} from "cloudinary";
+
+
+cloudinary.config({
+    could_name: process.env.COULDNIARY_COULD,
+    api_key: process.env.COULDINARY_API_KEY,
+    api_secret: process.env.COULDINARY_API_SCRET_KEY,
+});
 
 const server = express();
 server.use(express.json());
