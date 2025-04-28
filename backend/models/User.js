@@ -19,15 +19,26 @@ const UserSchema = new mongoose.Schema({
 
     profile_image: {
         type: String,
-        required: [false, "profile_image required"],
+        required: [false, "profile_image is not required"],
         default: ""
     },
     cover_image: {
         type: String,
-        required: [false, "cover_image required"],
+        required: [false, "cover_image is not required"],
         default: ""
     },
-    
+
+    bio: {
+        type: String,
+        required: [false, "bio is not required"],
+        default: ""
+    },
+    link: {
+        type: String,
+        required: [false, "bio is not required"],
+        default: ""
+    },
+
     followers: [
         {
             type: mongoose.Schema.Types.ObjectId,

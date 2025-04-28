@@ -84,16 +84,23 @@ const follow_unfollow = async (req, res) => {
 
 const update_user_profile = async (req, res) => {
     try {
-        const user = await UserModel.findByIdAndUpdate(req.params.user_id,req.body);
+        const user = await UserModel.findById(req.params.user_id);
         if (!user) return res.status(400).send({message: "User Not Found"});
 
         const {user_name, email, new_password, current_password, bio, link} = req.body;
         let {profile_image, cover_image} = req.body;
 
-        if (!new_password || !current_password || !user_name || !email || !new_password.length < 6) {
+        if (!new_password || !current_password || !user_name || !email || new_password.length < 6) {
+            console.log("Some Inputs Nedded");
             return res.status(400).send({message: "All Filieds Required"});
         }
-        
+
+        // Check If The Email Already Exit
+        const is_match_by_email = await UserModel.findOne({email: email});
+        if (is_match_by_email) {
+            return res.status(400).send({message: "Email Already Exit"});
+        }
+
         const is_match = await bcrypt.compare(current_password, user.password);
         if (!is_match) return res.status(400).send({message: "The Current Password does Not Correct"});
 
@@ -121,9 +128,9 @@ const update_user_profile = async (req, res) => {
         user.bio = bio || user.bio;
         user.link = link || user.link;
 
-        user = await user.save();
-        user.password = null;
-        return res.status(200).send(user);
+        const updated_user = await UserModel.findByIdAndUpdate(user._id, user);
+        updated_user.password = null;
+        return res.status(200).send(updated_user);
  
     } catch (error) {
         
