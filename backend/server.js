@@ -22,7 +22,7 @@ server.use(express.json());
 server.use(cookieParser());
 server.use("/api/auth", authRouter);
 server.use("/api/user", userRouter);
-server.use("/api/post", );
+server.use("/api/post", postRouter);
 
 
 

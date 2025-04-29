@@ -12,7 +12,7 @@ const signup = async (req, res) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     // Please enter a valid email address (e.g. example@domain.com)
     if (!emailRegex.test(email) || !user_name || !password || password.length < 6) {
-      res.status(400).send({ message: "All Filieds Required" });
+      res.status(400).send({ message: "All Filieds Required and Password Should Be Al Least 6 Character" });
       return;
     }
 
