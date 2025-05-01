@@ -4,6 +4,7 @@ import UserModel from "../models/User.js";
 import PostModel from "../models/Post.js";
 import {v2 as cloudinary} from "cloudinary";
 
+
 const create_post = async (req, res) => {
   try {
     const text = req.body.post_text;
@@ -32,7 +33,7 @@ const create_post = async (req, res) => {
     res.status(200).send(new_post);
   } catch (error) {
     console.log(error.message);
-    res.status(400).send({message: error.message});
+    res.status(500).send({message: error.message});
   }
 };
 
@@ -44,14 +45,52 @@ const like_unlike_post = (req, res) => {
   }
 };
 
-const comment_post = (req, res) => {
+const comment_post = async (req, res) => {
   try {
-  } catch (error) {}
+    const {text, post_id} = req.body;
+    const {user_id} = req.user._id;
+
+    if (!text) return res.status(400).send({message: "Text Filied Is Required"});
+    const post = await PostModel.findById(req.params.post_id);
+
+    if (!post) {
+      return res.status(400).send({message: "Can Not Find This Post"});
+    }
+  
+    const comment = {
+      text: text,
+      user: user_id,
+    }
+    post.post_comments.push(comment);
+    
+    await PostModel.findByIdAndUpdate(post_id, {post_comments: post.post_comments}); 
+    return res.status(200).send(post);
+
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({message: error.message});
+  }
 };
 
-const delete_post = (req, res) => {
+const delete_post = async (req, res) => {
   try {
-  } catch (error) {}
+    const post = await PostModel.findById(req.params.post_id);
+    if (!post) {
+      return res.status(400).send({message: "Can Not Find This Post"});
+    }
+
+    if (post.img) {
+      const img_id = post.img.split("/").split(".")[0];
+      await cloudinary.uploader.destroy(img_id);
+    }
+
+    await PostModel.findByIdAndDelete(req.params.post_id);
+    return res.status(200).send(post);
+
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({message: error.message});
+  }
 };
 
 export { create_post, like_unlike_post, comment_post, delete_post };
