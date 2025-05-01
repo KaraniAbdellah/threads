@@ -10,11 +10,14 @@ import { connectDb } from "./config/db.js";
 import cookieParser from "cookie-parser";
 import {v2 as cloudinary} from "cloudinary";
 
+// import cloudinary from "cloudinary";
+// cloudinary.v2.config({...});
 
 cloudinary.config({
     could_name: process.env.COULDNIARY_COULD,
     api_key: process.env.COULDINARY_API_KEY,
     api_secret: process.env.COULDINARY_API_SCRET_KEY,
+    // secure: true
 });
 
 const server = express();
