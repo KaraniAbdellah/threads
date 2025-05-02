@@ -122,7 +122,17 @@ const delete_post = async (req, res) => {
 
 const get_all_posts = async (req, res) => {
   try {
-    const posts = await PostModel.find().sort({createdAt: -1});
+    const posts = await PostModel.find()
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "user",
+        select: "-password",
+      })
+      .populate({
+        path: "comments.user",
+        select: "-password",
+      });
+
     if (posts.length === 0) return res.status(200).send([]);
     res.status(200).json(posts);
   } catch (error) {
