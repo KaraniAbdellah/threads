@@ -54,15 +54,28 @@ const like_unlike_post = async (req, res) => {
           $pull: { likes: user_id },
         }
       );
+      await UserModel.updateOne(
+        { _id: user_id },
+        {
+          $pull: { liked_posts: post_id },
+        }
+      );
       res.status(200).send({ message: "Post UnLiked Succefully" });
     } else {
       post.likes.push(user_id);
+      await UserModel.updateOne(
+        { _id: user_id },
+        {
+          $push: { liked_posts: post_id },
+        }
+      );
       await post.save();
       const new_notification = new NotificationModel({
         from: user_id,
         to: post.user,
         type: "like",
       });
+      await new_notification.save();
       res.status(200).send({ message: "Post Liked Succeffully" });
     }
   } catch (error) {
@@ -141,10 +154,41 @@ const get_all_posts = async (req, res) => {
   }
 };
 
+const get_liked_posts = async (req, res) => {
+  try {
+    const user_id = req.params.user_id;
+    const user = await UserModel.findById(user_id);
+    if (!user) return res.status(200).send({message: "Can Not Found User"});
+    const liked_posts = await PostModel.find({_id: {$in: user.liked_posts}}).populate({
+      path: "user",
+      select: "-password"
+    }).populate({
+      path: "comments.user",
+      select: "-password"
+    });
+    return res.status(200).send(liked_posts);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+}
+
+const get_followers_posts = async (req, res) => {
+  try {
+    
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+}
+
+
 export {
   create_post,
   like_unlike_post,
   comment_post,
   delete_post,
   get_all_posts,
+  get_liked_posts,
+  get_followers_posts
 };
