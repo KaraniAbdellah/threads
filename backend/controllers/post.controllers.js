@@ -2,8 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import UserModel from "../models/User.js";
 import PostModel from "../models/Post.js";
-import {v2 as cloudinary} from "cloudinary";
-
+import NotificationModel from "../models/Notification.js";
+import { v2 as cloudinary } from "cloudinary";
 
 const create_post = async (req, res) => {
   try {
@@ -33,42 +33,70 @@ const create_post = async (req, res) => {
     res.status(200).send(new_post);
   } catch (error) {
     console.log(error.message);
-    res.status(500).send({message: error.message});
+    res.status(500).send({ message: error.message });
   }
 };
 
-const like_unlike_post = (req, res) => {
+const like_unlike_post = async (req, res) => {
   try {
+    const user_id = req.user._id;
+    const post_id = req.params.post_id;
+    const post = await PostModel.findById(post_id);
+    if (!post) {
+      return res.status(400).send({ message: "Can Not Find This Post" });
+    }
 
+    const is_user_like_post = post.likes.includes(user_id);
+    if (is_user_like_post) {
+      await PostModel.updateOne(
+        { _id: post._id },
+        {
+          $pull: { likes: user_id },
+        }
+      );
+      res.status(200).send({ message: "Post UnLiked Succefully" });
+    } else {
+      post.likes.push(user_id);
+      await post.save();
+      const new_notification = new NotificationModel({
+        from: user_id,
+        to: post.user,
+        type: "like",
+      });
+      res.status(200).send({ message: "Post Liked Succeffully" });
+    }
   } catch (error) {
-
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
   }
 };
 
 const comment_post = async (req, res) => {
   try {
-    const {text, post_id} = req.body;
-    const {user_id} = req.user._id;
+    const { text, post_id } = req.body;
+    const { user_id } = req.user._id;
 
-    if (!text) return res.status(400).send({message: "Text Filied Is Required"});
+    if (!text)
+      return res.status(400).send({ message: "Text Filied Is Required" });
     const post = await PostModel.findById(req.params.post_id);
 
     if (!post) {
-      return res.status(400).send({message: "Can Not Find This Post"});
+      return res.status(400).send({ message: "Can Not Find This Post" });
     }
-  
+
     const comment = {
       text: text,
       user: user_id,
-    }
+    };
     post.post_comments.push(comment);
-    
-    await PostModel.findByIdAndUpdate(post_id, {post_comments: post.post_comments}); 
-    return res.status(200).send(post);
 
+    await PostModel.findByIdAndUpdate(post_id, {
+      post_comments: post.post_comments,
+    });
+    return res.status(200).send(post);
   } catch (error) {
     console.log(error.message);
-    res.status(500).send({message: error.message});
+    res.status(500).send({ message: error.message });
   }
 };
 
@@ -76,7 +104,7 @@ const delete_post = async (req, res) => {
   try {
     const post = await PostModel.findById(req.params.post_id);
     if (!post) {
-      return res.status(400).send({message: "Can Not Find This Post"});
+      return res.status(400).send({ message: "Can Not Find This Post" });
     }
 
     if (post.img) {
@@ -86,11 +114,27 @@ const delete_post = async (req, res) => {
 
     await PostModel.findByIdAndDelete(req.params.post_id);
     return res.status(200).send(post);
-
   } catch (error) {
     console.log(error.message);
-    res.status(500).send({message: error.message});
+    res.status(500).send({ message: error.message });
   }
 };
 
-export { create_post, like_unlike_post, comment_post, delete_post };
+const get_all_posts = async (req, res) => {
+  try {
+    const posts = await PostModel.find().sort({createdAt: -1});
+    if (posts.length === 0) return res.status(200).send([]);
+    res.status(200).json(posts);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+};
+
+export {
+  create_post,
+  like_unlike_post,
+  comment_post,
+  delete_post,
+  get_all_posts,
+};
