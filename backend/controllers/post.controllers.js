@@ -173,9 +173,36 @@ const get_liked_posts = async (req, res) => {
   }
 }
 
-const get_followers_posts = async (req, res) => {
+const get_following_posts = async (req, res) => {
   try {
+    const user_id = req.user._id;
+    const user = await UserModel.findById(user_id);
+    if (!user) return res.status(200).send({message: "Can Not Found User"});
+    const following = user.following;
+    const feed_posts = await PostModel.find({user: {$in: following}}).sort({createAt: -1}).populate({
+      path: "user",
+      select: "-password"
+    }).populate({
+      path: "comments.user",
+      select: "-password"
+    });
+
+    return res.status(200).send(feed_posts);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
+  }
+}
+
+
+const get_user_post = async (req, res) => {
+  try {
+    const user_id = req.params.user_id;
+    const user = await UserModel.findById(user_id);
+    if (!user) return res.status(200).send({message: "Can Not Found User"});
     
+
+    return res.status(200).send(feed_posts);
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
@@ -190,5 +217,6 @@ export {
   delete_post,
   get_all_posts,
   get_liked_posts,
-  get_followers_posts
+  get_following_posts,
+  get_user_post
 };
