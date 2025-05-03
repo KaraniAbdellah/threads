@@ -5,10 +5,12 @@ import "dotenv/config";
 import authRouter from "./routes/auth.routes.js";
 import userRouter from "./routes/user.routes.js";
 import postRouter from "./routes/post.routes.js";
+import notificationRouter from './routes/notification.routes.js';
 
 import { connectDb } from "./config/db.js";
 import cookieParser from "cookie-parser";
 import {v2 as cloudinary} from "cloudinary";
+
 
 
 cloudinary.config({
@@ -24,6 +26,7 @@ server.use(cookieParser());
 server.use("/api/auth", authRouter);
 server.use("/api/user", userRouter);
 server.use("/api/post", postRouter);
+server.use("/api/notification", notificationRouter);
 
 
 
