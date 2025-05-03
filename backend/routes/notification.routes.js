@@ -1,12 +1,14 @@
 import express from "express";
 import protect_middlware from "../middlwares/protect_middlware.js";
 import {
-  create_post,
+    get_notification,
+    delete_notification
 } from "../controllers/notification.controllers.js";
 
 
 const notificationRouter = express.Router();
-
+notificationRouter.get("/", protect_middlware, get_notification)
+notificationRouter.get("/", protect_middlware, delete_notification)
 
 
 
