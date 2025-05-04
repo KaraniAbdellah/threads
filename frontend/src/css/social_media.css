@@ -1,22 +1,10 @@
-/* From Uiverse.io by fanishah */ 
 .social_media {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-weight: 400;
-  background: rgb(7 89 133);
   color: white;
-  padding: 0.35em 0;
-  font-size: 17px;
-  border: none;
   border-radius: 0.7em;
-  letter-spacing: 0.08em;
   position: relative;
   display: flex;
   align-content: center;
   align-items: center;
-  overflow: hidden;
-  height: 2.7em;
-  padding-left: 3em;
-  padding-right: 0.5em;
 }
 
 .social_media .icon {
