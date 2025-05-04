@@ -1,0 +1,64 @@
+/* From Uiverse.io by fanishah */ 
+.social_media {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 400;
+  background: rgb(7 89 133);
+  color: white;
+  padding: 0.35em 0;
+  font-size: 17px;
+  border: none;
+  border-radius: 0.7em;
+  letter-spacing: 0.08em;
+  position: relative;
+  display: flex;
+  align-content: center;
+  align-items: center;
+  overflow: hidden;
+  height: 2.7em;
+  padding-left: 3em;
+  padding-right: 0.5em;
+}
+
+.social_media .icon {
+  background: #fff;
+  margin-right: 1em;
+  height: 2.2em;
+  width: 2.2em;
+  border-radius: 0.5em;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 0.2em;
+  transition: all .7s;
+  gap: 10px;
+}
+
+.social_media .icon {
+  color: rgb(7 89 133) !important;
+}
+
+.shere {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.social_media:hover .icon {
+  width: calc(100% - 0.6rem);
+}
+
+.social_media:hover .shere {
+  width: calc(100% - 0.6rem);
+  display: none;
+}
+
+.social_media .icon-shere {
+  color: rgb(7 89 133);
+  width: 1.5rem;
+  height: 1.5rem;
+  display: none;
+}
+
+.social_media:hover .icon .icon-shere {
+  display: flex;
+}

@@ -1,8 +1,8 @@
 .get_started_btn {
-  --main-color: rgb(46, 124, 213);
-  --main-bg-color: rgba(46, 124, 213, 0.36);
-  --pattern-color: rgba(46, 213, 116, 0.073);
-
+  --main-color: rgb(46, 124, 213);            
+  --main-bg-color: rgba(46, 124, 213, 0.1);    
+  --pattern-color: rgba(46, 124, 213, 0.05);   
+  
   filter: hue-rotate(0deg);
 
   cursor: pointer;
