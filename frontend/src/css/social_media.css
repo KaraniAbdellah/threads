@@ -22,8 +22,8 @@
   gap: 10px;
 }
 
-.social_media .icon {
-  color: rgb(7 89 133) !important;
+.social_media .icon a {
+  color: #854d0e !important;
 }
 
 .shere {
@@ -41,7 +41,7 @@
 }
 
 .social_media .icon-shere {
-  color: rgb(7 89 133);
+  color: #854d0e;
   width: 1.5rem;
   height: 1.5rem;
   display: none;

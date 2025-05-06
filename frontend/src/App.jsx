@@ -8,7 +8,7 @@ import "./css/social_media.css";
 function App() {
   return (
     <>
-      <div box="square">
+      <div box="square relative">
           <Home></Home>
       </div>
     </>

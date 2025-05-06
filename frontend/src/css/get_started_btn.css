@@ -1,8 +1,8 @@
 .get_started_btn {
-  --main-color: rgb(46, 124, 213);            
-  --main-bg-color: rgba(46, 124, 213, 0.1);    
-  --pattern-color: rgba(46, 124, 213, 0.05);   
-  
+  --main-color: #854d0e;            
+  --main-bg-color: rgba(219, 125, 17, 0.2);    
+  --pattern-color: rgba(219, 128, 24, 0.1); 
+
   filter: hue-rotate(0deg);
 
   cursor: pointer;
@@ -46,3 +46,4 @@
 .get_started_btn:active {
   filter: hue-rotate(250deg);
 }
+

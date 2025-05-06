@@ -4,7 +4,7 @@ import Background from '../components/Background';
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen bg-black text-white">
+    <div className="flex flex-col min-h-screen bg-black text-white overflow-hidden">
       <Header></Header>
       <Background></Background>
       <HomeIntro></HomeIntro>
