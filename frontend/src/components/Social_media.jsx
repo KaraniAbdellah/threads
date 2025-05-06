@@ -7,8 +7,8 @@ import { IoPersonCircleOutline } from "react-icons/io5";
 export default function SocialMedia() {
   return (
     <div>
-      <button class="social_media z-10 px-4 py-2 border border-yellow-600 rounded hover:bg-yellow-800">
-        <div class="icon">
+      <button className="social_media z-10 px-4 py-2 border border-yellow-600 rounded hover:bg-yellow-800">
+        <div className="icon">
           <a href="/">
             <FaShare className="shere" />
           </a>
