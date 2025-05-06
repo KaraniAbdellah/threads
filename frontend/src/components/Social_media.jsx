@@ -9,7 +9,7 @@ export default function SocialMedia() {
     <div>
       <button className="social_media z-10 px-4 py-2 border border-yellow-600 rounded hover:bg-yellow-800">
         <div className="icon">
-          <a href="/">
+          <a href="/" className="-mr-8">
             <FaShare className="shere" />
           </a>
           <a href="https://www.linkedin.com/in/abdellah-karani-965928294/" target="_blank">
