@@ -1,4 +1,6 @@
 import Home from "./pages/Home";
+import Login from "./models/Login";
+import Create_Account from "./models/Create_Account";
 
 // import Css Filies
 import "./css/get_started_btn.css";
@@ -9,7 +11,9 @@ function App() {
   return (
     <>
       <div box="square">
-          <Home></Home>
+          {/* <Home></Home> */}
+          {/* <Login></Login> */}
+          <Create_Account></Create_Account>
       </div>
     </>
   );
