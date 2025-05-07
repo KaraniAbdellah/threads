@@ -49,7 +49,7 @@ const Login = () => {
             />
           </div>
 
-          <div className="mb-6 relative">
+          <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-yellow-500">
               <FiLock />
             </div>
@@ -62,6 +62,7 @@ const Login = () => {
               required
             />
           </div>
+          <p className="mt-1 mb-4 hover:underline cursor-pointer">Forget Password?</p>
 
           <button
             type="submit"

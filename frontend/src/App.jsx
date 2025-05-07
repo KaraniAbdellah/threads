@@ -12,8 +12,8 @@ function App() {
     <>
       <div box="square">
           {/* <Home></Home> */}
-          {/* <Login></Login> */}
-          <Create_Account></Create_Account>
+          <Login></Login>
+          {/* <Create_Account></Create_Account> */}
       </div>
     </>
   );
