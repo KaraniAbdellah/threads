@@ -15,7 +15,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-black">
+    <div className="absolute z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center min-h-screen bg-black">
       <div className="w-full max-w-md p-6 rounded-lg shadow-md bg-zinc-900 text-yellow-300">
         <div className="relative mb-12">
             <button className="text-end text-xl absolute right-0 hover:bg-zinc-800 rounded-full p-3">

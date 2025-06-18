@@ -13,7 +13,7 @@ const HomeIntro = () => {
 
       <div className="lg:max-w-2xl lg:py-5 lg:px-0 p-2 -mt-16 mb-2 md:px-10 md:-mt-14 sm:p-10 sm:-mt-14 font-semibold">
         Share moments, chat with friends, and explore cool space vibes. Join the
-        SpaceY community and connect in a fun, zero-gravity world!
+        Threads community and connect in a fun, zero-gravity world!
       </div>
 
       <button className="get_started_btn">Get Started</button>
