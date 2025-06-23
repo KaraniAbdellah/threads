@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
+import AuthContext from "../context/AuthContext";
 
 const Header = () => {
+  const [setLoginOrSignUp] = useContext(AuthContext);
+
   function ShowLogin() {
-    
+    setLoginOrSignUp("login");
   }
 
   function ShowSignUp() {
-
+    setLoginOrSignUp("sign up");
   }
 
   return (

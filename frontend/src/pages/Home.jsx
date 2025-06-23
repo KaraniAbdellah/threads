@@ -3,21 +3,22 @@ import HomeIntro from "../components/Home_Intro";
 import Background from "../components/Background";
 import { useState } from "react";
 import Login from "../models/Login";
-import Create_Account from "../models/Create_Account";
+import SignUp from "../models/SignUp";
+import AuthContext from "../context/AuthContext";
+
 
 export default function Home() {
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSignUp, setShowSignUp] = useState(false);
-  const [content, setContent] = useState();
-
+  const [LoginOrSignUp, setLoginOrSignUp] = useState(false);
 
   return (
     <div className="flex flex-col min-h-screen bg-black text-white overflow-hidden relative">
-      <Header></Header>
-      <Background></Background>
-      <HomeIntro></HomeIntro>
-      {showLogin ? <Login></Login> : ""}
-      {showSignUp ? <Create_Account></Create_Account> : ""}
+      <AuthContext.Provider value={[setLoginOrSignUp]}>
+        <Header></Header>
+        <Background></Background>
+        <HomeIntro></HomeIntro>
+        {LoginOrSignUp == "login" ? <Login></Login> : ""}
+        {LoginOrSignUp == "sign up" ? <SignUp></SignUp> : ""}
+      </AuthContext.Provider>
     </div>
   );
 }

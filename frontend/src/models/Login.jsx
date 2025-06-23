@@ -1,13 +1,18 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { FiMail, FiLock } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 import { FaXmark } from "react-icons/fa6";
+import AuthContext from "../context/AuthContext";
 
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [setLoginOrSignUp] = useContext(AuthContext);
 
+  const UnShowLogin  = () => {
+    setLoginOrSignUp("");
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Login attempt with:", { email, password });
@@ -15,10 +20,10 @@ const Login = () => {
   };
 
   return (
-    <div className="absolute z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center min-h-screen bg-black">
+    <div className="absolute w-full z-50  left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center min-h-screen bg-black opacity-9">
       <div className="w-full max-w-md p-6 rounded-lg shadow-md bg-zinc-900 text-yellow-300">
         <div className="relative mb-12">
-            <button className="text-end text-xl absolute right-0 hover:bg-zinc-800 rounded-full p-3">
+            <button onClick={() => UnShowLogin()} className="text-end text-xl absolute right-0 hover:bg-zinc-800 rounded-full p-3">
                 <FaXmark />
             </button>
         </div>
@@ -66,7 +71,7 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 rounded text-yellow-400 font-medium transition-colors"
+            className="w-full py-3 bg-zinc-900 border border-zinc-700 hover:bg-zinc-800 rounded text-yellow-400 font-medium transition-colors"
           >
             Login
           </button>

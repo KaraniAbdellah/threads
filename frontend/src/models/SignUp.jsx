@@ -1,12 +1,19 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { FiMail, FiLock } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 import { FaXmark } from "react-icons/fa6";
+import AuthContext from "../context/AuthContext";
 
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [setLoginOrSignUp] = useContext(AuthContext);
+
+
+  const UnShowSignUp = () => {
+    setLoginOrSignUp("");
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,12 +22,12 @@ const Login = () => {
   };
 
   return (
-    <div className="absolute z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center min-h-screen bg-black">
+    <div className="absolute w-full z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center min-h-screen bg-black opacity-95">
       <div className="w-full max-w-md p-6 rounded-lg shadow-md bg-zinc-900 text-yellow-300">
         <div className="relative mb-12">
-            <button className="text-end text-xl absolute right-0 hover:bg-zinc-800 rounded-full p-3">
-                <FaXmark />
-            </button>
+          <button onClick={() => UnShowSignUp()} className="text-end text-xl absolute right-0 hover:bg-zinc-800 rounded-full p-3">
+            <FaXmark />
+          </button>
         </div>
         <div className="text-center mb-6">
           <div className="mx-auto mb-2 w-12 h-12 bg-yellow-800 rounded-full flex items-center justify-center">
@@ -76,11 +83,10 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 rounded text-yellow-400 font-medium transition-colors"
+            className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 hover:bg-zinc-80 rounded text-yellow-400 font-medium transition-colors"
           >
             Sign up
           </button>
-
         </form>
 
         <div className="my-4 flex items-center justify-center">
@@ -99,7 +105,7 @@ const Login = () => {
         <div className="mt-6 text-center text-sm">
           <span className="text-yellow-400">Already have an account?</span>{" "}
           <a href="#signup" className="text-yellow-300 hover:underline">
-          Login
+            Login
           </a>
         </div>
       </div>

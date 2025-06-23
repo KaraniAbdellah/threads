@@ -1,6 +1,6 @@
 import Home from "./pages/Home";
 import Login from "./models/Login";
-import Create_Account from "./models/Create_Account";
+import SignUp from "./models/SignUp";
 
 // import Css Filies
 import "./css/get_started_btn.css";
