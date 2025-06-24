@@ -3,29 +3,60 @@ import { FiMail, FiLock } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 import { FaXmark } from "react-icons/fa6";
 import AuthContext from "../context/AuthContext";
+import { IoMdPerson } from "react-icons/io";
+import SignUpSchema from "../YupSchema/SignUpShcema";
+import axios from 'axios';
 
 
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const SignUp = () => {
+  const [formData, setFormData] = useState({
+    user_name: "",
+    email: "",
+    password: "",
+    confirm_password: "",
+  });
+  const apiURL = import.meta.env.VITE_API_URL;
+
   const [setLoginOrSignUp] = useContext(AuthContext);
-
 
   const UnShowSignUp = () => {
     setLoginOrSignUp("");
   };
 
+  const CreateUser = () => {
+    try {
+      axios.post(`${apiURL}/api/auth/signup`, formData).then((response) => {
+        console.log(response.data);
+        alert("Create Account Succefully");
+        setLoginOrSignUp("login");
+      }).catch((error) => {
+        alert("Error in Creating Account");
+        console.log(error.message);
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Login attempt with:", { email, password });
-    // Add your authentication logic here
+    console.log(formData);
+    try {
+      SignUpSchema.validateSync(formData);
+      CreateUser();
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
     <div className="absolute w-full z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center min-h-screen bg-black opacity-95">
       <div className="w-full max-w-md p-6 rounded-lg shadow-md bg-zinc-900 text-yellow-300">
         <div className="relative mb-12">
-          <button onClick={() => UnShowSignUp()} className="text-end text-xl absolute right-0 hover:bg-zinc-800 rounded-full p-3">
+          <button
+            onClick={() => UnShowSignUp()}
+            className="text-end text-xl absolute right-0 hover:bg-zinc-800 rounded-full p-3"
+          >
             <FaXmark />
           </button>
         </div>
@@ -41,12 +72,29 @@ const Login = () => {
         <form onSubmit={handleSubmit}>
           <div className="mb-4 relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-yellow-500">
+              <IoMdPerson />
+            </div>
+            <input
+              type="username"
+              value={formData.user_name}
+              onChange={(e) =>
+                setFormData({ ...formData, user_name: e.target.value })
+              }
+              className="w-full py-3 pl-10 pr-3 bg-zinc-800 placeholder-yellow-500 rounded border border-zinc-700 focus:outline-none focus:border-yellow-500"
+              placeholder="username"
+              required
+            />
+          </div>
+          <div className="mb-4 relative">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-yellow-500">
               <FiMail />
             </div>
             <input
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
               className="w-full py-3 pl-10 pr-3 bg-zinc-800 placeholder-yellow-500 rounded border border-zinc-700 focus:outline-none focus:border-yellow-500"
               placeholder="Email"
               required
@@ -59,8 +107,10 @@ const Login = () => {
             </div>
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
               className="w-full py-3 pl-10 pr-3 bg-zinc-800 placeholder-yellow-500 rounded border border-zinc-700 focus:outline-none focus:border-yellow-500"
               placeholder="Password"
               required
@@ -73,8 +123,10 @@ const Login = () => {
             </div>
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.confirm_password}
+              onChange={(e) =>
+                setFormData({ ...formData, confirm_password: e.target.value })
+              }
               className="w-full py-3 pl-10 pr-3 bg-zinc-800 placeholder-yellow-500 rounded border border-zinc-700 focus:outline-none focus:border-yellow-500"
               placeholder="Confirm Password"
               required
@@ -104,7 +156,7 @@ const Login = () => {
 
         <div className="mt-6 text-center text-sm">
           <span className="text-yellow-400">Already have an account?</span>{" "}
-          <a href="#signup" className="text-yellow-300 hover:underline">
+          <a onClick={() => setLoginOrSignUp("login")} href="#signup" className="text-yellow-300 hover:underline">
             Login
           </a>
         </div>
@@ -113,4 +165,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;

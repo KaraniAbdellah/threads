@@ -1,6 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 import "dotenv/config";
+import cors from "cors";
+
 
 import authRouter from "./routes/auth.routes.js";
 import userRouter from "./routes/user.routes.js";
@@ -21,6 +23,7 @@ cloudinary.config({
 });
 
 const server = express();
+server.use(cors())
 server.use(express.json());
 server.use(cookieParser());
 server.use("/api/auth", authRouter);

@@ -20,7 +20,7 @@ const Login = () => {
   };
 
   return (
-    <div className="absolute w-full z-50  left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center min-h-screen bg-black opacity-9">
+    <div className="absolute w-full z-50  left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center min-h-screen bg-black opacity-95">
       <div className="w-full max-w-md p-6 rounded-lg shadow-md bg-zinc-900 text-yellow-300">
         <div className="relative mb-12">
             <button onClick={() => UnShowLogin()} className="text-end text-xl absolute right-0 hover:bg-zinc-800 rounded-full p-3">
@@ -67,7 +67,7 @@ const Login = () => {
               required
             />
           </div>
-          <p className="mt-1 mb-4 hover:underline cursor-pointer">Forget Password?</p>
+          <p className="mt-1 text-sm mb-4 hover:underline cursor-pointer">Forget Password?</p>
 
           <button
             type="submit"
@@ -92,7 +92,7 @@ const Login = () => {
 
         <div className="mt-6 text-center text-sm">
           <span className="text-yellow-400">Don't have an account?</span>{" "}
-          <a href="#signup" className="text-yellow-300 hover:underline">
+          <a onClick={() => setLoginOrSignUp("sign up")} href="#signup" className="text-yellow-300 hover:underline">
             Sign up
           </a>
         </div>
