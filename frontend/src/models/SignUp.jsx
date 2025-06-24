@@ -6,9 +6,11 @@ import AuthContext from "../context/AuthContext";
 import { IoMdPerson } from "react-icons/io";
 import SignUpSchema from "../YupSchema/SignUpShcema";
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 const SignUp = () => {
+  const notify = () => toast("Account Created Succeffully");
   const [formData, setFormData] = useState({
     user_name: "",
     email: "",
@@ -28,6 +30,7 @@ const SignUp = () => {
       axios.post(`${apiURL}/api/auth/signup`, formData).then((response) => {
         console.log(response.data);
         alert("Create Account Succefully");
+        notify();
         setLoginOrSignUp("login");
       }).catch((error) => {
         alert("Error in Creating Account");
