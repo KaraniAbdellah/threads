@@ -9,7 +9,7 @@ export default function generateCookie(user_id, res) {
     maxAge: 1296000,
     httpOnly: true, // prevent XSS (cross site scripting) attack,
     sameSite: "strict", // CSRF attack cross-site request forgery
-    // secure: process.env.NODE_ENV !== "development"
+    secure: process.env.NODE_ENV !== "development"
   });
 }
 
