@@ -6,21 +6,20 @@ import AuthContext from "../context/AuthContext";
 import { IoMdPerson } from "react-icons/io";
 import SignUpSchema from "../YupSchema/SignUpShcema";
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-
+import toast from "react-hot-toast";
 
 const SignUp = () => {
-  const notify = () => toast("Account Created Succeffully");
   const [formData, setFormData] = useState({
     user_name: "",
     email: "",
     password: "",
     confirm_password: "",
   });
-  const apiURL = import.meta.env.VITE_API_URL;
-
+  
   const [setLoginOrSignUp] = useContext(AuthContext);
-
+  const [isLoading, SetLoading] = useState(false);
+  
+  const apiURL = import.meta.env.VITE_API_URL;
   const UnShowSignUp = () => {
     setLoginOrSignUp("");
   };
@@ -28,29 +27,53 @@ const SignUp = () => {
   const CreateUser = () => {
     try {
       axios.post(`${apiURL}/api/auth/signup`, formData).then((response) => {
-        console.log(response.data);
-        alert("Create Account Succefully");
-        notify();
+        toast.success("Your Account Created Successfully", {
+          duration: 2000,
+          position: "bottom-right"
+        });
+
+        SetLoading(true);
         setLoginOrSignUp("login");
       }).catch((error) => {
-        alert("Error in Creating Account");
         console.log(error.message);
+        let message = "Please enter a valid email. Username must be at least 6 characters and not already taken."; 
+        if (error.message == "Network Error") {
+          message = error.message; 
+        }
+        toast.error(message, {
+          duration: 4000,
+          position: "bottom-right"
+        });
+      }).finally(() => {
+        SetLoading(false);
       });
     } catch (error) {
-      console.log(error.message);
+      toast.error("Something went wrong. Maybe a network error.", {
+        duration: 2000,
+        position: "bottom-right"
+      });
     }
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
     try {
       SignUpSchema.validateSync(formData);
       CreateUser();
     } catch (error) {
-      console.log(error.message);
+      toast.error(error.message, {
+        duration: 2000,
+        position: "bottom-right"
+      });
     }
   };
+
+  if (isLoading) {
+    toast.promise("Saving", {
+      duration: 2000,
+      position: "bottom-right"
+    });
+  }
 
   return (
     <div className="absolute w-full z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center min-h-screen bg-black opacity-95">

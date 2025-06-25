@@ -6,14 +6,15 @@ import SignUp from "./models/SignUp";
 import "./css/get_started_btn.css";
 import "./css/starry_background.css";
 import "./css/social_media.css";
-
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <>
       <div box="square">
-          <Home></Home>
+        <Home></Home>
       </div>
+      <Toaster></Toaster>
     </>
   );
 }
