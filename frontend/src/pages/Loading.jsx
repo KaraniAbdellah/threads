@@ -1,20 +1,13 @@
 import React from "react";
+import "../css/loading.css";
 
 const Loading = () => {
   return (
-    <div>
-      <div className="dot-spinner">
-        <div className="dot-spinner__dot"></div>
-        <div className="dot-spinner__dot"></div>
-        <div className="dot-spinner__dot"></div>
-        <div className="dot-spinner__dot"></div>
-        <div className="dot-spinner__dot"></div>
-        <div className="dot-spinner__dot"></div>
-        <div className="dot-spinner__dot"></div>
-        <div className="dot-spinner__dot"></div>
-      </div>
+    <div className="h-screen w-full flex justify-center items-center bg-zinc-800">
+      <div className="loader"></div>
     </div>
   );
 };
 
 export default Loading;
+
