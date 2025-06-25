@@ -6,16 +6,18 @@ import AuthContext from "../context/AuthContext";
 
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
+  });
   const [setLoginOrSignUp] = useContext(AuthContext);
 
   const UnShowLogin  = () => {
     setLoginOrSignUp("");
   }
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Login attempt with:", { email, password });
     // Add your authentication logic here
   };
 
