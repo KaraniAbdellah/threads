@@ -242,13 +242,3 @@ const Login = () => {
 };
 
 export default Login;
-
-{
-  /* <button
-onClick={() => LoginWithGoogle()}
-className="w-full py-3 px-4 flex items-center justify-center bg-white hover:bg-gray-100 rounded text-yellow-800 font-medium transition-colors"
->
-<FcGoogle className="mr-2 text-xl" />
-Continue with Google
-</button> */
-}
