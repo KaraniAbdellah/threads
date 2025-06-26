@@ -23,6 +23,10 @@ const Login = () => {
   const apiURL = import.meta.env.VITE_API_URL;
   const client_id = import.meta.env.VITE_CLIENT_ID;
 
+  const ForgetPassword = () => {
+    console.log("Hello World");
+  }
+
   const UnShowLogin = () => {
     setLoginOrSignUp("");
   };
@@ -196,7 +200,7 @@ const Login = () => {
                 required
               />
             </div>
-            <p className="mt-1 text-sm mb-4 hover:underline cursor-pointer">
+            <p onClick={() => ForgetPassword()} className="mt-1 text-sm mb-4 hover:underline cursor-pointer">
               Forget Password?
             </p>
 
@@ -237,7 +241,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-    </GoogleOAuthProvider>
+     </GoogleOAuthProvider>
   );
 };
 

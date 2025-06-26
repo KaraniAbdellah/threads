@@ -103,6 +103,14 @@ const signup_with_google = async (req, res) => {
     if (new_user) {
       generateCookie(new_user._id, res);
       if (!exiting_user) await UserModel.create(new_user);
+      console.log({
+        user_name: new_user.user_name,
+        email: new_user.email,
+        profile_image: new_user.profile_image,
+        cover_image: new_user.cover_image,
+        followers: new_user.followers,
+        following: new_user.following,
+      });
       res.status(201).send({
         user_name: new_user.user_name,
         email: new_user.email,

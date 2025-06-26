@@ -1,6 +1,5 @@
 import { useState, useContext } from "react";
 import { FiMail, FiLock } from "react-icons/fi";
-import { FcGoogle } from "react-icons/fc";
 import { FaXmark } from "react-icons/fa6";
 import AuthContext from "../context/AuthContext";
 import { IoMdPerson } from "react-icons/io";
@@ -22,7 +21,7 @@ const SignUp = () => {
   });
   const [isLoading, SetLoading] = useState(false);
   const [setLoginOrSignUp] = useContext(AuthContext);
-  
+
   const apiURL = import.meta.env.VITE_API_URL;
   const client_id = import.meta.env.VITE_CLIENT_ID;
   const navigate = useNavigate();
