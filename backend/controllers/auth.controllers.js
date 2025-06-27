@@ -155,7 +155,6 @@ const login = async (req, res) => {
   }
 };
 
-
 const get_me = async (req, res) => {
   try {
     return res.status(200).send(req.user);
@@ -165,4 +164,43 @@ const get_me = async (req, res) => {
   }
 };
 
-export { signup, logout, login, get_me, signup_with_google };
+const check_email = async (req, res) => {
+  try {
+    const user = await UserModel.findOne({ email: req.body.email });
+    if (user) return res.status(200).send(user);
+    else return res.status(404).send({ message: "User Not Found" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send({ message: error.message });
+  }
+};
+
+const change_password = async (req, res) => {
+  try {
+    const user = await UserModel.findOne({ email: req.body.email });
+    if (user) {
+      const salt = await bcrypt.genSalt(10);
+      const hashed_password = await bcrypt.hash(req.body.new_password, salt);
+      if (!hashed_password) {
+        return res.status(400).send({ message: "Can Not Hash The Password" });
+      }
+
+      user.password = hashed_password;
+      await user.save();
+      return res.status(200).send(user);
+    } else return res.status(404).send({ message: "User Not Found" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send({ message: error.message });
+  }
+};
+
+export {
+  signup,
+  logout,
+  login,
+  get_me,
+  signup_with_google,
+  check_email,
+  change_password,
+};

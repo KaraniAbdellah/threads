@@ -1,6 +1,5 @@
 import { useState, useContext } from "react";
 import { FiMail, FiLock } from "react-icons/fi";
-import { FcGoogle } from "react-icons/fc";
 import { FaXmark } from "react-icons/fa6";
 import AuthContext from "../context/AuthContext";
 import axios from "axios";
@@ -24,7 +23,7 @@ const Login = () => {
   const client_id = import.meta.env.VITE_CLIENT_ID;
 
   const ForgetPassword = () => {
-    console.log("Hello World");
+    navigate("/recovery");
   }
 
   const UnShowLogin = () => {
