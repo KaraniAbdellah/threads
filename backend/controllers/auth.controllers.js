@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import UserModel from "../models/User.js";
 import bcrypt, { hash } from "bcrypt";
 import generateCookie from "../lib/utils/generateCookie.js";
-import { OAuth2Client } from "google-auth-library";
+import {sendMail} from "../lib/utils/sendMail.js";
 
 const signup = async (req, res) => {
   console.log("Request Come From Postman");
@@ -195,6 +195,31 @@ const change_password = async (req, res) => {
   }
 };
 
+const forget_password = async (req, res) => {
+  try {
+    console.log("Request Come to Forget Password");
+    const { email, subject, message } = req.body;
+
+    if (!email || !subject || !message) {
+      return res.send({ message: "Please Fill All Inputs" });
+    }
+
+    sendMail(email, subject, message)
+      .then((result) => {
+        console.log(result);
+        return res.send({ message: result.message });
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.send({ message: err.message });
+      });
+
+  } catch (error) {
+    return res.send({ message: error.message });
+  }
+};
+
+
 export {
   signup,
   logout,
@@ -203,4 +228,5 @@ export {
   signup_with_google,
   check_email,
   change_password,
+  forget_password
 };

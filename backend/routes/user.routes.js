@@ -13,4 +13,6 @@ userRouter.get("/suggested", protect_middlware, get_suggested_users);
 userRouter.get("/follow/:id", protect_middlware, follow_unfollow);
 userRouter.get("/update/:user_id", protect_middlware, update_user_profile);
 
+
+
 export default userRouter;
