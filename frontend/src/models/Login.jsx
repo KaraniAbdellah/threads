@@ -41,7 +41,7 @@ const Login = () => {
             duration: 2000,
             position: "bottom-right",
           });
-
+          document.cookie = `token=${response.data.token}; max-age=${60 * 60 * 24 * 15}; SameSite=Lax`;
           SetLoading(true);
           setLoginOrSignUp("");
           navigate("/loading");
@@ -102,7 +102,7 @@ const Login = () => {
             duration: 2000,
             position: "bottom-right",
           });
-
+          document.cookie = `token=${response.data.token}; max-age=${60 * 60 * 24 * 15}; SameSite=Lax`;
           SetLoading(true); setLoginOrSignUp(""); navigate("/loading");
           setTimeout(() => {
             navigate("/space");

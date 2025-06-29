@@ -101,6 +101,7 @@ const SignUp = () => {
 
           SetLoading(true);
           setLoginOrSignUp("");
+          document.cookie = `token=${response.data.token}; max-age=${60 * 60 * 24 * 15}; SameSite=Lax`;
           navigate("/loading");
           setTimeout(() => {
             navigate("/space");
