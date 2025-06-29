@@ -7,8 +7,9 @@ export default function generateCookie(user_id, res) {
   res.cookie("token", token, {
     secure: true,
     httpOnly: true,
-    sameSite: "none",
-    maxAge: 24 * 60 * 60 * 1000, // expires in 24hr
+    sameSite: "None",
+    maxAge: 15 * 24 * 60 * 60 * 1000, // expires in 15d
   });
+  return token;
 }
 
