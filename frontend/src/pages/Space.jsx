@@ -1,7 +1,8 @@
 import React from 'react';
-import Menu from '../components/space_compoenents/Menu';
-import Main from '../components/space_compoenents/Main';
-import Suggestion from '../components/space_compoenents/Suggestion';
+import Menu from '../components/space_components/Menu';
+import Main from '../components/space_components/Main';
+import Suggestion from '../components/space_components/Suggestion';
+
 
 const Space = () => {
     return (
