@@ -110,7 +110,12 @@ const ForgetPassword = () => {
             duration: 2000,
             position: "bottom-right",
           });
-          navigate("/space");
+          console.log(res.data);
+          document.cookie = `token=${res.data.token}; max-age=${60 * 60 * 24 * 15}; SameSite=Lax`;
+          navigate("/loading");
+          setTimeout(() => {
+            navigate("/space");
+          }, 1000);
         })
         .catch((error) => {
           toast.error("Failed Update Password", {

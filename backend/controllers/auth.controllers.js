@@ -164,8 +164,9 @@ const change_password = async (req, res) => {
       }
 
       user.password = hashed_password;
+      const token = generateCookie(user._id, res);
       await user.save();
-      return res.status(200).send(user);
+      return res.status(200).send({token: token});
     } else return res.status(404).send({ message: "User Not Found" });
   } catch (error) {
     console.error(error.message);
