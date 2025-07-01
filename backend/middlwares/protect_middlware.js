@@ -6,6 +6,7 @@ export default async function protect_middlware(req, res, next) {
     // const token = req.headers.cookie;
     console.log("Hello To Procted Middlware");
     const token = req.cookies.token;
+    console.log(req.cookies);
     console.log(token);
 
     if (!token) {

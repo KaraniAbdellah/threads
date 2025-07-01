@@ -20,30 +20,35 @@ const ForgetPassword = () => {
 
   const CheckEmail = async (e) => {
     e.preventDefault();
-    console.log("Search To Emaiil");
-    await axios
-      .post(`${import.meta.env.VITE_API_URL}/api/auth/check_email`, {
-        email: email,
-      })
-      .then((res) => {
-        console.log("email: ", res);
-        setEmail(() => res.data.email);
-        setFormState(() => "code_opt");
-        setAction(() => true);
-        const generated_opt_code = GetOPTCode();
-        setGenerated_opt_code(generated_opt_code);
-        SendCodeToEmail(generated_opt_code);
-        toast.success("User Found", {
-          duration: 2000,
-          position: "bottom-right",
+    try {
+      await axios
+        .post(`${import.meta.env.VITE_API_URL}/api/auth/check_email`, {
+          email: email,
+        })
+        .then((res) => {
+          setEmail(() => res.data.email);
+          setFormState(() => "code_opt");
+          setAction(() => true);
+          const generated_opt_code = GetOPTCode();
+          setGenerated_opt_code(generated_opt_code);
+          SendCodeToEmail(generated_opt_code);
+          toast.success("User Found", {
+            duration: 2000,
+            position: "bottom-right",
+          });
+        })
+        .catch((error) => {
+          toast.error("Can Not Find User", {
+            duration: 2000,
+            position: "bottom-right",
+          });
         });
-      })
-      .catch((error) => {
-        toast.error("User Not Found", {
-          duration: 2000,
-          position: "bottom-right",
-        });
+    } catch (error) {
+      toast.error("Something went wrong, please try again", {
+        duration: 2000,
+        position: "bottom-right",
       });
+    }
   };
 
   const ResendOPTCode = async () => {
@@ -68,6 +73,10 @@ const ForgetPassword = () => {
         position: "bottom-right",
       });
     } catch (error) {
+      toast.error("Something went wrong, please try again", {
+        duration: 2000,
+        position: "bottom-right",
+      });
       console.log("Error" + error);
     }
   }
@@ -110,12 +119,11 @@ const ForgetPassword = () => {
             duration: 2000,
             position: "bottom-right",
           });
-          console.log(res.data);
           document.cookie = `token=${res.data.token}; max-age=${60 * 60 * 24 * 15}; SameSite=Lax`;
           navigate("/loading");
           setTimeout(() => {
             navigate("/space");
-          }, 1000);
+          }, 3000);
         })
         .catch((error) => {
           toast.error("Failed Update Password", {

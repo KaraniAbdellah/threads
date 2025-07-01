@@ -164,6 +164,7 @@ const change_password = async (req, res) => {
       }
 
       user.password = hashed_password;
+      console.log(user);
       const token = generateCookie(user._id, res);
       await user.save();
       return res.status(200).send({token: token});
