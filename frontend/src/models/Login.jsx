@@ -41,7 +41,6 @@ const Login = () => {
             duration: 2000,
             position: "bottom-right",
           });
-          console.log(response.data);
           SetLoading(true);
           setLoginOrSignUp("");
           navigate("/loading");

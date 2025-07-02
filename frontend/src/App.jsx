@@ -29,7 +29,6 @@ function App() {
           setUser(() => res.data);
         })
         .catch((err) => {
-          console.log(err);
         }).finally(() => setIsLoading(() => true));
     } catch (error) {
       console.log(error);
