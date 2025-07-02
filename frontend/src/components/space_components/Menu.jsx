@@ -103,7 +103,7 @@ const Menu = () => {
 
       <div className="mt-auto pt-6 border-t border-zinc-700">
         <button
-          onClick={goToProfile()}
+          onClick={goToProfile}
           className="flex items-center space-x-3 w-full p-3 rounded-md hover:bg-yellow-600 transition-all duration-200"
         >
           <img
