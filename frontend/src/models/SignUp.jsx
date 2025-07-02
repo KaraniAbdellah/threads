@@ -98,11 +98,7 @@ const SignUp = () => {
             duration: 2000,
             position: "bottom-right",
           });
-
-          SetLoading(true);
-          setLoginOrSignUp("");
-          document.cookie = `token=${response.data.token}; max-age=${60 * 60 * 24 * 15}; SameSite=Lax`;
-          navigate("/loading");
+          SetLoading(true); setLoginOrSignUp(""); navigate("/loading");
           setTimeout(() => {
             navigate("/space");
           }, 2000);

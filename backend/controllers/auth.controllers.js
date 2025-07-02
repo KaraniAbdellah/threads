@@ -57,7 +57,7 @@ const signup = async (req, res) => {
 
 const logout = async (req, res) => {
   try {
-    res.cookie("jwt", "", { maxAge: 0 });
+    res.cookie("token", "", { maxAge: 0 });
     res.status(200).send({ message: "Log Out Succeffully" });
   } catch (error) {
     console.error(error.message);

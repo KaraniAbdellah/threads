@@ -41,7 +41,7 @@ const Login = () => {
             duration: 2000,
             position: "bottom-right",
           });
-          document.cookie = `token=${response.data.token}; max-age=${60 * 60 * 24 * 15}; SameSite=Lax`;
+          console.log(response.data);
           SetLoading(true);
           setLoginOrSignUp("");
           navigate("/loading");

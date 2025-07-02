@@ -24,7 +24,10 @@ cloudinary.config({
 
 const server = express();
 // Allows cookies and credentials and Allow request from any origin
-server.use(cors({credentials: true, origin: true}))
+server.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+}));
 server.use(express.json());
 server.use(cookieParser());
 server.use("/api/auth", authRouter);

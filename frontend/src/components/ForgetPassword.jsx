@@ -119,7 +119,6 @@ const ForgetPassword = () => {
             duration: 2000,
             position: "bottom-right",
           });
-          document.cookie = `token=${res.data.token}; max-age=${60 * 60 * 24 * 15}; SameSite=Lax`;
           navigate("/loading");
           setTimeout(() => {
             navigate("/space");
