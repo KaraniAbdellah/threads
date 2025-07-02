@@ -13,7 +13,7 @@ const Main = () => {
   const [main_space, setMain_Sate] = useContext(spaceContext);
 
   return (
-    <div className='bg-green-600 w-[55%] p-4'>
+    <div className='bg-zinc-800 w-[55%] p-4'>
       {main_space === "Home" && <Home />}
       {main_space === "Followers" && <Followers />}
       {main_space === "Following" && <Following />}

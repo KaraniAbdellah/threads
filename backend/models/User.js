@@ -21,7 +21,7 @@ const UserSchema = new mongoose.Schema(
     profile_image: {
       type: String,
       required: [false, "profile_image is not required"],
-      default: "",
+      default: "https://robohash.org/username.png?size=150x150",
     },
     cover_image: {
       type: String,

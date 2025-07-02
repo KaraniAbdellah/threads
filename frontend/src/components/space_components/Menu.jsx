@@ -10,9 +10,11 @@ import {
 
 import { useNavigate } from "react-router-dom";
 import spaceContext from "../../context/SpaceContext";
+import userContext from "../../context/UserContext";
 
 const Menu = () => {
   const [main_state, setMain_State] = useContext(spaceContext);
+  const user = useContext(userContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -24,7 +26,7 @@ const Menu = () => {
   };
 
   return (
-    <div className="bg-zinc-800 w-[25%] text-white min-h-screen p-5 shadow-lg">
+    <div className="bg-zinc-800 w-[25%] text-white min-h-screen p-5 ">
       <h2 className="text-2xl font-bold mb-8">Threads</h2>
 
       <nav className="space-y-2">
@@ -107,7 +109,7 @@ const Menu = () => {
           className="flex items-center space-x-3 w-full p-3 rounded-md hover:bg-yellow-600 transition-all duration-200"
         >
           <img
-            src="https://i.pravatar.cc/40 "
+            src={user.profile_image}
             alt="User Avatar"
             className="w-8 h-8 rounded-full"
           />
