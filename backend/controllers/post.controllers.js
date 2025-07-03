@@ -15,19 +15,19 @@ const create_post = async (req, res) => {
     const user = await UserModel.findById(user_id);
     if (!user) return res.status(400).send({ message: "User Not Found" });
 
-    if (!text || !img) {
+    if (!text) {
       return res.status(400).send({ message: "Post Have No Text or Image" });
     }
 
     if (img) {
       const uploadedResponse = await cloudinary.uploader.upload(img);
 			img = uploadedResponse.secure_url;
-    }
+    } 
 
     const new_post = new PostModel({
       user: user_id,
       post_text: text,
-      post_image: img,
+      post_image: img ? img : "",
       post_date: post_date
     });
     console.log(new_post);

@@ -16,7 +16,6 @@ export default async function protect_middlware(req, res, next) {
     }
 
     const user = await UserModel.findById(decoded.user_id).select("-password");
-    console.log(user);
     if (!user) {
       return res.status(404).send({ message: "Can Not Find This User" });
     }

@@ -18,10 +18,10 @@ import userContext from "../../context/UserContext";
 import axios from "axios";
 import formatTimeAgo from "../../utlis_functions/formatTimeAgo";
 
-
 const Home = () => {
   const [posts, setPosts] = useState([]);
   const user = useContext(userContext);
+  const [isLoading, setIsLoading] = useState(false);
   const [postToPost, setPostToPost] = useState({
     user: "",
     post_text: "",
@@ -32,31 +32,43 @@ const Home = () => {
   });
 
   const handlePost = async () => {
-    const post_date = new Date();
-    console.log(post_date);
-    setPostToPost((prevPost) => ({
-      ...prevPost,
-      post_date: post_date,
+    const postToSend = {
+      ...postToPost,
+      post_date: new Date(),
       user: user._id,
-    }));
+    };
     // Store Post To Database
-    await axios
-      .post(`${import.meta.env.VITE_API_URL}/api/post/create`, postToPost, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setPostToPost({
-          user: "",
-          post_text: "",
-          post_img: "",
-          post_likes: [],
-          post_comments: [{ text: "", user: "" }],
-          post_date: null,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
+    try {
+      await axios
+        .post(`${import.meta.env.VITE_API_URL}/api/post/create`, postToSend, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          setPostToPost({
+            user: "",
+            post_text: "",
+            post_img: "",
+            post_likes: [],
+            post_comments: [{ text: "", user: "" }],
+            post_date: null,
+          });
+          toast.success("Post Added Successfully", {
+            duration: 2000,
+            position: "bottom-right",
+          });
+        })
+        .catch((err) => {
+          toast.error("Failed Adding Post", {
+            duration: 2000,
+            position: "bottom-right",
+          });
+        })
+    } catch (error) {
+      toast.error("Failed Adding Post", {
+        duration: 2000,
+        position: "bottom-right",
       });
+    }
   };
 
   const selectImage = () => {
@@ -92,8 +104,6 @@ const Home = () => {
     }
   };
 
-
-
   useEffect(() => {
     GetAllPosts();
     return () => {};
@@ -128,8 +138,12 @@ const Home = () => {
                   setPostToPost({ ...postToPost, post_text: e.target.value })
                 }
                 placeholder="What's happening?"
-                className="w-full text-xl placeholder-gray-500 text-white border-none outline-none resize-none min-h-[80px] bg-transparent"
-                rows="3"
+                className="w-full text-xl
+                [&::-webkit-scrollbar]:w-2
+                        [&::-webkit-scrollbar-track]:bg-yellow-100
+                        [&::-webkit-scrollbar-thumb]:bg-yellow-300
+                        dark:[&::-webkit-scrollbar-track]:bg-zinc-800
+                         placeholder-gray-500 text-white border-none outline-none resize-none min-h-[40px] bg-transparent"
               />
               {postToPost.post_img ? (
                 <div
@@ -249,13 +263,18 @@ const Home = () => {
                     <BsThreeDots className="w-4 h-4" />
                   </button>
                 </div>
-
-                {/* Post Content */}
                 <div className="mb-4">
                   <p className="text-white text-lg leading-relaxed">
                     {post.post_text}
                   </p>
                 </div>
+                {post.post_image ? (
+                  <div className="border rounded-md w-full h-full">
+                    <img className="h-full" src={post.post_image}></img>
+                  </div>
+                ) : (
+                  ""
+                )}
 
                 {/* Post Actions */}
                 <div className="flex items-center justify-between pt-4 border-t border-gray-100">
