@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import {
   HiOutlinePhotograph,
   HiOutlineVideoCamera,
@@ -17,11 +17,14 @@ import { toast } from "react-hot-toast";
 import userContext from "../../context/UserContext";
 import axios from "axios";
 import formatTimeAgo from "../../utlis_functions/formatTimeAgo";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
   const user = useContext(userContext);
   const [isLoading, setIsLoading] = useState(false);
+  const [showPostAction, setShowPostAction] = useState(false);
+  const post_actions_menu = useRef(null);
   const [postToPost, setPostToPost] = useState({
     user: "",
     post_text: "",
@@ -62,7 +65,7 @@ const Home = () => {
             duration: 2000,
             position: "bottom-right",
           });
-        })
+        });
     } catch (error) {
       toast.error("Failed Adding Post", {
         duration: 2000,
@@ -104,14 +107,24 @@ const Home = () => {
     }
   };
 
-  const handleSeePostAction = async () => {
-    console.log("Edit Or Delete Post");
-  }
-
   useEffect(() => {
     GetAllPosts();
     return () => {};
   }, []);
+
+  useEffect(() => {
+    document.addEventListener("mousedown", function(e) {
+      if (post_actions_menu && post_actions_menu.current) {
+        console.log(post_actions_menu.current);
+        console.log(e.target);
+        if (post_actions_menu.current.contains(e.target)) {
+          console.log("We CLick Outside");
+          setShowPostAction(false);
+        }
+      }
+    });
+
+  }, [post_actions_menu]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br bg-zinc-800 border-r border-l border-zinc-700 p-0">
@@ -259,13 +272,32 @@ const Home = () => {
                         </div>
                       </div>
                       <p className="text-gray-500 text-sm">
-                        @{post.user.user_name.split(" ")[0]} · {formatTimeAgo(post.post_date)}
+                        @{post.user.user_name.split(" ")[0]} ·{" "}
+                        {formatTimeAgo(post.post_date)}
                       </p>
                     </div>
                   </div>
-                  <button onClick={handleSeePostAction} className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors">
-                    <BsThreeDots className="w-4 h-4" />
-                  </button>
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowPostAction(!showPostAction)}
+                      
+                      className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors"
+                    >
+                      <BsThreeDots className="w-4 h-4" />
+                    </button>
+                    {showPostAction ? (
+                      <div ref={post_actions_menu} className="post_action absolute top-0 right-0 bg-zinc-900 p-1 rounded-sm border">
+                        <button className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800">
+                          <FaEdit /> Edit
+                        </button>
+                        <button className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800">
+                          <FaTrash /> Delete
+                        </button>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </div>
                 </div>
                 <div className="mb-4">
                   <p className="text-white text-lg leading-relaxed">
