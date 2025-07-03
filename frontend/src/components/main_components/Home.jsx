@@ -104,16 +104,20 @@ const Home = () => {
     }
   };
 
+  const handleSeePostAction = async () => {
+    console.log("Edit Or Delete Post");
+  }
+
   useEffect(() => {
     GetAllPosts();
     return () => {};
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br bg-zinc-800">
+    <div className="min-h-screen bg-gradient-to-br bg-zinc-800 border-r border-l border-zinc-700 p-0">
       <div className="max-w-2xl mx-auto pt-8 px-4">
         {/* Create Post Section */}
-        <div className="bg-zinc-900 rounded-2xl shadow-lg border border-yellow-700 p-6 mb-6 hover:shadow-xl transition-all duration-300">
+        <div className="bg-zinc-900 rounded-md shadow-lg border border-yellow-700 p-6 mb-6 hover:shadow-xl transition-all duration-300">
           <div className="flex items-start space-x-4">
             <div className="relative">
               <img
@@ -224,7 +228,7 @@ const Home = () => {
           {posts.map((post) => (
             <div
               key={post._id}
-              className="bg-zinc-900 rounded-2xl shadow-lg border border-yellow-700 hover:shadow-xl transition-all duration-300"
+              className="bg-zinc-900 rounded-md  shadow-lg border border-yellow-700 hover:shadow-xl transition-all duration-300"
             >
               <div className="p-6">
                 {/* Post Header */}
@@ -255,11 +259,11 @@ const Home = () => {
                         </div>
                       </div>
                       <p className="text-gray-500 text-sm">
-                        @{post.user.user_name} · {formatTimeAgo(post.post_date)}
+                        @{post.user.user_name.split(" ")[0]} · {formatTimeAgo(post.post_date)}
                       </p>
                     </div>
                   </div>
-                  <button className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors">
+                  <button onClick={handleSeePostAction} className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors">
                     <BsThreeDots className="w-4 h-4" />
                   </button>
                 </div>
