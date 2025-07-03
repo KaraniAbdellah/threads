@@ -8,7 +8,8 @@ import { v2 as cloudinary } from "cloudinary";
 const create_post = async (req, res) => {
   try {
     const text = req.body.post_text;
-    const img = req.body.post_img;
+    let img = req.body.post_img;
+    const post_date = req.body.post_date;
     const user_id = req.user._id.toString();
 
     const user = await UserModel.findById(user_id);
@@ -19,17 +20,19 @@ const create_post = async (req, res) => {
     }
 
     if (img) {
-      const uploaded = await cloudinary.uploader.upload(img);
-      img = uploaded.secure_url;
+      const uploadedResponse = await cloudinary.uploader.upload(img);
+			img = uploadedResponse.secure_url;
     }
 
     const new_post = new PostModel({
       user: user_id,
       post_text: text,
       post_image: img,
+      post_date: post_date
     });
+    console.log(new_post);
 
-    await PostModel.create();
+    await new_post.save();
     res.status(200).send(new_post);
   } catch (error) {
     console.log(error.message);
@@ -158,64 +161,70 @@ const get_liked_posts = async (req, res) => {
   try {
     const user_id = req.params.user_id;
     const user = await UserModel.findById(user_id);
-    if (!user) return res.status(200).send({message: "Can Not Found User"});
-    const liked_posts = await PostModel.find({_id: {$in: user.liked_posts}}).populate({
-      path: "user",
-      select: "-password"
-    }).populate({
-      path: "comments.user",
-      select: "-password"
-    });
+    if (!user) return res.status(200).send({ message: "Can Not Found User" });
+    const liked_posts = await PostModel.find({ _id: { $in: user.liked_posts } })
+      .populate({
+        path: "user",
+        select: "-password",
+      })
+      .populate({
+        path: "comments.user",
+        select: "-password",
+      });
     return res.status(200).send(liked_posts);
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
   }
-}
+};
 
 const get_following_posts = async (req, res) => {
   try {
     const user_id = req.user._id;
     const user = await UserModel.findById(user_id);
-    if (!user) return res.status(200).send({message: "Can Not Found User"});
+    if (!user) return res.status(200).send({ message: "Can Not Found User" });
     const following = user.following;
-    const feed_posts = await PostModel.find({user: {$in: following}}).sort({createAt: -1}).populate({
-      path: "user",
-      select: "-password"
-    }).populate({
-      path: "comments.user",
-      select: "-password"
-    });
+    const feed_posts = await PostModel.find({ user: { $in: following } })
+      .sort({ createAt: -1 })
+      .populate({
+        path: "user",
+        select: "-password",
+      })
+      .populate({
+        path: "comments.user",
+        select: "-password",
+      });
 
     return res.status(200).send(feed_posts);
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
   }
-}
-
+};
 
 const get_user_post = async (req, res) => {
   try {
     const user_id = req.user._id;
     const user = await UserModel.findById(user_id);
-    if (!user) return res.status(200).send({message: "Can Not Found User"});
+    if (!user) return res.status(200).send({ message: "Can Not Found User" });
     const following = user.following;
-    const feed_posts = await PostModel.find({user: user_id}).sort({createAt: -1}).populate({
-      path: "user",
-      select: "-password"
-    }).populate({
-      path: "comments.user",
-      select: "-password"
-    });
+    const feed_posts = await PostModel.find({ user: user_id })
+      .sort({ createAt: -1 })
+      .populate({
+        path: "user",
+        select: "-password",
+      })
+      .populate({
+        path: "comments.user",
+        select: "-password",
+      });
 
     return res.status(200).send(feed_posts);
   } catch (error) {
     console.log(error.message);
     res.status(500).send({ message: error.message });
   }
-}
-
+};
 
 export {
   create_post,
@@ -225,5 +234,5 @@ export {
   get_all_posts,
   get_liked_posts,
   get_following_posts,
-  get_user_post
+  get_user_post,
 };

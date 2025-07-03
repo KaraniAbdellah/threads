@@ -14,9 +14,8 @@ import cookieParser from "cookie-parser";
 import {v2 as cloudinary} from "cloudinary";
 
 
-
 cloudinary.config({
-    could_name: process.env.CLOUDINARY_COULD,
+    cloud_name: process.env.CLOUDINARY_COULD,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SCRET_KEY,
     // secure: true
