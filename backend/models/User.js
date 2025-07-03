@@ -61,6 +61,11 @@ const UserSchema = new mongoose.Schema(
         default: [], // 0 followers
       },
     ],
+    verfied: {
+      type: Boolean,
+      required: false,
+      default: true
+    }
   },
   { timestamps: true }
 );

@@ -4,10 +4,11 @@ import Loading from "./pages/Loading";
 import ForgetPassword from "./components/ForgetPassword";
 import ProtectedRoutes from "./components/ProtectRoutes";
 import { Toaster } from "react-hot-toast";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import userContext from "./context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 // import Css Filies
 import "./css/get_started_btn.css";
@@ -18,7 +19,6 @@ import Profile from "./pages/Profile";
 function App() {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
   async function getUserInfo() {
     try {
       console.log("Start Getting The User");

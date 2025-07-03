@@ -27,7 +27,7 @@ server.use(cors({
     origin: "http://localhost:5173",
     credentials: true,
 }));
-server.use(express.json());
+server.use(express.json({limit: "10mb"}));
 server.use(cookieParser());
 server.use("/api/auth", authRouter);
 server.use("/api/user", userRouter);

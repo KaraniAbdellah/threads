@@ -37,7 +37,8 @@ const PostSchema = new mongoose.Schema(
     post_date: {
       type: Date,
       required: [true, "post date required"],
-    },
+      default: new Date()
+    }
   },
   { timestamps: true }
 );

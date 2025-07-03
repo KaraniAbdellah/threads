@@ -145,7 +145,7 @@ const get_all_posts = async (req, res) => {
         select: "-password",
       })
       .populate({
-        path: "comments.user",
+        path: "post_comments.user",
         select: "-password",
       });
 
