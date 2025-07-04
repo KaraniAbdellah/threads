@@ -25,6 +25,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPostAction, setShowPostAction] = useState(false);
   const post_actions_menu = useRef(null);
+  const [post_number, setPost_Number] = useState(4);
   const [postToPost, setPostToPost] = useState({
     user: "",
     post_text: "",
@@ -80,6 +81,7 @@ const Home = () => {
 
   const NotBuildYet = () => {
     toast("Not Implemented Yet!", {
+      duration: 2000,
       icon: "🛠️",
       style: {
         borderRadius: "10px",
@@ -107,30 +109,41 @@ const Home = () => {
     }
   };
 
+  const load_more_posts = async () => {
+    setPost_Number((post_number) => post_number + 4);
+  };
+
   useEffect(() => {
     GetAllPosts();
     return () => {};
   }, []);
 
   useEffect(() => {
-    document.addEventListener("mousedown", function(e) {
+    document.addEventListener("mousedown", function (e) {
       if (post_actions_menu && post_actions_menu.current) {
-        console.log(post_actions_menu.current);
-        console.log(e.target);
+        // console.log(post_actions_menu.current);
+        // console.log(e.target);
         if (post_actions_menu.current.contains(e.target)) {
           console.log("We CLick Outside");
           setShowPostAction(false);
         }
       }
     });
-
   }, [post_actions_menu]);
 
+  useEffect(() => {
+    window.addEventListener("scroll", function (e) {
+      if (e.target.documentElement.scrollY >= this.window.scrollY) {
+        console.log("Load More");
+      }
+    });
+  });
+
   return (
-    <div className="min-h-screen bg-gradient-to-br bg-zinc-800 border-r border-l border-zinc-700 p-0">
-      <div className="max-w-2xl mx-auto pt-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br bg-zinc-800 border-r border-l border-zinc-700 pb-4">
+      <div className="max-w-2xl mx-auto pt-4 px-2">
         {/* Create Post Section */}
-        <div className="bg-zinc-900 rounded-md shadow-lg border border-yellow-700 p-6 mb-6 hover:shadow-xl transition-all duration-300">
+        <div className="bg-zinc-900 rounded-md shadow-lg border border-yellow-700 p-4 mb-6 hover:shadow-xl transition-all duration-300">
           <div className="flex items-start space-x-4">
             <div className="relative">
               <img
@@ -142,7 +155,7 @@ const Home = () => {
             </div>
 
             <div className="flex-1">
-              <div className="flex items-center space-x-2 mb-4">
+              <div className="flex items-center space-x-2 mb-2">
                 <HiOutlineGlobeAlt className="w-4 h-4 text-yellow-500" />
                 <span className="text-sm font-medium text-yellow-600">
                   Everyone can reply
@@ -238,14 +251,14 @@ const Home = () => {
 
         {/* Posts Feed */}
         <div className="space-y-6">
-          {posts.map((post) => (
+          {posts.slice(0, post_number).map((post) => (
             <div
               key={post._id}
               className="bg-zinc-900 rounded-md  shadow-lg border border-yellow-700 hover:shadow-xl transition-all duration-300"
             >
-              <div className="p-6">
+              <div className="p-4">
                 {/* Post Header */}
-                <div className="flex items-start justify-between mb-4">
+                <div className="flex items-start justify-between mb-2">
                   <div className="flex items-start space-x-3">
                     <img
                       src={post.user.profile_image}
@@ -280,13 +293,15 @@ const Home = () => {
                   <div className="relative">
                     <button
                       onClick={() => setShowPostAction(!showPostAction)}
-                      
                       className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors"
                     >
                       <BsThreeDots className="w-4 h-4" />
                     </button>
                     {showPostAction ? (
-                      <div ref={post_actions_menu} className="post_action absolute top-0 right-0 bg-zinc-900 p-1 rounded-sm border">
+                      <div
+                        ref={post_actions_menu}
+                        className="post_action absolute top-0 right-0 bg-zinc-900 p-1 rounded-sm border"
+                      >
                         <button className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800">
                           <FaEdit /> Edit
                         </button>
@@ -299,7 +314,7 @@ const Home = () => {
                     )}
                   </div>
                 </div>
-                <div className="mb-4">
+                <div className="mb-2">
                   <p className="text-white text-lg leading-relaxed">
                     {post.post_text}
                   </p>
@@ -351,15 +366,19 @@ const Home = () => {
         </div>
 
         {/* Load More */}
-        {posts.length !== 0 ? (
+        {posts.length !== 0 && post_number < posts.length ? (
           <div className="text-center py-8">
-            <button className="bg-white text-gray-600 px-8 py-3 rounded-full font-medium hover:bg-gray-50 transition-colors shadow-md border border-gray-200">
+            <button
+              onClick={load_more_posts}
+              className=" text-yellow-600 px-6 py-2 rounded-full font-medium hover:bg-zinc-700 transition-colors shadow-md border border-yellow-600"
+            >
               Load more posts
             </button>
           </div>
-        ) : (
-          <p className="text-white text-center">Create Your Threads ...</p>
-        )}
+        ) : ""}
+        {
+          posts.length === 0 ? (<p className="text-white text-center">Create Your Threads ...</p>) : ""
+        }
       </div>
     </div>
   );
