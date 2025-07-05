@@ -18,6 +18,9 @@ import userContext from "../../context/UserContext";
 import axios from "axios";
 import formatTimeAgo from "../../utlis_functions/formatTimeAgo";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -109,6 +112,16 @@ const Home = () => {
     }
   };
 
+  const LikePost = async (post) => {
+    console.log("Like To POst");
+    console.log(post);
+  }
+
+  const CommentPost = async (post) => {
+    console.log("Comment To Post");
+    console.log(post);
+  }
+
   useEffect(() => {
     GetAllPosts();
     return () => {};
@@ -140,11 +153,15 @@ const Home = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   });
 
+  useEffect(() => {
+    AOS.init();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br bg-zinc-800 border-r border-l border-zinc-700 pb-4">
       <div className="max-w-2xl mx-auto pt-4 px-2">
         {/* Create Post Section */}
-        <div className="bg-zinc-900 rounded-md shadow-lg border border-yellow-700 p-4 mb-6 hover:shadow-xl transition-all duration-300">
+        <div data-aos="flip-left" className="bg-zinc-900 rounded-md shadow-lg border border-yellow-700 p-4 mb-6 hover:shadow-xl transition-all duration-300">
           <div className="flex items-start space-x-4">
             <div className="relative">
               <img
@@ -240,7 +257,7 @@ const Home = () => {
 
                 <button
                   onClick={handlePost}
-                  disabled={!postToPost.post_text}
+                  disabled={postToPost.post_text.length < 10}
                   className="bg-gradient-to-r bg-yellow-700 hover:bg-yellow-600 text-white px-8 py-2.5 rounded-full font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
                 >
                   Post
@@ -252,7 +269,7 @@ const Home = () => {
 
         {/* Posts Feed */}
         {isLoading ? (
-          <div className="space-y-6">
+          <div data-aos="fade-up" className="space-y-6">
             {posts.slice(0, post_number).map((post) => (
               <div
                 key={post._id}
@@ -331,16 +348,16 @@ const Home = () => {
 
                   {/* Post Actions */}
                   <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    <button className="flex items-center space-x-2 text-gray-500 hover:text-red-500 hover:bg-red-50 px-3 py-2 rounded-full transition-all group">
+                    <button onClick={() => LikePost(post)} className="flex items-center space-x-2 text-gray-500 hover:text-red-500 hover:bg-red-50 px-3 py-2 rounded-full transition-all group">
                       <AiOutlineHeart className="w-5 h-5 group-hover:scale-110 transition-transform" />
                       <span className="text-sm font-medium">
-                        {post.post_comments?.length == 0
+                        {post.post_likes?.length == 0
                           ? 0
-                          : post.post_comments?.length}
+                          : post.post_likes?.length}
                       </span>
                     </button>
 
-                    <button className="flex items-center space-x-2 text-gray-500 hover:text-blue-500 hover:bg-blue-50 px-3 py-2 rounded-full transition-all group">
+                    <button onClick={() => CommentPost(post)} className="flex items-center space-x-2 text-gray-500 hover:text-blue-500 hover:bg-blue-50 px-3 py-2 rounded-full transition-all group">
                       <AiOutlineComment className="w-5 h-5 group-hover:scale-110 transition-transform" />
                       <span className="text-sm font-medium">
                         {post.post_likes?.length}

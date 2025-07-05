@@ -12,6 +12,7 @@
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@react-oauth/google": "^0.12.2",
+    "aos": "^3.0.0-beta.6",
     "axios": "^1.10.0",
     "i": "^0.3.7",
     "js-generate-password": "^1.0.0",
