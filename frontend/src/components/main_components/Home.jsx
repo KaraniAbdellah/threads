@@ -130,8 +130,8 @@ const Home = () => {
   useEffect(() => {
     document.addEventListener("mousedown", function (e) {
       if (post_actions_menu && post_actions_menu.current) {
-        // console.log(post_actions_menu.current);
-        // console.log(e.target);
+        console.log(post_actions_menu.current);
+        console.log(e.target);
         if (post_actions_menu.current.contains(e.target)) {
           console.log("We CLick Outside");
           setShowPostAction(false);
@@ -387,19 +387,7 @@ const Home = () => {
           <p className="text-white text-center">Loading ...</p>
         )}
 
-        {/* Load More */}
-        {/* {posts.length !== 0 && post_number < posts.length ? (
-          <div className="text-center py-8">
-            <button
-              className=" text-yellow-600 px-6 py-2 rounded-full font-medium hover:bg-zinc-700 transition-colors shadow-md border border-yellow-600"
-            >
-              Load more posts
-            </button>
-          </div>
-        ) : (
-          ""
-        )} */}
-
+        
         {posts.length === 0 && isLoading ? (
           <p className="text-white text-center">Create Your Threads ...</p>
         ) : (
@@ -411,3 +399,16 @@ const Home = () => {
 };
 
 export default Home;
+
+{/* Load More */}
+  {/* {posts.length !== 0 && post_number < posts.length ? (
+    <div className="text-center py-8">
+      <button
+        className=" text-yellow-600 px-6 py-2 rounded-full font-medium hover:bg-zinc-700 transition-colors shadow-md border border-yellow-600"
+      >
+        Load more posts
+      </button>
+    </div>
+  ) : (
+    ""
+  )} */}
