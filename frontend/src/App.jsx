@@ -4,11 +4,16 @@ import Loading from "./pages/Loading";
 import ForgetPassword from "./components/ForgetPassword";
 import ProtectedRoutes from "./components/ProtectRoutes";
 import { Toaster } from "react-hot-toast";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import userContext from "./context/UserContext";
-import { useNavigate } from "react-router-dom";
 
 // import Css Filies
 import "./css/get_started_btn.css";
@@ -29,8 +34,8 @@ function App() {
         .then((res) => {
           setUser(() => res.data);
         })
-        .catch((err) => {
-        }).finally(() => setIsLoading(() => true));
+        .catch((err) => {})
+        .finally(() => setIsLoading(() => true));
     } catch (error) {
       console.log(error);
     }
@@ -41,24 +46,32 @@ function App() {
 
   if (!isLoading) {
     return <Loading></Loading>;
+  } else {
+    console.log(user);
   }
   return (
-    <>
-      <BrowserRouter>
+    <BrowserRouter>
+      <>
         <userContext.Provider value={user}>
           <Routes>
-            <Route path="/" element={<Home></Home>}></Route>
-              <Route path="/recovery"  element={<ForgetPassword></ForgetPassword>} ></Route>
-            <Route element={<ProtectedRoutes />}>
-              <Route path="/space" element={<Space></Space>}></Route>
-              <Route path="/loading" element={<Loading></Loading>}></Route>
-              <Route path="/profile" element={<Profile></Profile>}></Route>
-            </Route>
+            <Route
+              path="/"
+              element={user ? <Navigate to="/space" /> : <Home />}
+            ></Route>
+            <Route
+              path="/recovery"
+              element={<ForgetPassword></ForgetPassword>}
+            ></Route>
+            {/* <Route element={<ProtectedRoutes />}> */}
+            <Route path="/space" element={<Space></Space>}></Route>
+            <Route path="/loading" element={<Loading></Loading>}></Route>
+            <Route path="/profile" element={<Profile></Profile>}></Route>
+            {/* </Route> */}
           </Routes>
         </userContext.Provider>
-      </BrowserRouter>
-      <Toaster></Toaster>
-    </>
+        <Toaster></Toaster>
+      </>
+    </BrowserRouter>
   );
 }
 

@@ -4,6 +4,7 @@ import { useContext } from "react";
 
 const ProtectedRoutes = () => {
   const user = useContext(userContext);
+  console.log(user);
   return user ? <Outlet /> : <Navigate to="/"/>;
 };
 export default ProtectedRoutes;
