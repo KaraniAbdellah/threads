@@ -29,6 +29,7 @@ const Home = () => {
   const [post_number, setPost_Number] = useState(4);
   const [postToShow, setPostToShow] = useState(null);
   const [isLoadingPost, setIsLoadingPost] = useState(false);
+  const [isLoadingLike, setIsLoadingLike] = useState(false);
   const [postToPost, setPostToPost] = useState({
     user: "",
     post_text: "",
@@ -184,16 +185,7 @@ const Home = () => {
   };
 
   const LikePost = async (post) => {
-    const newPosts = posts.map((Mpost) => {
-      if (Mpost._id == post._id) {
-        return {
-          ...Mpost,
-          post_likes: [...Mpost.post_likes, user._id],
-        };
-      }
-    });
-    setPosts(() => newPosts);
-
+    setIsLoadingLike(() => true);
     try {
       await axios
         .get(`${import.meta.env.VITE_API_URL}/api/user/like_post/${post._id}`, {
@@ -209,7 +201,7 @@ const Home = () => {
             duration: 2000,
             position: "bottom-right",
           });
-        });
+        }).finally(() => setIsLoadingLike(() => false));
     } catch (error) {
       toast.error("Something went wrong, please try again", {
         duration: 2000,
@@ -219,18 +211,7 @@ const Home = () => {
   };
 
   const UnLikePost = async (post) => {
-    const newPosts = posts.map((Mpost) => {
-      if (Mpost._id === post._id) {
-        return {
-          ...Mpost,
-          post_likes: Mpost.post_likes.filter(
-            (id) => id.toString() !== user._id.toString()
-          ),
-        };
-      }
-      return Mpost;
-    });
-    setPosts(newPosts);
+    setIsLoadingLike(() => true);
     try {
       await axios
         .get(`${import.meta.env.VITE_API_URL}/api/user/unlike_post/${post._id}`, {
@@ -246,7 +227,7 @@ const Home = () => {
             duration: 2000,
             position: "bottom-right",
           });
-        });
+        }).finally(() => setIsLoadingLike(() => false));
     } catch (error) {
       toast.error("Something went wrong, please try again", {
         duration: 2000,

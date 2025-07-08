@@ -26,7 +26,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   async function getUserInfo() {
     try {
-      console.log("Start Getting The User");
       await axios
         .get(`${import.meta.env.VITE_API_URL}/api/auth/me`, {
           withCredentials: true,
@@ -46,8 +45,6 @@ function App() {
 
   if (!isLoading) {
     return <Loading></Loading>;
-  } else {
-    console.log(user);
   }
   return (
     <BrowserRouter>

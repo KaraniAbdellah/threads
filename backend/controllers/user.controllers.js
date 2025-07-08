@@ -141,7 +141,6 @@ const update_user_profile = async (req, res) => {
 const user_like_post = async (req, res) => {
     try {
         const post_id = req.params.post_id;
-        console.log(req.user._id, "liek this post", post_id);
         const user = await UserModel.findById(req.user._id);
         const post = await PostModel.findById(post_id);
         if (!user) return res.status(404).send({message: "User Not Found"});
@@ -149,6 +148,7 @@ const user_like_post = async (req, res) => {
         post.post_likes.push(req.user._id);
         await user.save();
         await post.save();
+        return res.status(200).send(post);
     } catch (error) {
         console.error(error.message);
         return res.status(500).send({error: error.message});
@@ -159,7 +159,6 @@ const user_like_post = async (req, res) => {
 const user_unlike_post = async (req, res) => {
     try {
         const post_id = req.params.post_id;
-        console.log(req.user._id, "liek this post", post_id);
         const user = await UserModel.findById(req.user._id);
         const post = await PostModel.findById(post_id);
         if (!user) return res.status(404).send({message: "User Not Found"});
@@ -167,6 +166,7 @@ const user_unlike_post = async (req, res) => {
         post.post_likes.pop(req.user._id);
         await user.save();
         await post.save();
+        return res.status(200).send(post);
     } catch (error) {
         console.error(error.message);
         return res.status(500).send({error: error.message});
