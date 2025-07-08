@@ -29,7 +29,9 @@ const Home = () => {
   const [post_number, setPost_Number] = useState(4);
   const [postToShow, setPostToShow] = useState(null);
   const [isLoadingPost, setIsLoadingPost] = useState(false);
-  const [isLoadingLike, setIsLoadingLike] = useState(false);
+  const [isWantToComment, setIsWantToComment] = useState(false);
+  const [commentText, setCommentText] = useState("");
+
   const [postToPost, setPostToPost] = useState({
     user: "",
     post_text: "",
@@ -185,7 +187,6 @@ const Home = () => {
   };
 
   const LikePost = async (post) => {
-    setIsLoadingLike(() => true);
     try {
       await axios
         .get(`${import.meta.env.VITE_API_URL}/api/user/like_post/${post._id}`, {
@@ -201,7 +202,7 @@ const Home = () => {
             duration: 2000,
             position: "bottom-right",
           });
-        }).finally(() => setIsLoadingLike(() => false));
+        });
     } catch (error) {
       toast.error("Something went wrong, please try again", {
         duration: 2000,
@@ -211,12 +212,14 @@ const Home = () => {
   };
 
   const UnLikePost = async (post) => {
-    setIsLoadingLike(() => true);
     try {
       await axios
-        .get(`${import.meta.env.VITE_API_URL}/api/user/unlike_post/${post._id}`, {
-          withCredentials: true,
-        })
+        .get(
+          `${import.meta.env.VITE_API_URL}/api/user/unlike_post/${post._id}`,
+          {
+            withCredentials: true,
+          }
+        )
         .then((res) => {
           console.log(res);
           GetAllPosts();
@@ -227,7 +230,7 @@ const Home = () => {
             duration: 2000,
             position: "bottom-right",
           });
-        }).finally(() => setIsLoadingLike(() => false));
+        });
     } catch (error) {
       toast.error("Something went wrong, please try again", {
         duration: 2000,
@@ -239,6 +242,21 @@ const Home = () => {
   const CommentPost = async (post) => {
     console.log("Comment To Post");
     console.log(post);
+    try {
+      await axios
+        .post(
+          `${import.meta.env.VITE_API_URL}/api/user/comment_post/${post._id}`,
+          { commentText: commentText },
+          {
+            withCredentials: true,
+          }
+        )
+        .then((res) => {
+          console.log(res);
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const NotBuildYet = () => {
@@ -525,7 +543,7 @@ const Home = () => {
                     )}
 
                     <button
-                      onClick={() => CommentPost(post)}
+                      onClick={() => setIsWantToComment(() => !isWantToComment)}
                       className="flex items-center space-x-2 text-gray-500 hover:text-blue-500 hover:bg-blue-50 px-3 py-2 rounded-full transition-all group"
                     >
                       <AiOutlineComment className="w-5 h-5 group-hover:scale-110 transition-transform" />
@@ -550,6 +568,32 @@ const Home = () => {
                     </button>
                   </div>
                 </div>
+                {isWantToComment ? (
+                  <div>
+                    <form className="create_comment p-4 flex flex-col justify-end items-end">
+                      <textarea
+                        className="w-full bg-zinc-800 border-none outline-none p-2 rounded-md text-white border resize-none"
+                        placeholder="Write your comment"
+                        value={commentText}
+                        onChange={(e) => setCommentText(e.target.value)}
+                        rows={3}
+                        required
+                      />
+                      <button
+                        onClick={() => CommentPost(post)}
+                        className="mt-1 text-right px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700"
+                      >
+                        Submit
+                      </button>
+                    </form>
+                    <div className="all_comments m-4 p-3 bg-zinc-800 rounded-lg text-white space-y-2">
+                      <p className="text-sm">💬 Helllo World</p>
+                      {/* You can map real comments here */}
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
             ))}
           </div>
