@@ -21,14 +21,14 @@ const create_post = async (req, res) => {
 
     if (img) {
       const uploadedResponse = await cloudinary.uploader.upload(img);
-			img = uploadedResponse.secure_url;
-    } 
+      img = uploadedResponse.secure_url;
+    }
 
     const new_post = new PostModel({
       user: user_id,
       post_text: text,
       post_image: img ? img : "",
-      post_date: post_date
+      post_date: post_date,
     });
     console.log(new_post);
 
@@ -120,9 +120,14 @@ const delete_post = async (req, res) => {
   console.log(req.params.post_id);
   try {
     const post = await PostModel.findById(req.params.post_id);
+    const user = await UserModel.findById(req.user._id);
     if (!post) {
       return res.status(400).send({ message: "Can Not Find This Post" });
     }
+
+    user.liked_posts = user.liked_posts.filter(
+      (id) => id.toString() !== post._id.toString()
+    );
 
     if (post.img) {
       const img_id = post.img.split("/").split(".")[0];
@@ -130,6 +135,7 @@ const delete_post = async (req, res) => {
     }
 
     await PostModel.findByIdAndDelete(req.params.post_id);
+    await user.save();
     return res.status(200).send(post);
   } catch (error) {
     console.log(error.message);
@@ -138,7 +144,7 @@ const delete_post = async (req, res) => {
 };
 
 const update_post = async (req, res) => {
-try {
+  try {
     const postToUpdate = await PostModel.findById(req.params.post_id);
     const newPost = req.body;
     console.log(newPost);
@@ -153,8 +159,10 @@ try {
     }
 
     if (newPost.post_image) {
-        const uploadedResponse = await cloudinary.uploader.upload(newPost.post_image);
-        newPost.post_image = uploadedResponse.secure_url;
+      const uploadedResponse = await cloudinary.uploader.upload(
+        newPost.post_image
+      );
+      newPost.post_image = uploadedResponse.secure_url;
     }
 
     await PostModel.findByIdAndUpdate(req.params.post_id, newPost);
@@ -163,7 +171,7 @@ try {
     console.log(error.message);
     res.status(500).send({ message: error.message });
   }
-}
+};
 
 const get_all_posts = async (req, res) => {
   try {
@@ -264,5 +272,5 @@ export {
   get_liked_posts,
   get_following_posts,
   get_user_post,
-  update_post
+  update_post,
 };
