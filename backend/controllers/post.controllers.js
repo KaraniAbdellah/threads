@@ -117,6 +117,7 @@ const comment_post = async (req, res) => {
 };
 
 const delete_post = async (req, res) => {
+  console.log(req.params.post_id);
   try {
     const post = await PostModel.findById(req.params.post_id);
     if (!post) {
@@ -135,6 +136,14 @@ const delete_post = async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 };
+
+const update_post = async (req, res) => {
+  try {
+    
+  } catch (error) {
+    
+  }
+}
 
 const get_all_posts = async (req, res) => {
   try {
@@ -235,4 +244,5 @@ export {
   get_liked_posts,
   get_following_posts,
   get_user_post,
+  update_post
 };

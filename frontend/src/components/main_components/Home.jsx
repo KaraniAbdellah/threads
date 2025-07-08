@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   HiOutlinePhotograph,
   HiOutlineVideoCamera,
@@ -6,20 +6,20 @@ import {
   HiOutlineLocationMarker,
   HiOutlineGlobeAlt,
 } from "react-icons/hi";
-import { BsThreeDots } from "react-icons/bs";
+import { IoSadOutline, IoShareOutline } from "react-icons/io5";
+import { toast } from "react-hot-toast";
+import userContext from "../../context/UserContext";
+import axios from "axios";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import formatTimeAgo from "../../utlis_functions/formatTimeAgo";
+import { BsThreeDotsVertical } from "react-icons/bs";
 import {
   AiOutlineHeart,
   AiOutlineComment,
   AiOutlineRetweet,
 } from "react-icons/ai";
-import { IoSadOutline, IoShareOutline } from "react-icons/io5";
-import { toast } from "react-hot-toast";
-import userContext from "../../context/UserContext";
-import axios from "axios";
-import formatTimeAgo from "../../utlis_functions/formatTimeAgo";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import AOS from "aos";
-import "aos/dist/aos.css";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -61,6 +61,7 @@ const Home = () => {
             duration: 2000,
             position: "bottom-right",
           });
+          GetAllPosts(); // Refresh posts after creating
         })
         .catch((err) => {
           toast.error("Failed Adding Post", {
@@ -78,18 +79,6 @@ const Home = () => {
 
   const selectImage = () => {
     console.log("Select Your Image");
-  };
-
-  const NotBuildYet = () => {
-    toast("Not Implemented Yet!", {
-      duration: 2000,
-      icon: "🛠️",
-      style: {
-        borderRadius: "10px",
-        background: "#333",
-        color: "#fff",
-      },
-    });
   };
 
   const GetAllPosts = async () => {
@@ -110,6 +99,41 @@ const Home = () => {
     }
   };
 
+  const EditPost = (post) => {
+    setEditingPost(post._id);
+    setEditText(post.post_text);
+    setPostToShow(null);
+  };
+
+  const DeletePost = async (postId) => {
+    if (window.confirm("Are you sure you want to delete this post?")) {
+      try {
+        // Backend API call - uncomment and implement when ready
+        console.log(postId);
+        await axios.delete(
+          `${import.meta.env.VITE_API_URL}/api/post/delete/${postId}`,
+          {
+            withCredentials: true,
+          }
+        );
+
+        // Frontend update for now
+        setPosts(posts.filter((post) => post._id !== postId));
+        setPostToShow(null);
+
+        toast.success("Post Deleted Successfully", {
+          duration: 2000,
+          position: "bottom-right",
+        });
+      } catch (error) {
+        toast.error("Failed to Delete Post", {
+          duration: 2000,
+          position: "bottom-right",
+        });
+      }
+    }
+  };
+
   const LikePost = async (post) => {
     console.log("Like To POst");
     console.log(post);
@@ -120,17 +144,22 @@ const Home = () => {
     console.log(post);
   };
 
-  useEffect(() => {
-    GetAllPosts();
-    return () => {};
-  }, []);
+  const NotBuildYet = () => {
+    toast("Not Implemented Yet!", {
+      duration: 2000,
+      icon: "🛠️",
+      style: {
+        borderRadius: "10px",
+        background: "#333",
+        color: "#fff",
+      },
+    });
+  };
 
   useEffect(() => {
     const handleClickOutside = (e) => {
       const postElement = document.getElementById(`${postToShow}`);
-      if (postElement && postElement.contains(e.target)) {
-        console.log("Edit Or Delete Button");
-      } else {
+      if (!(postElement && postElement.contains(e.target))) {
         setPostToShow(null);
       }
     };
@@ -140,6 +169,10 @@ const Home = () => {
     };
   }, [postToShow]);
 
+  useEffect(() => {
+    GetAllPosts();
+    return () => {};
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -167,14 +200,18 @@ const Home = () => {
           className="bg-zinc-900 rounded-md shadow-lg border border-yellow-700 p-4 mb-6 hover:shadow-xl transition-all duration-300"
         >
           <div className="flex items-start space-x-4">
-            <div className="relative">
-              <img
-                src={user.profile_image}
-                alt="Profile"
-                className="w-12 h-12 rounded-full object-cover ring-2 ring-blue-100"
-              />
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white"></div>
-            </div>
+            {user.profile_image ? (
+              <div className="relative">
+                <img
+                  src={user.profile_image}
+                  alt="Profile"
+                  className="w-12 h-12 rounded-full object-cover ring-2 ring-blue-100"
+                />
+                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white"></div>
+              </div>
+            ) : (
+              ""
+            )}
 
             <div className="flex-1">
               <div className="flex items-center space-x-2 mb-2">
@@ -261,7 +298,7 @@ const Home = () => {
 
                 <button
                   onClick={handlePost}
-                  disabled={postToPost.post_text.length < 10}
+                  disabled={postToPost.post_text.length < 2}
                   className="bg-gradient-to-r bg-yellow-700 hover:bg-yellow-600 text-white px-8 py-2.5 rounded-full font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
                 >
                   Post
@@ -278,7 +315,7 @@ const Home = () => {
               <div
                 key={post._id}
                 id={post._id}
-                className="bg-zinc-900 rounded-md  shadow-lg border border-yellow-700 hover:shadow-xl transition-all duration-300"
+                className="bg-zinc-900 rounded-md shadow-lg border border-yellow-700 hover:shadow-xl transition-all duration-300"
               >
                 <div className="p-4">
                   {/* Post Header */}
@@ -314,38 +351,49 @@ const Home = () => {
                         </p>
                       </div>
                     </div>
-                    <div className="relative">
-                      <button
-                        onClick={() => setPostToShow(() => post._id)}
-                        className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors"
-                      >
-                        <BsThreeDots className="w-4 h-4" />
-                      </button>
-                      {post._id === postToShow ? (
-                        <div className="post_action_menu absolute top-0 right-0 bg-zinc-900 p-1 rounded-sm border">
-                          <button className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800">
-                            <FaEdit /> Edit
-                          </button>
-                          <button className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800">
-                            <FaTrash /> Delete
-                          </button>
-                        </div>
-                      ) : (
-                        ""
-                      )}
-                    </div>
+                    {user._id === post.user._id && (
+                      <div className="relative">
+                        <button
+                          onClick={() => setPostToShow(post._id)}
+                          className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors"
+                        >
+                          <BsThreeDotsVertical className="w-4 h-4" />
+                        </button>
+                        {post._id === postToShow && (
+                          <div className="post_action_menu absolute top-0 right-0 bg-zinc-900 p-1 rounded-sm border z-10">
+                            <button
+                              onClick={() => EditPost(post)}
+                              className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800"
+                            >
+                              <FaEdit /> Edit
+                            </button>
+                            <button
+                              onClick={() => DeletePost(post._id)}
+                              className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800"
+                            >
+                              <FaTrash /> Delete
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
+
+                  {/* Post Content */}
                   <div className="mb-2">
                     <p className="text-white text-lg leading-relaxed">
                       {post.post_text}
                     </p>
                   </div>
-                  {post.post_image ? (
-                    <div className="border rounded-md w-full h-full">
-                      <img className="h-full" src={post.post_image}></img>
+
+                  {post.post_image && (
+                    <div className="border rounded-md w-full h-full mb-4">
+                      <img
+                        className="h-full w-full object-cover"
+                        src={post.post_image}
+                        alt=""
+                      />
                     </div>
-                  ) : (
-                    ""
                   )}
 
                   {/* Post Actions */}
@@ -366,7 +414,7 @@ const Home = () => {
                     >
                       <AiOutlineComment className="w-5 h-5 group-hover:scale-110 transition-transform" />
                       <span className="text-sm font-medium">
-                        {post.post_likes?.length || 0}
+                        {post.post_comments?.length || 0}
                       </span>
                     </button>
 
@@ -375,7 +423,7 @@ const Home = () => {
                       className="flex items-center space-x-2 text-gray-500 hover:text-green-500 hover:bg-green-50 px-3 py-2 rounded-full transition-all group"
                     >
                       <AiOutlineRetweet className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                      <span className="text-sm font-medium">{}</span>
+                      <span className="text-sm font-medium">0</span>
                     </button>
 
                     <button
@@ -393,10 +441,8 @@ const Home = () => {
           <p className="text-white text-center">Loading ...</p>
         )}
 
-        {posts.length === 0 && isLoading ? (
+        {posts.length === 0 && !isLoading && (
           <p className="text-white text-center">Create Your Threads ...</p>
-        ) : (
-          ""
         )}
       </div>
     </div>
@@ -404,20 +450,3 @@ const Home = () => {
 };
 
 export default Home;
-
-{
-  /* Load More */
-}
-{
-  /* {posts.length !== 0 && post_number < posts.length ? (
-    <div className="text-center py-8">
-      <button
-        className=" text-yellow-600 px-6 py-2 rounded-full font-medium hover:bg-zinc-700 transition-colors shadow-md border border-yellow-600"
-      >
-        Load more posts
-      </button>
-    </div>
-  ) : (
-    ""
-  )} */
-}
