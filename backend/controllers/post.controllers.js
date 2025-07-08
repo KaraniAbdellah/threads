@@ -190,7 +190,7 @@ const get_liked_posts = async (req, res) => {
   try {
     const user_id = req.params.user_id;
     const user = await UserModel.findById(user_id);
-    if (!user) return res.status(200).send({ message: "Can Not Found User" });
+    if (!user) return res.status(404).send({ message: "Can Not Found User" });
     const liked_posts = await PostModel.find({ _id: { $in: user.liked_posts } })
       .populate({
         path: "user",

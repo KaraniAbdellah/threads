@@ -46,7 +46,6 @@ const UserSchema = new mongoose.Schema(
         default: [],
       },
     ],
-
     followers: [
       {
         type: mongoose.Schema.Types.ObjectId,

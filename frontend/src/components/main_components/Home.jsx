@@ -99,9 +99,17 @@ const Home = () => {
         .finally(() => setIsLoadingPost(() => false))
         .catch((err) => {
           console.log(err);
+          toast.error("Failed Updating Post", {
+            duration: 2000,
+            position: "bottom-right",
+          });
         });
     } catch (error) {
       console.log(error);
+      toast.error("Failed Updating Post", {
+        duration: 2000,
+        position: "bottom-right",
+      });
     }
   };
 
@@ -176,8 +184,75 @@ const Home = () => {
   };
 
   const LikePost = async (post) => {
-    console.log("Like To POst");
-    console.log(post);
+    const newPosts = posts.map((Mpost) => {
+      if (Mpost._id == post._id) {
+        return {
+          ...Mpost,
+          post_likes: [...Mpost.post_likes, user._id],
+        };
+      }
+    });
+    setPosts(() => newPosts);
+
+    try {
+      await axios
+        .get(`${import.meta.env.VITE_API_URL}/api/user/like_post/${post._id}`, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          console.log(res);
+          GetAllPosts();
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Something went wrong, please try again", {
+            duration: 2000,
+            position: "bottom-right",
+          });
+        });
+    } catch (error) {
+      toast.error("Something went wrong, please try again", {
+        duration: 2000,
+        position: "bottom-right",
+      });
+    }
+  };
+
+  const UnLikePost = async (post) => {
+    const newPosts = posts.map((Mpost) => {
+      if (Mpost._id === post._id) {
+        return {
+          ...Mpost,
+          post_likes: Mpost.post_likes.filter(
+            (id) => id.toString() !== user._id.toString()
+          ),
+        };
+      }
+      return Mpost;
+    });
+    setPosts(newPosts);
+    try {
+      await axios
+        .get(`${import.meta.env.VITE_API_URL}/api/user/unlike_post/${post._id}`, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          console.log(res);
+          GetAllPosts();
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Something went wrong, please try again", {
+            duration: 2000,
+            position: "bottom-right",
+          });
+        });
+    } catch (error) {
+      toast.error("Something went wrong, please try again", {
+        duration: 2000,
+        position: "bottom-right",
+      });
+    }
   };
 
   const CommentPost = async (post) => {
@@ -241,10 +316,10 @@ const Home = () => {
           className="bg-zinc-900 rounded-md shadow-lg border border-yellow-700 p-4 mb-6 hover:shadow-xl transition-all duration-300"
         >
           <div className="flex items-start space-x-4">
-            {user.profile_image ? (
+            {user?.profile_image ? (
               <div className="relative">
                 <img
-                  src={user.profile_image}
+                  src={user?.profile_image}
                   alt="Profile"
                   className="w-12 h-12 rounded-full object-cover ring-2 ring-blue-100"
                 />
@@ -300,7 +375,7 @@ const Home = () => {
                     <span className="text-sm font-medium">Photo</span>
                   </label>
                   <input
-                    value={postToPost.profile_image}
+                    value={postToPost?.profile_image}
                     onChange={async (e) => {
                       const file = e.target.files[0];
                       const reader = new FileReader();
@@ -343,9 +418,11 @@ const Home = () => {
                   disabled={postToPost.post_text.length < 2}
                   className="bg-gradient-to-r bg-yellow-700 hover:bg-yellow-600 text-white px-8 py-2.5 rounded-full font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
                 >
-                  {
-                    !isLoadingPost ? (IsEditPost ? "Edit" : "Post") : "Processing ..."
-                  }
+                  {!isLoadingPost
+                    ? IsEditPost
+                      ? "Edit"
+                      : "Post"
+                    : "Processing ..."}
                 </button>
               </div>
             </div>
@@ -366,7 +443,7 @@ const Home = () => {
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-start space-x-3">
                       <img
-                        src={post.user.profile_image}
+                        src={post.user?.profile_image}
                         alt={post.user?.user_name}
                         className="w-12 h-12 rounded-full object-cover ring-2 ring-gray-100"
                       />
@@ -442,15 +519,29 @@ const Home = () => {
 
                   {/* Post Actions */}
                   <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    <button
-                      onClick={() => LikePost(post)}
-                      className="flex items-center space-x-2 text-gray-500 hover:text-red-500 hover:bg-red-50 px-3 py-2 rounded-full transition-all group"
-                    >
-                      <AiOutlineHeart className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                      <span className="text-sm font-medium">
-                        {post.post_likes?.length || 0}
-                      </span>
-                    </button>
+                    {post.post_likes.find(
+                      (id) => id.toString() === user._id.toString()
+                    ) ? (
+                      <button
+                        onClick={() => UnLikePost(post)}
+                        className="flex items-center space-x-2 text-gray-500 hover:text-red-500 hover:bg-red-50 px-3 py-2 rounded-full transition-all group"
+                      >
+                        <FaHeart className="w-5 h-5 text-red-700 group-hover:scale-110 transition-transform" />
+                        <span className="text-sm font-medium">
+                          {post.post_likes?.length || 0}
+                        </span>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => LikePost(post)}
+                        className="flex items-center space-x-2 text-gray-500 hover:text-red-500 hover:bg-red-50 px-3 py-2 rounded-full transition-all group"
+                      >
+                        <AiOutlineHeart className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                        <span className="text-sm font-medium">
+                          {post.post_likes?.length || 0}
+                        </span>
+                      </button>
+                    )}
 
                     <button
                       onClick={() => CommentPost(post)}

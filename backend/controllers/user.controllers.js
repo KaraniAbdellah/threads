@@ -6,7 +6,7 @@ import {v2 as cloudinary} from "cloudinary";
 import bcrypt, { hash } from "bcrypt";
 import UserModel from "../models/User.js";
 import NotificationModel from "../models/Notification.js";
-
+import PostModel from "../models/Post.js";
 
 const get_user_profile = async (req, res) => {
     try {
@@ -138,4 +138,41 @@ const update_user_profile = async (req, res) => {
 }
 
 
-export { get_user_profile, get_suggested_users, follow_unfollow, update_user_profile };
+const user_like_post = async (req, res) => {
+    try {
+        const post_id = req.params.post_id;
+        console.log(req.user._id, "liek this post", post_id);
+        const user = await UserModel.findById(req.user._id);
+        const post = await PostModel.findById(post_id);
+        if (!user) return res.status(404).send({message: "User Not Found"});
+        user.liked_posts.push(post_id);
+        post.post_likes.push(req.user._id);
+        await user.save();
+        await post.save();
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).send({error: error.message});
+    }
+}
+
+
+const user_unlike_post = async (req, res) => {
+    try {
+        const post_id = req.params.post_id;
+        console.log(req.user._id, "liek this post", post_id);
+        const user = await UserModel.findById(req.user._id);
+        const post = await PostModel.findById(post_id);
+        if (!user) return res.status(404).send({message: "User Not Found"});
+        user.liked_posts.pop(post_id);
+        post.post_likes.pop(req.user._id);
+        await user.save();
+        await post.save();
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).send({error: error.message});
+    }
+}
+
+
+
+export { get_user_profile, get_suggested_users, follow_unfollow, update_user_profile, user_like_post, user_unlike_post };
