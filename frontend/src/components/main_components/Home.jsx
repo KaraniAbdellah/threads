@@ -18,17 +18,15 @@ import userContext from "../../context/UserContext";
 import axios from "axios";
 import formatTimeAgo from "../../utlis_functions/formatTimeAgo";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import AOS from 'aos';
-import 'aos/dist/aos.css';
-
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
   const user = useContext(userContext);
-  const [isLoading, setIsLoading] = useState(false);
-  const [showPostAction, setShowPostAction] = useState(false);
-  const post_actions_menu = useRef(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [post_number, setPost_Number] = useState(4);
+  const [postToShow, setPostToShow] = useState(null);
   const [postToPost, setPostToPost] = useState({
     user: "",
     post_text: "",
@@ -106,7 +104,7 @@ const Home = () => {
         .catch((err) => {
           console.log(err);
         })
-        .finally(() => setIsLoading(true));
+        .finally(() => setIsLoading(false));
     } catch (error) {
       console.log(error);
     }
@@ -115,12 +113,12 @@ const Home = () => {
   const LikePost = async (post) => {
     console.log("Like To POst");
     console.log(post);
-  }
+  };
 
   const CommentPost = async (post) => {
     console.log("Comment To Post");
     console.log(post);
-  }
+  };
 
   useEffect(() => {
     GetAllPosts();
@@ -128,30 +126,33 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    document.addEventListener("mousedown", function (e) {
-      if (post_actions_menu && post_actions_menu.current) {
-        console.log(post_actions_menu.current);
-        console.log(e.target);
-        if (post_actions_menu.current.contains(e.target)) {
-          console.log("We CLick Outside");
-          setShowPostAction(false);
-        }
+    const handleClickOutside = (e) => {
+      const postElement = document.getElementById(`${postToShow}`);
+      if (postElement && postElement.contains(e.target)) {
+        console.log("Edit Or Delete Button");
+      } else {
+        setPostToShow(null);
       }
-    });
-  }, [post_actions_menu]);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [postToShow]);
+
 
   useEffect(() => {
     const handleScroll = () => {
       if (
         window.innerHeight + window.scrollY >= document.body.scrollHeight &&
-        isLoading
+        !isLoading
       ) {
         setPost_Number((post_number) => post_number + 4);
       }
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  });
+  }, []);
 
   useEffect(() => {
     AOS.init();
@@ -161,7 +162,10 @@ const Home = () => {
     <div className="min-h-screen bg-gradient-to-br bg-zinc-800 border-r border-l border-zinc-700 pb-4">
       <div className="max-w-2xl mx-auto pt-4 px-2">
         {/* Create Post Section */}
-        <div data-aos="flip-left" className="bg-zinc-900 rounded-md shadow-lg border border-yellow-700 p-4 mb-6 hover:shadow-xl transition-all duration-300">
+        <div
+          data-aos="flip-left"
+          className="bg-zinc-900 rounded-md shadow-lg border border-yellow-700 p-4 mb-6 hover:shadow-xl transition-all duration-300"
+        >
           <div className="flex items-start space-x-4">
             <div className="relative">
               <img
@@ -268,11 +272,12 @@ const Home = () => {
         </div>
 
         {/* Posts Feed */}
-        {isLoading ? (
+        {!isLoading ? (
           <div data-aos="fade-up" className="space-y-6">
             {posts.slice(0, post_number).map((post) => (
               <div
                 key={post._id}
+                id={post._id}
                 className="bg-zinc-900 rounded-md  shadow-lg border border-yellow-700 hover:shadow-xl transition-all duration-300"
               >
                 <div className="p-4">
@@ -311,16 +316,13 @@ const Home = () => {
                     </div>
                     <div className="relative">
                       <button
-                        onClick={() => setShowPostAction(!showPostAction)}
+                        onClick={() => setPostToShow(() => post._id)}
                         className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors"
                       >
                         <BsThreeDots className="w-4 h-4" />
                       </button>
-                      {showPostAction ? (
-                        <div
-                          ref={post_actions_menu}
-                          className="post_action absolute top-0 right-0 bg-zinc-900 p-1 rounded-sm border"
-                        >
+                      {post._id === postToShow ? (
+                        <div className="post_action_menu absolute top-0 right-0 bg-zinc-900 p-1 rounded-sm border">
                           <button className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800">
                             <FaEdit /> Edit
                           </button>
@@ -348,19 +350,23 @@ const Home = () => {
 
                   {/* Post Actions */}
                   <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    <button onClick={() => LikePost(post)} className="flex items-center space-x-2 text-gray-500 hover:text-red-500 hover:bg-red-50 px-3 py-2 rounded-full transition-all group">
+                    <button
+                      onClick={() => LikePost(post)}
+                      className="flex items-center space-x-2 text-gray-500 hover:text-red-500 hover:bg-red-50 px-3 py-2 rounded-full transition-all group"
+                    >
                       <AiOutlineHeart className="w-5 h-5 group-hover:scale-110 transition-transform" />
                       <span className="text-sm font-medium">
-                        {post.post_likes?.length == 0
-                          ? 0
-                          : post.post_likes?.length}
+                        {post.post_likes?.length || 0}
                       </span>
                     </button>
 
-                    <button onClick={() => CommentPost(post)} className="flex items-center space-x-2 text-gray-500 hover:text-blue-500 hover:bg-blue-50 px-3 py-2 rounded-full transition-all group">
+                    <button
+                      onClick={() => CommentPost(post)}
+                      className="flex items-center space-x-2 text-gray-500 hover:text-blue-500 hover:bg-blue-50 px-3 py-2 rounded-full transition-all group"
+                    >
                       <AiOutlineComment className="w-5 h-5 group-hover:scale-110 transition-transform" />
                       <span className="text-sm font-medium">
-                        {post.post_likes?.length}
+                        {post.post_likes?.length || 0}
                       </span>
                     </button>
 
@@ -387,7 +393,6 @@ const Home = () => {
           <p className="text-white text-center">Loading ...</p>
         )}
 
-        
         {posts.length === 0 && isLoading ? (
           <p className="text-white text-center">Create Your Threads ...</p>
         ) : (
@@ -400,8 +405,11 @@ const Home = () => {
 
 export default Home;
 
-{/* Load More */}
-  {/* {posts.length !== 0 && post_number < posts.length ? (
+{
+  /* Load More */
+}
+{
+  /* {posts.length !== 0 && post_number < posts.length ? (
     <div className="text-center py-8">
       <button
         className=" text-yellow-600 px-6 py-2 rounded-full font-medium hover:bg-zinc-700 transition-colors shadow-md border border-yellow-600"
@@ -411,4 +419,5 @@ export default Home;
     </div>
   ) : (
     ""
-  )} */}
+  )} */
+}
