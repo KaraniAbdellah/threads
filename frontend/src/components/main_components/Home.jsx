@@ -239,9 +239,8 @@ const Home = () => {
     }
   };
 
-  const CommentPost = async (post) => {
-    console.log("Comment To Post");
-    console.log(post);
+  const CommentPost = async (e, post) => {
+    e.preventDefault();
     try {
       await axios
         .post(
@@ -253,9 +252,20 @@ const Home = () => {
         )
         .then((res) => {
           console.log(res);
+          GetAllPosts();
+          setCommentText(() => "");
+        }).catch((err) => {
+          toast.error("Something went wrong, please try again", {
+            duration: 2000,
+            position: "bottom-right",
+          });
         });
     } catch (error) {
       console.log(error);
+      toast.error("Something went wrong, please try again", {
+        duration: 2000,
+        position: "bottom-right",
+      });
     }
   };
 
@@ -570,7 +580,10 @@ const Home = () => {
                 </div>
                 {isWantToComment ? (
                   <div>
-                    <form className="create_comment p-4 flex flex-col justify-end items-end">
+                    <form
+                      onSubmit={(e) => CommentPost(e, post)}
+                      className="create_comment px-4 flex flex-col justify-end items-end"
+                    >
                       <textarea
                         className="w-full bg-zinc-800 border-none outline-none p-2 rounded-md text-white border resize-none"
                         placeholder="Write your comment"
@@ -579,17 +592,25 @@ const Home = () => {
                         rows={3}
                         required
                       />
-                      <button
-                        onClick={() => CommentPost(post)}
-                        className="mt-1 text-right px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700"
-                      >
+                      <button className="mt-1 text-right px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700">
                         Submit
                       </button>
                     </form>
-                    <div className="all_comments m-4 p-3 bg-zinc-800 rounded-lg text-white space-y-2">
-                      <p className="text-sm">💬 Helllo World</p>
-                      {/* You can map real comments here */}
-                    </div>
+                    {post.post_comments.length !== 0
+                      ? post.post_comments.map((comment) => {
+                          return (
+                            <div className="all_comments flex justify-start items-center m-4 p-3 bg-zinc-800 rounded-lg text-white space-y-2">
+                              <div className="border rounded-full mr-5 p-1">
+                                <img
+                                  className="w-10 h-10"
+                                  src={post.user.profile_image}
+                                />
+                              </div>
+                              <p className="text-yellow-400">{comment.text}</p>
+                            </div>
+                          );
+                        })
+                      : "Not Comment"}
                   </div>
                 ) : (
                   ""

@@ -207,11 +207,10 @@ const comment_post = async (req, res) => {
   try {
     const post_id = req.params.post_id;
     const commentText = req.body.commentText;
-    const user = await UserModel.findById(req.user._id);
     const post = await PostModel.findById(post_id);
-
     post.post_comments.push({text: commentText, user: req.user._id});
-    await user.save();    
+    await post.save();    
+    return res.status(200).send(post);
   } catch (error) {
     console.error(error.message);
     return res.status(500).send({ error: error.message });
