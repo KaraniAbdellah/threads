@@ -8,7 +8,7 @@ import { v2 as cloudinary } from "cloudinary";
 const create_post = async (req, res) => {
   try {
     const text = req.body.post_text;
-    let img = req.body.post_img;
+    let img = req.body.post_image;
     const post_date = req.body.post_date;
     const user_id = req.user._id.toString();
 
@@ -138,10 +138,30 @@ const delete_post = async (req, res) => {
 };
 
 const update_post = async (req, res) => {
-  try {
-    
+try {
+    const postToUpdate = await PostModel.findById(req.params.post_id);
+    const newPost = req.body;
+    console.log(newPost);
+    console.log(postToUpdate);
+    if (!postToUpdate) {
+      return res.status(400).send({ message: "Can Not Find This Post" });
+    }
+
+    if (postToUpdate.post_image) {
+      const img_id = postToUpdate.post_image;
+      await cloudinary.uploader.destroy(img_id);
+    }
+
+    if (newPost.post_image) {
+        const uploadedResponse = await cloudinary.uploader.upload(newPost.post_image);
+        newPost.post_image = uploadedResponse.secure_url;
+    }
+
+    await PostModel.findByIdAndUpdate(req.params.post_id, newPost);
+    return res.status(200).send(postToUpdate);
   } catch (error) {
-    
+    console.log(error.message);
+    res.status(500).send({ message: error.message });
   }
 }
 

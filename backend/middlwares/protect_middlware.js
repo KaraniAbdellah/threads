@@ -4,7 +4,6 @@ import UserModel from "../models/User.js";
 export default async function protect_middlware(req, res, next) {
   try {
     // const token = req.headers.cookie;
-    console.log("Hello To Procted Middlware");
     const token = req.cookies.token;
 
     if (!token) {

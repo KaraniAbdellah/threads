@@ -20,6 +20,7 @@ import {
   AiOutlineComment,
   AiOutlineRetweet,
 } from "react-icons/ai";
+import { FaHeart } from "react-icons/fa";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -27,22 +28,19 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [post_number, setPost_Number] = useState(4);
   const [postToShow, setPostToShow] = useState(null);
+  const [isLoadingPost, setIsLoadingPost] = useState(false);
   const [postToPost, setPostToPost] = useState({
     user: "",
     post_text: "",
-    post_img: "",
+    post_image: "",
     post_likes: [],
     post_comments: [{ text: "", user: "" }],
     post_date: null,
   });
+  const [IsEditPost, setIsEditPost] = useState(false);
 
-  const handlePost = async () => {
-    const postToSend = {
-      ...postToPost,
-      post_date: new Date(),
-      user: user._id,
-    };
-    // Store Post To Database
+  const createThisPost = async (postToSend) => {
+    setIsLoadingPost(() => true);
     try {
       await axios
         .post(`${import.meta.env.VITE_API_URL}/api/post/create`, postToSend, {
@@ -52,7 +50,7 @@ const Home = () => {
           setPostToPost({
             user: "",
             post_text: "",
-            post_img: "",
+            post_image: "",
             post_likes: [],
             post_comments: [{ text: "", user: "" }],
             post_date: null,
@@ -63,6 +61,7 @@ const Home = () => {
           });
           GetAllPosts(); // Refresh posts after creating
         })
+        .finally(() => setIsLoadingPost(() => false))
         .catch((err) => {
           toast.error("Failed Adding Post", {
             duration: 2000,
@@ -74,6 +73,49 @@ const Home = () => {
         duration: 2000,
         position: "bottom-right",
       });
+    }
+  };
+
+  const EditThisPost = async (postToSend) => {
+    setIsLoadingPost(() => true);
+    try {
+      await axios
+        .put(
+          `${import.meta.env.VITE_API_URL}/api/post/update/${IsEditPost._id}`,
+          postToSend,
+          { withCredentials: true }
+        )
+        .then((res) => {
+          setPostToPost({
+            user: "",
+            post_text: "",
+            post_image: "",
+            post_likes: [],
+            post_comments: [{ text: "", user: "" }],
+            post_date: null,
+          });
+          GetAllPosts();
+        })
+        .finally(() => setIsLoadingPost(() => false))
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handlePost = async () => {
+    const postToSend = {
+      ...postToPost,
+      post_date: new Date(),
+      user: user._id,
+    };
+    if (IsEditPost) {
+      console.log("Must Edit This Post ", IsEditPost);
+      EditThisPost(postToSend);
+    } else {
+      createThisPost(postToSend);
     }
   };
 
@@ -100,16 +142,15 @@ const Home = () => {
   };
 
   const EditPost = (post) => {
-    setEditingPost(post._id);
-    setEditText(post.post_text);
     setPostToShow(null);
+    window.scroll(0, 0);
+    setIsEditPost(post);
+    setPostToPost(post);
   };
 
   const DeletePost = async (postId) => {
     if (window.confirm("Are you sure you want to delete this post?")) {
       try {
-        // Backend API call - uncomment and implement when ready
-        console.log(postId);
         await axios.delete(
           `${import.meta.env.VITE_API_URL}/api/post/delete/${postId}`,
           {
@@ -234,7 +275,7 @@ const Home = () => {
                         dark:[&::-webkit-scrollbar-track]:bg-zinc-800
                          placeholder-gray-500 text-white border-none outline-none resize-none min-h-[40px] bg-transparent"
               />
-              {postToPost.post_img ? (
+              {postToPost.post_image ? (
                 <div
                   className="image_show scroll-m-60 overflow-auto overflow-y-auto [&::-webkit-scrollbar]:w-2
                         [&::-webkit-scrollbar-track]:bg-yellow-100
@@ -242,7 +283,7 @@ const Home = () => {
                         dark:[&::-webkit-scrollbar-track]:bg-zinc-800
                         w-full h-[300px] rounded-md flex justify-center items-center"
                 >
-                  <img src={postToPost.post_img} alt="" />
+                  <img src={postToPost.post_image} alt="" />
                 </div>
               ) : (
                 ""
@@ -259,13 +300,14 @@ const Home = () => {
                     <span className="text-sm font-medium">Photo</span>
                   </label>
                   <input
+                    value={postToPost.profile_image}
                     onChange={async (e) => {
                       const file = e.target.files[0];
                       const reader = new FileReader();
                       reader.onloadend = () => {
                         setPostToPost({
                           ...postToPost,
-                          post_img: reader.result, // this is a valid base64 string
+                          post_image: reader.result, // this is a valid base64 string
                         });
                       };
                       reader.readAsDataURL(file);
@@ -301,7 +343,9 @@ const Home = () => {
                   disabled={postToPost.post_text.length < 2}
                   className="bg-gradient-to-r bg-yellow-700 hover:bg-yellow-600 text-white px-8 py-2.5 rounded-full font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
                 >
-                  Post
+                  {
+                    !isLoadingPost ? (IsEditPost ? "Edit" : "Post") : "Processing ..."
+                  }
                 </button>
               </div>
             </div>
@@ -442,7 +486,7 @@ const Home = () => {
         )}
 
         {posts.length === 0 && !isLoading && (
-          <p className="text-white text-center">Create Your Threads ...</p>
+          <p className="text-white text-center">Create Your Thread ...</p>
         )}
       </div>
     </div>
