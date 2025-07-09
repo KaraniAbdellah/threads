@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Profile = () => {
+const UserProfile = () => {
     return (
         <div>
             Her e You Can Update Profile Delete Profile....
@@ -8,4 +8,4 @@ const Profile = () => {
     );
 }
 
-export default Profile;
+export default UserProfile;

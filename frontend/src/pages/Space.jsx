@@ -4,6 +4,7 @@ import Main from "../components/space_components/Main";
 import Suggestion from "../components/space_components/Suggestion";
 import spaceContext from "../context/SpaceContext";
 
+
 const Space = () => {
   const [main_state, setMain_Sate] = useState("Home");  
   return (

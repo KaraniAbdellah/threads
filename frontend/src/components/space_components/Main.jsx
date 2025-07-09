@@ -10,7 +10,7 @@ import Posts from '../main_components/Posts';
 import Notifications from '../main_components/Notifications';
 
 const Main = () => {
-  const [main_space, setMain_Sate] = useContext(spaceContext);
+  const [main_space] = useContext(spaceContext);
 
   return (
     <div className='bg-zinc-800 w-[55%] px-2'>

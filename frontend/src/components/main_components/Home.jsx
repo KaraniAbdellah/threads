@@ -6,7 +6,7 @@ import {
   HiOutlineLocationMarker,
   HiOutlineGlobeAlt,
 } from "react-icons/hi";
-import { IoSadOutline, IoShareOutline } from "react-icons/io5";
+import { IoShareOutline } from "react-icons/io5";
 import { toast } from "react-hot-toast";
 import userContext from "../../context/UserContext";
 import axios from "axios";
@@ -15,12 +15,13 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import formatTimeAgo from "../../utlis_functions/formatTimeAgo";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { FaHeart } from "react-icons/fa";
 import {
   AiOutlineHeart,
   AiOutlineComment,
   AiOutlineRetweet,
 } from "react-icons/ai";
-import { FaHeart } from "react-icons/fa";
+
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -30,7 +31,6 @@ const Home = () => {
   const [comment_number, setCommentNumber] = useState(4);
   const [postToShow, setPostToShow] = useState(null);
   const [isLoadingPost, setIsLoadingPost] = useState(false);
-  const [isWantToComment, setIsWantToComment] = useState(false);
   const [commentText, setCommentText] = useState("");
 
   const [postToPost, setPostToPost] = useState({

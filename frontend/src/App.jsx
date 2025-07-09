@@ -19,7 +19,7 @@ import userContext from "./context/UserContext";
 import "./css/get_started_btn.css";
 import "./css/starry_background.css";
 import "./css/social_media.css";
-import Profile from "./pages/Profile";
+import UserProfile from "./pages/UserProfile";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -62,7 +62,7 @@ function App() {
             {/* <Route element={<ProtectedRoutes />}> */}
             <Route path="/space" element={<Space></Space>}></Route>
             <Route path="/loading" element={<Loading></Loading>}></Route>
-            <Route path="/profile" element={<Profile></Profile>}></Route>
+            <Route path="/user_profile" element={<UserProfile></UserProfile>}></Route>
             {/* </Route> */}
           </Routes>
         </userContext.Provider>
