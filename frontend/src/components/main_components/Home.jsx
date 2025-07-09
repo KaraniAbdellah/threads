@@ -27,6 +27,7 @@ const Home = () => {
   const user = useContext(userContext);
   const [isLoading, setIsLoading] = useState(true);
   const [post_number, setPost_Number] = useState(4);
+  const [comment_number, setCommentNumber] = useState(4);
   const [postToShow, setPostToShow] = useState(null);
   const [isLoadingPost, setIsLoadingPost] = useState(false);
   const [isWantToComment, setIsWantToComment] = useState(false);
@@ -254,7 +255,8 @@ const Home = () => {
           console.log(res);
           GetAllPosts();
           setCommentText(() => "");
-        }).catch((err) => {
+        })
+        .catch((err) => {
           toast.error("Something went wrong, please try again", {
             duration: 2000,
             position: "bottom-right",
@@ -279,6 +281,21 @@ const Home = () => {
         color: "#fff",
       },
     });
+  };
+
+  const ShowCommentSection = (post) => {
+    setCommentNumber(4);
+    const post_to_comment = document.getElementById(`${post._id}`);
+    const comments_section = post_to_comment.querySelector(".comments_section");
+    if (comments_section) {
+      if (comments_section.classList.contains("hidden")) {
+        comments_section.classList.add("block");
+        comments_section.classList.remove("hidden");
+      } else {
+        comments_section.classList.add("hidden");
+        comments_section.classList.remove("block");
+      }
+    }
   };
 
   useEffect(() => {
@@ -481,32 +498,30 @@ const Home = () => {
                         </p>
                       </div>
                     </div>
-                    {user._id === post.user._id && (
-                      <div className="relative">
-                        <button
-                          onClick={() => setPostToShow(post._id)}
-                          className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors"
-                        >
-                          <BsThreeDotsVertical className="w-4 h-4" />
-                        </button>
-                        {post._id === postToShow && (
-                          <div className="post_action_menu absolute top-0 right-0 bg-zinc-900 p-1 rounded-sm border z-10">
-                            <button
-                              onClick={() => EditPost(post)}
-                              className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800"
-                            >
-                              <FaEdit /> Edit
-                            </button>
-                            <button
-                              onClick={() => DeletePost(post._id)}
-                              className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800"
-                            >
-                              <FaTrash /> Delete
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    )}
+                    <div className="relative">
+                      <button
+                        onClick={() => setPostToShow(post._id)}
+                        className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors"
+                      >
+                        <BsThreeDotsVertical className="w-4 h-4" />
+                      </button>
+                      {post._id === postToShow && (
+                        <div className="post_action_menu absolute top-0 right-0 bg-zinc-900 p-1 rounded-sm border z-10">
+                          <button
+                            onClick={() => EditPost(post)}
+                            className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800"
+                          >
+                            <FaEdit /> Edit
+                          </button>
+                          <button
+                            onClick={() => DeletePost(post._id)}
+                            className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800"
+                          >
+                            <FaTrash /> Delete
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {/* Post Content */}
@@ -553,7 +568,7 @@ const Home = () => {
                     )}
 
                     <button
-                      onClick={() => setIsWantToComment(() => !isWantToComment)}
+                      onClick={() => ShowCommentSection(post)}
                       className="flex items-center space-x-2 text-gray-500 hover:text-blue-500 hover:bg-blue-50 px-3 py-2 rounded-full transition-all group"
                     >
                       <AiOutlineComment className="w-5 h-5 group-hover:scale-110 transition-transform" />
@@ -578,43 +593,58 @@ const Home = () => {
                     </button>
                   </div>
                 </div>
-                {isWantToComment ? (
-                  <div>
-                    <form
-                      onSubmit={(e) => CommentPost(e, post)}
-                      className="create_comment px-4 flex flex-col justify-end items-end"
-                    >
-                      <textarea
-                        className="w-full bg-zinc-800 border-none outline-none p-2 rounded-md text-white border resize-none"
-                        placeholder="Write your comment"
-                        value={commentText}
-                        onChange={(e) => setCommentText(e.target.value)}
-                        rows={3}
-                        required
-                      />
-                      <button className="mt-1 text-right px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700">
-                        Submit
-                      </button>
-                    </form>
+                <div className="comments_section hidden">
+                  <form
+                    onSubmit={(e) => CommentPost(e, post)}
+                    className="create_comment px-4 flex-col justify-end items-end"
+                  >
+                    <textarea
+                      className="w-full bg-zinc-800 border-none outline-none p-2 rounded-md text-white border resize-none"
+                      placeholder="Write your comment"
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                      rows={2}
+                      required
+                    />
+                    <button className="mt-2 text-right px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700">
+                      Submit
+                    </button>
+                  </form>
+                  <div className="all_comments justify-start flex-col items-start m-4">
                     {post.post_comments.length !== 0
-                      ? post.post_comments.map((comment) => {
-                          return (
-                            <div className="all_comments flex justify-start items-center m-4 p-3 bg-zinc-800 rounded-lg text-white space-y-2">
-                              <div className="border rounded-full mr-5 p-1">
+                      ? post.post_comments
+                          .slice(0, comment_number)
+                          .map((comment) => {
+                            return (
+                              <div
+                                className="p-1 flex justify-start
+                            items-center my-1 bg-zinc-800 text-white w-full"
+                              >
                                 <img
-                                  className="w-10 h-10"
+                                  className="w-10 h-10 border mr-4 rounded-full p-2 cursor-pointer"
                                   src={post.user.profile_image}
                                 />
+                                <p className="text-yellow-400">
+                                  {comment.text}
+                                </p>
                               </div>
-                              <p className="text-yellow-400">{comment.text}</p>
-                            </div>
-                          );
-                        })
-                      : "Not Comment"}
+                            );
+                          })
+                      : <p className="text-yellow-600 text-center">No Comment Found</p>}
+                    {comment_number <= post.post_comments.length ? (
+                      <button
+                        onClick={() =>
+                          setCommentNumber(() => comment_number + 4)
+                        }
+                        className="text-yellow-600 mt-2 text-center flex m-auto"
+                      >
+                        Load more Comment
+                      </button>
+                    ) : (
+                      ""
+                    )}
                   </div>
-                ) : (
-                  ""
-                )}
+                </div>
               </div>
             ))}
           </div>
