@@ -9,6 +9,7 @@ import {
   FiImage,
   FiX,
 } from "react-icons/fi";
+import { SiGoogledocs } from "react-icons/si";
 import profileContext from "../../context/ProfileContext";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -294,6 +295,13 @@ const Profile = () => {
                   {profile?.user.following?.length || 0}
                 </span>
                 <span className="text-gray-400">Following</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <SiGoogledocs className="w-5 h-5 text-yellow-400" />
+                <span className="text-white font-semibold">
+                  {profile?.posts?.length || 0}
+                </span>
+                <span className="text-gray-400">Posts</span>
               </div>
             </div>
 
