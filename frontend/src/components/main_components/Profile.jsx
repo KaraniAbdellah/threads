@@ -86,7 +86,9 @@ const Profile = () => {
       // Save profile data
       try {
         const response = await axios.put(
-          `${import.meta.env.VITE_API_URL}/api/user/update_user_profile/${user._id}`,
+          `${import.meta.env.VITE_API_URL}/api/user/update_user_profile/${
+            user._id
+          }`,
           newData,
           { withCredentials: true }
         );
@@ -96,7 +98,6 @@ const Profile = () => {
         alert("Failed to update profile. Please try again.");
       }
     } else {
-      // Initialize edit data when starting to edit
       setEditData({
         user_name: user?.user_name || "",
         email: user?.email || "",
@@ -243,7 +244,7 @@ const Profile = () => {
                 />
               ) : (
                 <h1 className="text-2xl font-bold text-white">
-                  {user?.user_name}
+                  {editData?.user_name}
                 </h1>
               )}
               {user?.verfied && (
@@ -265,7 +266,7 @@ const Profile = () => {
                 />
               ) : (
                 <p className="text-gray-300">
-                  {user?.bio || "No bio available yet. Click edit to add one!"}
+                  {editData?.bio || "No bio available yet. Click edit to add one!"}
                 </p>
               )}
             </div>
