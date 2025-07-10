@@ -1,32 +1,33 @@
 import React, { useContext, useState, useRef } from "react";
 import {
   FiEdit2,
-  FiMail,
   FiCalendar,
   FiUsers,
   FiUserPlus,
   FiCheck,
   FiCamera,
   FiImage,
-  FiUpload,
   FiX,
 } from "react-icons/fi";
-import ProfileToShowContext from "../../context/ProfileToShowContext";
-import userContext from "../../context/UserContext";
+import profileContext from "../../context/ProfileContext";
 import axios from "axios";
+import toast from "react-hot-toast";
+
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const user = useContext(userContext);
+  const profile = useContext(profileContext);
   const profileImageRef = useRef(null);
   const coverImageRef = useRef(null);
+  console.log(profile);
+
 
   const [editData, setEditData] = useState({
-    user_name: user?.user_name,
-    bio: user?.bio,
-    profile_image: user?.profile_image,
-    cover_image: user?.cover_image,
+    user_name: profile?.user_name,
+    bio: profile?.bio,
+    profile_image: profile?.profile_image,
+    cover_image: profile?.cover_image,
   });
 
   // states for image uploads
@@ -39,7 +40,7 @@ const Profile = () => {
     const formData = new FormData();
     formData.append("image", file);
     formData.append("imageType", imageType);
-    formData.append("userId", user._id);
+    formData.append("userId", profile._id);
     setIsUploading(false);
   };
 
@@ -85,25 +86,31 @@ const Profile = () => {
 
       // Save profile data
       try {
-        const response = await axios.put(
+        await axios.put(
           `${import.meta.env.VITE_API_URL}/api/user/update_user_profile/${
-            user._id
+            profile._id
           }`,
           newData,
           { withCredentials: true }
         );
-        console.log("Profile updated successfully:", response.data);
+        toast.success("Profile updated successfully", {
+          duration: 2000,
+          position: "bottom-right",
+        });
       } catch (error) {
         console.error("Error updating profile:", error);
-        alert("Failed to update profile. Please try again.");
+        toast.error("Failed to update profile. Please try again.", {
+          duration: 2000,
+          position: "bottom-right",
+        });
       }
     } else {
       setEditData({
-        user_name: user?.user_name || "",
-        email: user?.email || "",
-        bio: user?.bio || "",
-        profile_image: user?.profile_image || "",
-        cover_image: user?.cover_image || "",
+        user_name: profile?.user_name || "",
+        email: profile?.email || "",
+        bio: profile?.bio || "",
+        profile_image: profile?.profile_image || "",
+        cover_image: profile?.cover_image || "",
       });
     }
   };
@@ -144,9 +151,9 @@ const Profile = () => {
 
         {/* Cover Image Section */}
         <div className="relative h-48 bg-gradient-to-r from-yellow-700 to-yellow-500">
-          {(coverImagePreview || user?.cover_image) && (
+          {(coverImagePreview || profile?.cover_image) && (
             <img
-              src={coverImagePreview || user.cover_image}
+              src={coverImagePreview || profile.cover_image}
               alt="Cover"
               className="w-full h-full object-cover"
             />
@@ -164,7 +171,7 @@ const Profile = () => {
                   <FiImage className="w-5 h-5" />
                 )}
               </button>
-              {(coverImagePreview || user?.cover_image) && (
+              {(coverImagePreview || profile?.cover_image) && (
                 <button
                   onClick={() => {
                     setCoverImagePreview(null);
@@ -193,7 +200,7 @@ const Profile = () => {
           <div className="relative -mt-16 mb-4">
             <div className="relative inline-block">
               <img
-                src={profileImagePreview || user?.profile_image}
+                src={profileImagePreview || profile?.profile_image}
                 alt="Profile"
                 className="w-32 h-32 rounded-full border-4 border-yellow-400 bg-zinc-700 object-cover"
               />
@@ -247,7 +254,7 @@ const Profile = () => {
                   {editData?.user_name}
                 </h1>
               )}
-              {user?.verfied && (
+              {profile?.verfied && (
                 <div className="bg-yellow-400 text-black p-1 rounded-full">
                   <FiCheck className="w-4 h-4" />
                 </div>
@@ -266,7 +273,8 @@ const Profile = () => {
                 />
               ) : (
                 <p className="text-gray-300">
-                  {editData?.bio || "No bio available yet. Click edit to add one!"}
+                  {editData?.bio ||
+                    "No bio available yet. Click edit to add one!"}
                 </p>
               )}
             </div>
@@ -276,14 +284,14 @@ const Profile = () => {
               <div className="flex items-center gap-2">
                 <FiUsers className="w-5 h-5 text-yellow-400" />
                 <span className="text-white font-semibold">
-                  {user?.followers?.length || 0}
+                  {profile?.followers?.length || 0}
                 </span>
                 <span className="text-gray-400">Followers</span>
               </div>
               <div className="flex items-center gap-2">
                 <FiUserPlus className="w-5 h-5 text-yellow-400" />
                 <span className="text-white font-semibold">
-                  {user?.following?.length || 0}
+                  {profile?.following?.length || 0}
                 </span>
                 <span className="text-gray-400">Following</span>
               </div>
@@ -293,11 +301,11 @@ const Profile = () => {
             <div className="space-y-2 text-sm text-gray-400">
               <div className="flex items-center gap-2">
                 <FiCalendar className="w-4 h-4 text-yellow-400" />
-                <span>Joined {formatDate(user?.createdAt)}</span>
+                <span>Joined {formatDate(profile?.createdAt)}</span>
               </div>
               <div className="flex items-center gap-2">
                 <FiEdit2 className="w-4 h-4 text-yellow-400" />
-                <span>Last updated {formatDate(user?.updatedAt)}</span>
+                <span>Last updated {formatDate(profile?.updatedAt)}</span>
               </div>
             </div>
           </div>
