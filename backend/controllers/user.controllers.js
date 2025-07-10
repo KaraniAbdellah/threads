@@ -7,17 +7,26 @@ import UserModel from "../models/User.js";
 import NotificationModel from "../models/Notification.js";
 import PostModel from "../models/Post.js";
 
+
+
 const get_user_profile = async (req, res) => {
   try {
     const user_id = req.params.user_id;
     const user = await UserModel.findById(user_id).select("-password");
+    // Get All posts for this user
+    const posts = await PostModel.find({user: user_id});
+    const user_with_post = {
+      ...user,
+      posts: posts
+    }
     if (!user) return res.status(404).send({ message: "User Not Found" });
-    res.status(200).send(user);
+    res.status(200).send(user_with_post);
   } catch (error) {
     console.error(error.message);
     res.status(500).send({ error: error.message });
   }
 };
+
 
 const get_suggested_users = async (req, res) => {
   try {
@@ -41,6 +50,7 @@ const get_suggested_users = async (req, res) => {
     res.status(500).send({ error: error.message });
   }
 };
+
 
 const follow_unfollow = async (req, res) => {
   try {
@@ -100,6 +110,7 @@ const follow_unfollow = async (req, res) => {
     return res.status(500).send({ error: error.message });
   }
 };
+
 
 const update_user_info = async (req, res) => {
   try {
@@ -169,6 +180,7 @@ const update_user_info = async (req, res) => {
   } catch (error) {}
 };
 
+
 const update_user_profile = async (req, res) => {
   const { bio, cover_image, profile_image, user_name } = req.body;
   console.log(req.body);
@@ -194,6 +206,7 @@ const update_user_profile = async (req, res) => {
   }
 };
 
+
 const user_like_post = async (req, res) => {
   try {
     const post_id = req.params.post_id;
@@ -211,6 +224,7 @@ const user_like_post = async (req, res) => {
   }
 };
 
+
 const user_unlike_post = async (req, res) => {
   try {
     const post_id = req.params.post_id;
@@ -227,6 +241,7 @@ const user_unlike_post = async (req, res) => {
     return res.status(500).send({ error: error.message });
   }
 };
+
 
 const comment_post = async (req, res) => {
   try {
