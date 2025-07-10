@@ -242,6 +242,30 @@ const user_unlike_post = async (req, res) => {
   }
 };
 
+const user_posts = async (req, res) => {
+  try {
+    const user_id = req.params.user_id;
+    let posts = await PostModel.find({ user: user_id });
+
+    posts = await Promise.all(
+      posts.map(async (post) => {
+        post.post_comments = await Promise.all(
+          post.post_comments.map(async (comment) => {
+            comment.user = await UserModel.findById(comment.user);
+            return comment;
+          })
+        );
+        return post;
+      })
+    );
+
+    return res.status(200).send(posts);
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).send({ error: error.message });
+  }
+};
+
 
 const comment_post = async (req, res) => {
   try {
@@ -266,4 +290,5 @@ export {
   user_like_post,
   user_unlike_post,
   comment_post,
+  user_posts
 };

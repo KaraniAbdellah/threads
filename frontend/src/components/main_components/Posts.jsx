@@ -24,14 +24,14 @@ import {
 
 
 const Posts = () => {
-    const [posts, setPosts] = useState([]);
-    const user = useContext(userContext);
-    const [isLoading, setIsLoading] = useState(true);
-    const [post_number, setPost_Number] = useState(4);
-    const [comment_number, setCommentNumber] = useState(4);
-    const [postToShow, setPostToShow] = useState(null);
-    const [isLoadingPost, setIsLoadingPost] = useState(false);
-    const [commentText, setCommentText] = useState("");
+  const [posts, setPosts] = useState([]);
+  const user = useContext(userContext);
+  const [isLoading, setIsLoading] = useState(true);
+  const [post_number, setPost_Number] = useState(4);
+  const [comment_number, setCommentNumber] = useState(4);
+  const [postToShow, setPostToShow] = useState(null);
+  const [isLoadingPost, setIsLoadingPost] = useState(false);
+  const [commentText, setCommentText] = useState("");
   
     const [postToPost, setPostToPost] = useState({
       user: "",
@@ -43,42 +43,7 @@ const Posts = () => {
     });
     const [IsEditPost, setIsEditPost] = useState(false);
   
-    const createThisPost = async (postToSend) => {
-      setIsLoadingPost(() => true);
-      try {
-        await axios
-          .post(`${import.meta.env.VITE_API_URL}/api/post/create`, postToSend, {
-            withCredentials: true,
-          })
-          .then((res) => {
-            setPostToPost({
-              user: "",
-              post_text: "",
-              post_image: "",
-              post_likes: [],
-              post_comments: [{ text: "", user: "" }],
-              post_date: null,
-            });
-            toast.success("Post Added Successfully", {
-              duration: 2000,
-              position: "bottom-right",
-            });
-            GetAllPosts(); // Refresh posts after creating
-          })
-          .finally(() => setIsLoadingPost(() => false))
-          .catch((err) => {
-            toast.error("Failed Adding Post", {
-              duration: 2000,
-              position: "bottom-right",
-            });
-          });
-      } catch (error) {
-        toast.error("Failed Adding Post", {
-          duration: 2000,
-          position: "bottom-right",
-        });
-      }
-    };
+
   
     const EditThisPost = async (postToSend) => {
       setIsLoadingPost(() => true);
@@ -116,32 +81,15 @@ const Posts = () => {
         });
       }
     };
-  
-    const handlePost = async () => {
-      const postToSend = {
-        ...postToPost,
-        post_date: new Date(),
-        user: user._id,
-      };
-      if (IsEditPost) {
-        console.log("Must Edit This Post ", IsEditPost);
-        EditThisPost(postToSend);
-      } else {
-        createThisPost(postToSend);
-      }
-    };
-  
-    const selectImage = () => {
-      console.log("Select Your Image");
-    };
-  
+
     const GetAllPosts = async () => {
       try {
         await axios
-          .get(`${import.meta.env.VITE_API_URL}/api/post/all_posts`, {
+          .get(`${import.meta.env.VITE_API_URL}/api/user/user_posts/${user._id}`, {
             withCredentials: true,
           })
           .then((res) => {
+            console.log(res.data);
             setPosts(res.data);
           })
           .catch((err) => {
@@ -155,7 +103,6 @@ const Posts = () => {
   
     const EditPost = (post) => {
       setPostToShow(null);
-      window.scroll(0, 0);
       setIsEditPost(post);
       setPostToPost(post);
     };
@@ -345,14 +292,14 @@ const Posts = () => {
               <div className="flex items-start justify-between ">
                 <div className="flex items-start space-x-3">
                   <img
-                    src={post.user?.profile_image}
-                    alt={post.user?.user_name}
+                    src={user?.profile_image}
+                    alt={user?.user_name}
                     className="w-12 h-12 rounded-full object-cover ring-2 ring-gray-100"
                   />
                   <div>
                     <div className="flex items-center space-x-2">
                       <h3 className="font-semibold text-yellow-600">
-                        {post.user?.user_name}
+                        {user?.user_name}
                       </h3>
                       <div className="w-5 h-5 bg-yellow-500 rounded-full flex items-center justify-center">
                         <svg
@@ -369,12 +316,11 @@ const Posts = () => {
                       </div>
                     </div>
                     <p className="text-gray-500 text-sm">
-                      @{post.user.user_name.split(" ")[0]} ·{" "}
+                      @{post.createdAt.split(" ")[0]} ·{" "}
                       {formatTimeAgo(post.post_date)}
                     </p>
                   </div>
                 </div>
-                {user._id === post.user._id ? (
                   <div className="relative">
                     <button
                       onClick={() => setPostToShow(post._id)}
@@ -399,9 +345,6 @@ const Posts = () => {
                       </div>
                     )}
                   </div>
-                ) : (
-                  ""
-                )}
               </div>
 
               {/* Post Content */}
@@ -499,8 +442,8 @@ const Posts = () => {
                             items-center my-1 bg-zinc-800 text-white w-full"
                       >
                         <img
-                          className="w-10 h-10 border mr-4 rounded-full p-2 cursor-pointer"
-                          src={post.user.profile_image}
+                          className="w-10 h-10 border mr-4 rounded-full cursor-pointer"
+                          src={comment.user.profile_image}
                         />
                         <p className="text-yellow-400">{comment.text}</p>
                       </div>

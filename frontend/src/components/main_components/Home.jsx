@@ -622,7 +622,7 @@ const Home = () => {
                             items-center my-1 bg-zinc-800 text-white w-full"
                             >
                               <img
-                                className="w-10 h-10 border mr-4 rounded-full p-2 cursor-pointer"
+                                className="w-10 h-10 border mr-4 rounded-full cursor-pointer"
                                 src={post.user.profile_image}
                               />
                               <p className="text-yellow-400">{comment.text}</p>
