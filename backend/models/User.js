@@ -5,8 +5,10 @@ const UserSchema = new mongoose.Schema(
     user_name: {
       type: String,
       required: [true, "user name required"],
-      unique: false
+      unique: false,
+      default: "John Deo"
     },
+
     email: {
       type: String,
       required: [true, "email required"],
@@ -26,19 +28,20 @@ const UserSchema = new mongoose.Schema(
     cover_image: {
       type: String,
       required: [false, "cover_image is not required"],
-      default: "",
+      default: "https://robohash.org/username.png?size=150x150",
     },
 
     bio: {
       type: String,
       required: [false, "bio is not required"],
-      default: "",
+      default: "Hi There I am using Threads",
     },
     link: {
       type: String,
-      required: [false, "bio is not required"],
+      required: [false, "link is not required"],
       default: "",
     },
+
     liked_posts: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -65,6 +68,7 @@ const UserSchema = new mongoose.Schema(
       required: false,
       default: true
     }
+
   },
   { timestamps: true }
 );

@@ -22,7 +22,7 @@ const Menu = () => {
   };
 
   const goToProfile = () => {
-    navigate("/profile");
+    navigate("/user_profile");
   };
 
   return (

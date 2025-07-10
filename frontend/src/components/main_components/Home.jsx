@@ -22,7 +22,6 @@ import {
   AiOutlineRetweet,
 } from "react-icons/ai";
 
-
 const Home = () => {
   const [posts, setPosts] = useState([]);
   const user = useContext(userContext);
@@ -318,28 +317,26 @@ const Home = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (
-        window.innerHeight + window.scrollY >= document.body.scrollHeight &&
-        !isLoading
-      ) {
-        setPost_Number((post_number) => post_number + 4);
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        setPost_Number(prev => prev + 4);
       }
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  
 
   useEffect(() => {
     AOS.init();
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br bg-zinc-800 border-r border-l border-zinc-700 pb-4">
-      <div className="max-w-2xl mx-auto pt-4 px-2">
+    <div className="">
+      <div className="pt-4">
         {/* Create Post Section */}
         <div
           data-aos="flip-left"
-          className="bg-zinc-900 rounded-md shadow-lg border border-yellow-700 p-4 mb-6 hover:shadow-xl transition-all duration-300"
+          className="bg-zinc-900 rounded-sm shadow-lg border border-yellow-700 p-4 mb-6 hover:shadow-xl transition-all duration-300"
         >
           <div className="flex items-start space-x-4">
             {user?.profile_image ? (
@@ -457,7 +454,7 @@ const Home = () => {
 
         {/* Posts Feed */}
         {!isLoading ? (
-          <div data-aos="fade-up" className="space-y-6">
+          <div className="space-y-2" data-aos="fade-up">
             {posts.slice(0, post_number).map((post) => (
               <div
                 key={post._id}
@@ -466,7 +463,7 @@ const Home = () => {
               >
                 <div className="p-4">
                   {/* Post Header */}
-                  <div className="flex items-start justify-between mb-2">
+                  <div className="flex items-start justify-between ">
                     <div className="flex items-start space-x-3">
                       <img
                         src={post.user?.profile_image}
@@ -498,30 +495,34 @@ const Home = () => {
                         </p>
                       </div>
                     </div>
-                    <div className="relative">
-                      <button
-                        onClick={() => setPostToShow(post._id)}
-                        className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors"
-                      >
-                        <BsThreeDotsVertical className="w-4 h-4" />
-                      </button>
-                      {post._id === postToShow && (
-                        <div className="post_action_menu absolute top-0 right-0 bg-zinc-900 p-1 rounded-sm border z-10">
-                          <button
-                            onClick={() => EditPost(post)}
-                            className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800"
-                          >
-                            <FaEdit /> Edit
-                          </button>
-                          <button
-                            onClick={() => DeletePost(post._id)}
-                            className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800"
-                          >
-                            <FaTrash /> Delete
-                          </button>
-                        </div>
-                      )}
-                    </div>
+                    {user._id === post.user._id ? (
+                      <div className="relative">
+                        <button
+                          onClick={() => setPostToShow(post._id)}
+                          className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors"
+                        >
+                          <BsThreeDotsVertical className="w-4 h-4" />
+                        </button>
+                        {post._id === postToShow && (
+                          <div className="post_action_menu absolute top-0 right-0 bg-zinc-900 p-1 rounded-sm border z-10">
+                            <button
+                              onClick={() => EditPost(post)}
+                              className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800"
+                            >
+                              <FaEdit /> Edit
+                            </button>
+                            <button
+                              onClick={() => DeletePost(post._id)}
+                              className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800"
+                            >
+                              <FaTrash /> Delete
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
 
                   {/* Post Content */}
@@ -611,26 +612,28 @@ const Home = () => {
                     </button>
                   </form>
                   <div className="all_comments justify-start flex-col items-start m-4">
-                    {post.post_comments.length !== 0
-                      ? post.post_comments
-                          .slice(0, comment_number)
-                          .map((comment) => {
-                            return (
-                              <div
-                                className="p-1 flex justify-start
+                    {post.post_comments.length !== 0 ? (
+                      post.post_comments
+                        .slice(0, comment_number)
+                        .map((comment) => {
+                          return (
+                            <div
+                              className="p-1 flex justify-start
                             items-center my-1 bg-zinc-800 text-white w-full"
-                              >
-                                <img
-                                  className="w-10 h-10 border mr-4 rounded-full p-2 cursor-pointer"
-                                  src={post.user.profile_image}
-                                />
-                                <p className="text-yellow-400">
-                                  {comment.text}
-                                </p>
-                              </div>
-                            );
-                          })
-                      : <p className="text-yellow-600 text-center">No Comment Found</p>}
+                            >
+                              <img
+                                className="w-10 h-10 border mr-4 rounded-full p-2 cursor-pointer"
+                                src={post.user.profile_image}
+                              />
+                              <p className="text-yellow-400">{comment.text}</p>
+                            </div>
+                          );
+                        })
+                    ) : (
+                      <p className="text-yellow-600 text-center">
+                        No Comment Found
+                      </p>
+                    )}
                     {comment_number <= post.post_comments.length ? (
                       <button
                         onClick={() =>

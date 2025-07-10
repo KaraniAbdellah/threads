@@ -101,7 +101,7 @@ const follow_unfollow = async (req, res) => {
   }
 };
 
-const update_user_profile = async (req, res) => {
+const update_user_info = async (req, res) => {
   try {
     const user = await UserModel.findById(req.params.user_id);
     if (!user) return res.status(400).send({ message: "User Not Found" });
@@ -169,6 +169,31 @@ const update_user_profile = async (req, res) => {
   } catch (error) {}
 };
 
+const update_user_profile = async (req, res) => {
+  const { bio, cover_image, profile_image, user_name } = req.body;
+  console.log(req.body);
+  const user_id = req.params.user_id;
+  try {
+    const user = await UserModel.findById(user_id);
+    // Upload Profile Image and Cover Image
+    if (profile_image) {
+      const profile_image_id = await cloudinary.uploader.upload(profile_image);
+      user.profile_image = profile_image_id.secure_url;
+    }
+    if (cover_image) {
+      const profile_image_id = await cloudinary.uploader.upload(cover_image);
+      user.cover_image = profile_image_id.secure_url;
+    }
+    user.bio = bio;
+    user.user_name = user_name;
+    await user.save();
+    return res.status(200).send(user);
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).send({ error: error.message });
+  }
+};
+
 const user_like_post = async (req, res) => {
   try {
     const post_id = req.params.post_id;
@@ -208,8 +233,8 @@ const comment_post = async (req, res) => {
     const post_id = req.params.post_id;
     const commentText = req.body.commentText;
     const post = await PostModel.findById(post_id);
-    post.post_comments.push({text: commentText, user: req.user._id});
-    await post.save();    
+    post.post_comments.push({ text: commentText, user: req.user._id });
+    await post.save();
     return res.status(200).send(post);
   } catch (error) {
     console.error(error.message);
@@ -221,6 +246,7 @@ export {
   get_user_profile,
   get_suggested_users,
   follow_unfollow,
+  update_user_info,
   update_user_profile,
   user_like_post,
   user_unlike_post,
