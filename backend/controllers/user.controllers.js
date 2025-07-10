@@ -16,10 +16,10 @@ const get_user_profile = async (req, res) => {
     // Get All posts for this user
     const posts = await PostModel.find({user: user_id});
     const user_with_post = {
-      ...user,
+      user,
       posts: posts
     }
-    if (!user) return res.status(404).send({ message: "User Not Found" });
+    if (!user_with_post) return res.status(404).send({ message: "User Not Found" });
     res.status(200).send(user_with_post);
   } catch (error) {
     console.error(error.message);
