@@ -15,9 +15,9 @@ const get_user_profile = async (req, res) => {
     const posts = await PostModel.find({ user: user_id })
       .populate({
         path: "post_comments.user",
-        select: "user_name profile_image email verfied", // Select only the fields you need
+        select: "user_name profile_image email verfied",
       })
-      .sort({ createdAt: -1 }); // Sort posts by newest first
+      .sort({ createdAt: -1 });
 
     const user_with_post = {
       user,

@@ -12,12 +12,18 @@ import {
 } from "react-icons/fi";
 import { SiGoogledocs } from "react-icons/si";
 import { FaHeart } from "react-icons/fa";
-import { AiOutlineHeart, AiOutlineComment, AiOutlineRetweet } from "react-icons/ai";
+import {
+  AiOutlineHeart,
+  AiOutlineComment,
+  AiOutlineRetweet,
+} from "react-icons/ai";
 import { IoShareOutline } from "react-icons/io5";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Loading from "../../pages/Loading";
 import userContext from "../../context/UserContext";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const UserProfile = () => {
   const [profile, setProfile] = useState(null);
@@ -31,6 +37,7 @@ const UserProfile = () => {
   const [comment_number, setCommentNumber] = useState(4);
   const [postToShow, setPostToShow] = useState(null);
   const [isLoadingPost, setIsLoadingPost] = useState(false);
+
   const [commentText, setCommentText] = useState("");
 
   const formatDate = (dateString) => {
@@ -60,11 +67,11 @@ const UserProfile = () => {
     }
   };
 
-  useEffect(() => {
-    if (select_user_profile_state) {
-      getUserSelectDate();
-    }
-  }, [select_user_profile_state]);
+
+  const FollowUnFollow = () => {
+    
+  }
+
 
   const LikePost = async (post) => {
     try {
@@ -182,6 +189,13 @@ const UserProfile = () => {
   };
 
   useEffect(() => {
+    if (select_user_profile_state) {
+      getUserSelectDate();
+    }
+  }, []);
+
+
+  useEffect(() => {
     const handleClickOutside = (e) => {
       const postElement = document.getElementById(`${postToShow}`);
       if (!(postElement && postElement.contains(e.target))) {
@@ -197,11 +211,15 @@ const UserProfile = () => {
   useEffect(() => {
     const handleScroll = () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-        setPost_Number(prev => prev + 4);
+        setPost_Number((prev) => prev + 4);
       }
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    AOS.init();
   }, []);
 
   if (isLoading || !profile) {
@@ -245,6 +263,11 @@ const UserProfile = () => {
                   <FiCheck className="w-4 h-4" />
                 </div>
               )}
+              <button
+                onClick={() => FollowUnFollow()}
+              className="ml-4 px-4 py-1 text-sm bg-yellow-400 text-black font-semibold rounded-full hover:bg-yellow-300 transition">
+                Follow
+              </button>
             </div>
 
             <div className="space-y-2">
@@ -295,18 +318,20 @@ const UserProfile = () => {
         </div>
 
         {/* User Posts */}
+        <h3 className="px-6 pb-6 text-yellow-400 font-semibold">Posts</h3>
         <div>
-          <div className="space-y-2" data-aos="fade-up">
+          <div className="space-y-2 px-6 pb-6">
             {posts.slice(0, post_number).map((post) => (
               <div
+                data-aos="fade-up"
                 key={post._id}
                 id={post._id}
-                className="bg-zinc-900 rounded-md shadow-lg border border-yellow-700 hover:shadow-xl transition-all duration-300"
+                className="bg-zinc-900 shadow-lg border border-yellow-700 hover:shadow-xl transition-all duration-300"
               >
                 <div className="p-4">
                   {/* Post Header */}
-                  <div className="flex items-start justify-between ">
-                    <div className="flex items-start space-x-3">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start space-x-3 mb-2">
                       <img
                         src={profile?.user?.profile_image}
                         alt={profile?.user?.user_name}
@@ -410,7 +435,7 @@ const UserProfile = () => {
                     </button>
                   </div>
                 </div>
-                
+
                 {/* Comments Section */}
                 <div className="comments_section hidden">
                   <form
@@ -430,26 +455,28 @@ const UserProfile = () => {
                   </form>
                   <div className="all_comments justify-start flex-col items-start m-4">
                     {post.post_comments.length !== 0 ? (
-                      post.post_comments.slice(0, comment_number).map((comment, index) => {
-                        return (
-                          <div
-                            key={index}
-                            className="p-1 flex justify-start items-center my-1 bg-zinc-800 text-white w-full"
-                          >
-                            <img
-                              className="w-10 h-10 border mr-4 rounded-full cursor-pointer"
-                              src={comment.user.profile_image}
-                              alt={comment.user.user_name}
-                            />
-                            <div>
-                              <p className="text-yellow-400 font-semibold text-sm">
-                                {comment.user.user_name}
-                              </p>
-                              <p className="text-white">{comment.text}</p>
+                      post.post_comments
+                        .slice(0, comment_number)
+                        .map((comment, index) => {
+                          return (
+                            <div
+                              key={index}
+                              className="p-1 flex justify-start items-center my-1 bg-zinc-800 text-white w-full"
+                            >
+                              <img
+                                className="w-10 h-10 border mr-4 rounded-full cursor-pointer"
+                                src={comment.user.profile_image}
+                                alt={comment.user.user_name}
+                              />
+                              <div>
+                                <p className="text-yellow-400 font-semibold text-sm">
+                                  {comment.user.user_name}
+                                </p>
+                                <p className="text-white">{comment.text}</p>
+                              </div>
                             </div>
-                          </div>
-                        );
-                      })
+                          );
+                        })
                     ) : (
                       <p className="text-yellow-600 text-center">
                         No Comment Found
@@ -457,7 +484,9 @@ const UserProfile = () => {
                     )}
                     {comment_number < post.post_comments.length ? (
                       <button
-                        onClick={() => setCommentNumber(() => comment_number + 4)}
+                        onClick={() =>
+                          setCommentNumber(() => comment_number + 4)
+                        }
                         className="text-yellow-600 mt-2 text-center flex m-auto"
                       >
                         Load more Comment
