@@ -7,7 +7,7 @@ import userContext from "../context/UserContext";
 import axios from "axios";
 import profileContext from "../context/ProfileContext";
 import Loading from "../pages/Loading";
-
+import UserProfile from "../components/main_components/UserProfile";
 
 
 const Space = () => {
@@ -45,7 +45,9 @@ const Space = () => {
       <spaceContext.Provider value={[main_state, setMain_Sate]}>
         <Menu></Menu>
         <profileContext.Provider value={profile}>
-          <Main></Main>
+          
+          {/* <Main></Main> */}
+          <UserProfile></UserProfile>
         </profileContext.Provider>
         <Suggestion></Suggestion>
       </spaceContext.Provider>
