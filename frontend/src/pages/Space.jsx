@@ -8,13 +8,18 @@ import axios from "axios";
 import profileContext from "../context/ProfileContext";
 import Loading from "../pages/Loading";
 import UserProfile from "../components/main_components/UserProfile";
-
+import SelectUserProfileContext from "../context/SelectUserProfileContext";
 
 const Space = () => {
   const [main_state, setMain_Sate] = useState("Home");
-  const user = useContext(userContext);
+  const [select_user_profile_state, setSelect_user_profile_state] =
+    useState(null); // this take id of user profile selected
+
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const user = useContext(userContext);
+  const select_user_profile = useContext(SelectUserProfileContext);
 
   async function getProfileInfo() {
     try {
@@ -36,20 +41,30 @@ const Space = () => {
   useEffect(() => {
     getProfileInfo();
   }, []);
+  useEffect(() => {
+    getProfileInfo();
+  }, []);
 
   if (!isLoading) {
     return <Loading></Loading>;
   }
+
   return (
     <div className="flex justify-between items-start bg-zinc-800 w-full min-h-screen">
       <spaceContext.Provider value={[main_state, setMain_Sate]}>
-        <Menu></Menu>
-        <profileContext.Provider value={profile}>
-          
-          {/* <Main></Main> */}
-          <UserProfile></UserProfile>
-        </profileContext.Provider>
-        <Suggestion></Suggestion>
+        <SelectUserProfileContext.Provider
+          value={[select_user_profile_state, setSelect_user_profile_state]}
+        >
+          <Menu></Menu>
+          <profileContext.Provider value={profile}>
+            {!select_user_profile_state ? (
+              <Main></Main>
+            ) : (
+              <UserProfile></UserProfile>
+            )}
+          </profileContext.Provider>
+          <Suggestion></Suggestion>
+        </SelectUserProfileContext.Provider>
       </spaceContext.Provider>
     </div>
   );

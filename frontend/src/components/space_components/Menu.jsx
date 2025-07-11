@@ -11,14 +11,23 @@ import {
 import { useNavigate } from "react-router-dom";
 import spaceContext from "../../context/SpaceContext";
 import userContext from "../../context/UserContext";
+import SelectUserProfileContext from "../../context/SelectUserProfileContext";
 
 const Menu = () => {
   const [main_state, setMain_State] = useContext(spaceContext);
   const user = useContext(userContext);
+  const [select_user_profile_state, setSelect_user_profile_state] = useContext(
+    SelectUserProfileContext
+  );
   const navigate = useNavigate();
 
   const handleLogout = () => {
     navigate("/");
+  };
+
+  const setMain_State_Fun = (state) => {
+    setSelect_user_profile_state(null);
+    setMain_State(state);
   };
 
   const goToProfile = () => {
@@ -28,10 +37,9 @@ const Menu = () => {
   return (
     <div className="bg-zinc-800 w-[25%] text-white min-h-screen p-5 ">
       <h2 className="text-2xl font-bold mb-8">Threads</h2>
-
       <nav className="space-y-2">
         <button
-          onClick={() => setMain_State("Home")}
+          onClick={() => setMain_State_Fun("Home")}
           className={`${
             main_state === "Home"
               ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 rounded-md"
@@ -43,7 +51,7 @@ const Menu = () => {
         </button>
 
         <button
-          onClick={() => setMain_State("Followers")}
+          onClick={() => setMain_State_Fun("Followers")}
           className={`${
             main_state === "Followers"
               ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 rounded-md"
@@ -55,7 +63,7 @@ const Menu = () => {
         </button>
 
         <button
-          onClick={() => setMain_State("Following")}
+          onClick={() => setMain_State_Fun("Following")}
           className={`${
             main_state === "Following"
               ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 rounded-md"
@@ -67,7 +75,7 @@ const Menu = () => {
         </button>
 
         <button
-          onClick={() => setMain_State("Profile")}
+          onClick={() => setMain_State_Fun("Profile")}
           className={`${
             main_state === "Profile"
               ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 rounded-md"
@@ -79,7 +87,7 @@ const Menu = () => {
         </button>
 
         <button
-          onClick={() => setMain_State("Posts")}
+          onClick={() => setMain_State_Fun("Posts")}
           className={`${
             main_state === "Posts"
               ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 rounded-md"
@@ -91,7 +99,7 @@ const Menu = () => {
         </button>
 
         <button
-          onClick={() => setMain_State("Notifications")}
+          onClick={() => setMain_State_Fun("Notifications")}
           className={`${
             main_state === "Notifications"
               ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 rounded-md"

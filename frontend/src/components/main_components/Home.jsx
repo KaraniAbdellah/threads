@@ -9,6 +9,7 @@ import {
 import { IoShareOutline } from "react-icons/io5";
 import { toast } from "react-hot-toast";
 import userContext from "../../context/UserContext";
+import SelectUserProfileContext from "../../context/SelectUserProfileContext";
 import axios from "axios";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import AOS from "aos";
@@ -31,6 +32,9 @@ const Home = () => {
   const [postToShow, setPostToShow] = useState(null);
   const [isLoadingPost, setIsLoadingPost] = useState(false);
   const [commentText, setCommentText] = useState("");
+  const [select_user_profile_state, setSelect_user_profile_state] = useContext(
+    SelectUserProfileContext
+  );
 
   const [postToPost, setPostToPost] = useState({
     user: "",
@@ -298,6 +302,11 @@ const Home = () => {
     }
   };
 
+  const SelectUserProfile = (selected_user) => {
+    console.log(selected_user);
+    setSelect_user_profile_state(() => selected_user);
+  };
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       const postElement = document.getElementById(`${postToShow}`);
@@ -319,13 +328,12 @@ const Home = () => {
   useEffect(() => {
     const handleScroll = () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-        setPost_Number(prev => prev + 4);
+        setPost_Number((prev) => prev + 4);
       }
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-  
 
   useEffect(() => {
     AOS.init();
@@ -343,9 +351,10 @@ const Home = () => {
             {user?.profile_image ? (
               <div className="relative">
                 <img
+                  onClick={() => SelectUserProfile(user?._id)}
                   src={user?.profile_image}
                   alt="Profile"
-                  className="w-12 h-12 rounded-full object-cover ring-2 ring-blue-100"
+                  className="w-12 h-12 rounded-full object-cover ring-2 ring-blue-100 cursor-pointer"
                 />
                 <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white"></div>
               </div>
@@ -464,12 +473,13 @@ const Home = () => {
               >
                 <div className="p-4">
                   {/* Post Header */}
-                  <div className="flex items-start justify-between ">
+                  <div className="flex items-start justify-between mb-2">
                     <div className="flex items-start space-x-3">
                       <img
+                        onClick={() => SelectUserProfile(post.user._id)}
                         src={post.user?.profile_image}
                         alt={post.user?.user_name}
-                        className="w-12 h-12 rounded-full object-cover ring-2 ring-gray-100"
+                        className="w-12 h-12 rounded-full object-cover ring-2 ring-gray-100 cursor-pointer"
                       />
                       <div>
                         <div className="flex items-center space-x-2">
@@ -595,6 +605,7 @@ const Home = () => {
                     </button>
                   </div>
                 </div>
+
                 <div className="comments_section hidden">
                   <form
                     onSubmit={(e) => CommentPost(e, post)}
@@ -618,11 +629,14 @@ const Home = () => {
                         .map((comment) => {
                           return (
                             <div
-                            key={comment._id}
+                              key={comment._id}
                               className="p-1 flex justify-start
                             items-center my-1 bg-zinc-800 text-white w-full"
                             >
                               <img
+                                onClick={() =>
+                                  SelectUserProfile(comment.user._id)
+                                }
                                 className="w-10 h-10 border mr-4 rounded-full cursor-pointer"
                                 src={post.user.profile_image}
                               />
