@@ -241,6 +241,7 @@ const Home = () => {
 
   const CommentPost = async (e, post) => {
     e.preventDefault();
+    e.target.querySelector("textarea").value = "";
     try {
       await axios
         .post(
@@ -602,7 +603,6 @@ const Home = () => {
                     <textarea
                       className="w-full bg-zinc-800 border-none outline-none p-2 rounded-md text-white border resize-none"
                       placeholder="Write your comment"
-                      value={commentText}
                       onChange={(e) => setCommentText(e.target.value)}
                       rows={2}
                       required
@@ -618,6 +618,7 @@ const Home = () => {
                         .map((comment) => {
                           return (
                             <div
+                            key={comment._id}
                               className="p-1 flex justify-start
                             items-center my-1 bg-zinc-800 text-white w-full"
                             >
@@ -634,7 +635,7 @@ const Home = () => {
                         No Comment Found
                       </p>
                     )}
-                    {comment_number <= post.post_comments.length ? (
+                    {comment_number < post.post_comments.length ? (
                       <button
                         onClick={() =>
                           setCommentNumber(() => comment_number + 4)
