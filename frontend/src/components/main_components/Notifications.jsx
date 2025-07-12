@@ -3,6 +3,7 @@ import axios from "axios";
 import Loading from "../../pages/Loading";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import toast from "react-hot-toast";
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState();
@@ -23,9 +24,34 @@ const Notifications = () => {
     }
   };
 
+  const deleteAllNotification = async () => {
+    try {
+      const res = await axios.get(
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/notification/delete_all_notification`,
+        {
+          withCredentials: true,
+        }
+      );
+      setNotifications(() => []);
+      toast.success("Notifications deleted successfully", {
+        duration: 2000,
+        position: "bottom-right",
+      });
+    } catch (error) {
+      toast.error("Something Wrong Please try Again!", {
+        duration: 2000,
+        position: "bottom-right",
+      });
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getAllUserNotification();
   }, []);
+
   useEffect(() => {
     AOS.init();
   }, []);
@@ -35,20 +61,29 @@ const Notifications = () => {
   }
 
   return (
-    <div
-      data-aos="fade-up"
-      className="space-y-4 p-4 bg-zinc-900 rounded-md shadow-md"
-    >
-      <h3 className="text-2xl font-bold text-yellow-500 mb-2">
-        Notitifcations
-      </h3>
-      <p className="text-white mb-4">
-        you have {notifications.length} notifications
+    <div data-aos="fade-up" className="space-y-4 p-4 bg-zinc-800 rounded-md ">
+      <div className="flex justify-between items-center">
+        <h3 className="text-2xl font-bold text-yellow-500">Notifications</h3>
+        {notifications.length !== 0 ? (
+          <button
+            onClick={deleteAllNotification}
+            className="bg-yellow-400 hover:bg-yellow-300 text-black text-sm px-4 py-1 rounded-md font-semibold transition"
+          >
+            Delete All
+          </button>
+        ) : (
+          ""
+        )}
+      </div>
+
+      <p className="text-white">
+        You have {notifications.length} notifications
       </p>
+
       {notifications.map((not) => (
         <div
           key={not._id}
-          className="flex items-center gap-4 p-3 rounded-lg bg-zinc-800 hover:bg-zinc-700 transition"
+          className="flex items-center gap-4 p-3 rounded-lg bg-zinc-900 transition"
         >
           <img
             src={not.from.profile_image}

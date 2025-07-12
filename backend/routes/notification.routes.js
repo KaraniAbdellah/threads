@@ -8,7 +8,7 @@ import {
 
 const notificationRouter = express.Router();
 notificationRouter.get("/get_notification", protect_middlware, get_notification)
-notificationRouter.get("/", protect_middlware, delete_notification)
+notificationRouter.get("/delete_all_notification", protect_middlware, delete_notification)
 
 
 
