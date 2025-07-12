@@ -632,7 +632,7 @@ const Home = () => {
                             return (
                               <div
                                 key={comment?._id}
-                                className="p-1 flex justify-start items-center my-1 bg-zinc-800 text-white w-full
+                                className="p-1 flex justify-start items-center my-1 bg-zinc-800 text-white w-full rounded-sm
                              "
                               >
                                 <img

@@ -406,7 +406,7 @@ const Posts = () => {
                     return (
                       <div
                         className="p-1 flex justify-start
-                            items-center my-1 bg-zinc-800 text-white w-full"
+                            items-center my-1 bg-zinc-800 text-white w-full rounded-sm"
                       >
                         <img
                           className="w-10 h-10 border mr-4 rounded-full cursor-pointer"
