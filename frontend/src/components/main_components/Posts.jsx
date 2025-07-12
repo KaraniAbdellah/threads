@@ -21,7 +21,7 @@ import {
   AiOutlineComment,
   AiOutlineRetweet,
 } from "react-icons/ai";
-
+import SelectUserProfileContext from "../../context/SelectUserProfileContext";
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
@@ -32,253 +32,219 @@ const Posts = () => {
   const [postToShow, setPostToShow] = useState(null);
   const [isLoadingPost, setIsLoadingPost] = useState(false);
   const [commentText, setCommentText] = useState("");
-  
-    const [postToPost, setPostToPost] = useState({
-      user: "",
-      post_text: "",
-      post_image: "",
-      post_likes: [],
-      post_comments: [{ text: "", user: "" }],
-      post_date: null,
-    });
-    const [IsEditPost, setIsEditPost] = useState(false);
-  
+  const [select_user_profile_state, setSelect_user_profile_state] = useContext(
+    SelectUserProfileContext
+  );
 
-  
-    const EditThisPost = async (postToSend) => {
-      setIsLoadingPost(() => true);
+  const [postToPost, setPostToPost] = useState({
+    user: "",
+    post_text: "",
+    post_image: "",
+    post_likes: [],
+    post_comments: [{ text: "", user: "" }],
+    post_date: null,
+  });
+  const [IsEditPost, setIsEditPost] = useState(false);
+
+  const GetAllPosts = async () => {
+    try {
+      await axios
+        .get(
+          `${import.meta.env.VITE_API_URL}/api/user/user_posts/${user._id}`,
+          {
+            withCredentials: true,
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+          setPosts(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => setIsLoading(false));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const EditPost = (post) => {
+    setPostToShow(null);
+    setIsEditPost(post);
+    setPostToPost(post);
+  };
+
+  const DeletePost = async (postId) => {
+    if (window.confirm("Are you sure you want to delete this post?")) {
       try {
-        await axios
-          .put(
-            `${import.meta.env.VITE_API_URL}/api/post/update/${IsEditPost._id}`,
-            postToSend,
-            { withCredentials: true }
-          )
-          .then((res) => {
-            setPostToPost({
-              user: "",
-              post_text: "",
-              post_image: "",
-              post_likes: [],
-              post_comments: [{ text: "", user: "" }],
-              post_date: null,
-            });
-            GetAllPosts();
-          })
-          .finally(() => setIsLoadingPost(() => false))
-          .catch((err) => {
-            console.log(err);
-            toast.error("Failed Updating Post", {
-              duration: 2000,
-              position: "bottom-right",
-            });
-          });
+        await axios.delete(
+          `${import.meta.env.VITE_API_URL}/api/post/delete/${postId}`,
+          {
+            withCredentials: true,
+          }
+        );
+
+        // Frontend update for now
+        setPosts(posts.filter((post) => post._id !== postId));
+        setPostToShow(null);
+
+        toast.success("Post Deleted Successfully", {
+          duration: 2000,
+          position: "bottom-right",
+        });
       } catch (error) {
-        console.log(error);
-        toast.error("Failed Updating Post", {
+        toast.error("Failed to Delete Post", {
           duration: 2000,
           position: "bottom-right",
         });
       }
-    };
+    }
+  };
 
-    const GetAllPosts = async () => {
-      try {
-        await axios
-          .get(`${import.meta.env.VITE_API_URL}/api/user/user_posts/${user._id}`, {
-            withCredentials: true,
-          })
-          .then((res) => {
-            console.log(res.data);
-            setPosts(res.data);
-          })
-          .catch((err) => {
-            console.log(err);
-          })
-          .finally(() => setIsLoading(false));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-  
-    const EditPost = (post) => {
-      setPostToShow(null);
-      setIsEditPost(post);
-      setPostToPost(post);
-    };
-  
-    const DeletePost = async (postId) => {
-      if (window.confirm("Are you sure you want to delete this post?")) {
-        try {
-          await axios.delete(
-            `${import.meta.env.VITE_API_URL}/api/post/delete/${postId}`,
-            {
-              withCredentials: true,
-            }
-          );
-  
-          // Frontend update for now
-          setPosts(posts.filter((post) => post._id !== postId));
-          setPostToShow(null);
-  
-          toast.success("Post Deleted Successfully", {
+  const LikePost = async (post) => {
+    try {
+      await axios
+        .get(`${import.meta.env.VITE_API_URL}/api/user/like_post/${post._id}`, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          console.log(res);
+          GetAllPosts();
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Something went wrong, please try again", {
             duration: 2000,
             position: "bottom-right",
           });
-        } catch (error) {
-          toast.error("Failed to Delete Post", {
-            duration: 2000,
-            position: "bottom-right",
-          });
-        }
-      }
-    };
-  
-    const LikePost = async (post) => {
-      try {
-        await axios
-          .get(`${import.meta.env.VITE_API_URL}/api/user/like_post/${post._id}`, {
-            withCredentials: true,
-          })
-          .then((res) => {
-            console.log(res);
-            GetAllPosts();
-          })
-          .catch((err) => {
-            console.log(err);
-            toast.error("Something went wrong, please try again", {
-              duration: 2000,
-              position: "bottom-right",
-            });
-          });
-      } catch (error) {
-        toast.error("Something went wrong, please try again", {
-          duration: 2000,
-          position: "bottom-right",
         });
-      }
-    };
-  
-    const UnLikePost = async (post) => {
-      try {
-        await axios
-          .get(
-            `${import.meta.env.VITE_API_URL}/api/user/unlike_post/${post._id}`,
-            {
-              withCredentials: true,
-            }
-          )
-          .then((res) => {
-            console.log(res);
-            GetAllPosts();
-          })
-          .catch((err) => {
-            console.log(err);
-            toast.error("Something went wrong, please try again", {
-              duration: 2000,
-              position: "bottom-right",
-            });
-          });
-      } catch (error) {
-        toast.error("Something went wrong, please try again", {
-          duration: 2000,
-          position: "bottom-right",
-        });
-      }
-    };
-  
-    const CommentPost = async (e, post) => {
-      e.preventDefault();
-      e.target.querySelector("textarea").value = "";
-      try {
-        await axios
-          .post(
-            `${import.meta.env.VITE_API_URL}/api/user/comment_post/${post._id}`,
-            { commentText: commentText },
-            {
-              withCredentials: true,
-            }
-          )
-          .then((res) => {
-            console.log(res);
-            GetAllPosts();
-            setCommentText(() => "");
-          })
-          .catch((err) => {
-            toast.error("Something went wrong, please try again", {
-              duration: 2000,
-              position: "bottom-right",
-            });
-          });
-      } catch (error) {
-        console.log(error);
-        toast.error("Something went wrong, please try again", {
-          duration: 2000,
-          position: "bottom-right",
-        });
-      }
-    };
-  
-    const NotBuildYet = () => {
-      toast("Not Implemented Yet!", {
+    } catch (error) {
+      toast.error("Something went wrong, please try again", {
         duration: 2000,
-        icon: "🛠️",
-        style: {
-          borderRadius: "10px",
-          background: "#333",
-          color: "#fff",
-        },
+        position: "bottom-right",
       });
-    };
-  
-    const ShowCommentSection = (post) => {
-      setCommentNumber(4);
-      const post_to_comment = document.getElementById(`${post._id}`);
-      const comments_section = post_to_comment.querySelector(".comments_section");
-      if (comments_section) {
-        if (comments_section.classList.contains("hidden")) {
-          comments_section.classList.add("block");
-          comments_section.classList.remove("hidden");
-        } else {
-          comments_section.classList.add("hidden");
-          comments_section.classList.remove("block");
-        }
+    }
+  };
+
+  const UnLikePost = async (post) => {
+    try {
+      await axios
+        .get(
+          `${import.meta.env.VITE_API_URL}/api/user/unlike_post/${post._id}`,
+          {
+            withCredentials: true,
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          GetAllPosts();
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Something went wrong, please try again", {
+            duration: 2000,
+            position: "bottom-right",
+          });
+        });
+    } catch (error) {
+      toast.error("Something went wrong, please try again", {
+        duration: 2000,
+        position: "bottom-right",
+      });
+    }
+  };
+
+  const CommentPost = async (e, post) => {
+    e.preventDefault();
+    e.target.querySelector("textarea").value = "";
+    try {
+      await axios
+        .post(
+          `${import.meta.env.VITE_API_URL}/api/user/comment_post/${post._id}`,
+          { commentText: commentText },
+          {
+            withCredentials: true,
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          GetAllPosts();
+          setCommentText(() => "");
+        })
+        .catch((err) => {
+          toast.error("Something went wrong, please try again", {
+            duration: 2000,
+            position: "bottom-right",
+          });
+        });
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong, please try again", {
+        duration: 2000,
+        position: "bottom-right",
+      });
+    }
+  };
+
+  const NotBuildYet = () => {
+    toast("Not Implemented Yet!", {
+      duration: 2000,
+      icon: "🛠️",
+      style: {
+        borderRadius: "10px",
+        background: "#333",
+        color: "#fff",
+      },
+    });
+  };
+
+  const ShowCommentSection = (post) => {
+    setCommentNumber(4);
+    const post_to_comment = document.getElementById(`${post._id}`);
+    const comments_section = post_to_comment.querySelector(".comments_section");
+    if (comments_section) {
+      if (comments_section.classList.contains("hidden")) {
+        comments_section.classList.add("block");
+        comments_section.classList.remove("hidden");
+      } else {
+        comments_section.classList.add("hidden");
+        comments_section.classList.remove("block");
+      }
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      const postElement = document.getElementById(`${postToShow}`);
+      if (!(postElement && postElement.contains(e.target))) {
+        setPostToShow(null);
       }
     };
-  
-    useEffect(() => {
-      const handleClickOutside = (e) => {
-        const postElement = document.getElementById(`${postToShow}`);
-        if (!(postElement && postElement.contains(e.target))) {
-          setPostToShow(null);
-        }
-      };
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, [postToShow]);
-  
-    useEffect(() => {
-      GetAllPosts();
-      return () => {};
-    }, []);
-  
-    useEffect(() => {
-      const handleScroll = () => {
-        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-          setPost_Number(prev => prev + 4);
-        }
-      };
-      window.addEventListener("scroll", handleScroll);
-      return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
-    
-  
-    useEffect(() => {
-      AOS.init();
-    }, []);
-  
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [postToShow]);
+
+  useEffect(() => {
+    GetAllPosts();
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        setPost_Number((prev) => prev + 4);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    AOS.init();
+  }, []);
+
   return (
     <div>
       <div className="space-y-2" data-aos="fade-up">
@@ -293,9 +259,10 @@ const Posts = () => {
               <div className="flex items-start justify-between ">
                 <div className="flex items-start space-x-3">
                   <img
+                    onClick={() => setSelect_user_profile_state(user?._id)}
                     src={user?.profile_image}
                     alt={user?.user_name}
-                    className="w-12 h-12 rounded-full object-cover ring-2 ring-gray-100"
+                    className="w-12 h-12 rounded-full object-cover ring-2 ring-gray-100 cursor-pointer"
                   />
                   <div>
                     <div className="flex items-center space-x-2">
@@ -322,30 +289,30 @@ const Posts = () => {
                     </p>
                   </div>
                 </div>
-                  <div className="relative">
-                    <button
-                      onClick={() => setPostToShow(post._id)}
-                      className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors"
-                    >
-                      <BsThreeDotsVertical className="w-4 h-4" />
-                    </button>
-                    {post._id === postToShow && (
-                      <div className="post_action_menu absolute top-0 right-0 bg-zinc-900 p-1 rounded-sm border z-10">
-                        <button
-                          onClick={() => EditPost(post)}
-                          className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800"
-                        >
-                          <FaEdit /> Edit
-                        </button>
-                        <button
-                          onClick={() => DeletePost(post._id)}
-                          className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800"
-                        >
-                          <FaTrash /> Delete
-                        </button>
-                      </div>
-                    )}
-                  </div>
+                <div className="relative">
+                  <button
+                    onClick={() => setPostToShow(post._id)}
+                    className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors"
+                  >
+                    <BsThreeDotsVertical className="w-4 h-4" />
+                  </button>
+                  {post._id === postToShow && (
+                    <div className="post_action_menu absolute top-0 right-0 bg-zinc-900 p-1 rounded-sm border z-10">
+                      <button
+                        onClick={() => EditPost(post)}
+                        className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800"
+                      >
+                        <FaEdit /> Edit
+                      </button>
+                      <button
+                        onClick={() => DeletePost(post._id)}
+                        className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800"
+                      >
+                        <FaTrash /> Delete
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Post Content */}

@@ -64,7 +64,7 @@ const follow_unfollow = async (req, res) => {
     if (id == req.user._id.toString())
       return res
         .status(400)
-        .send({ error: "You Can Follow or Unfollow Yourself" });
+        .send({ error: "You Can Not Follow or Unfollow Yourself" });
 
     if (!current_user || !user_to_modify)
       res.status(400).send({ error: "Can Not Find Users" });
@@ -78,6 +78,7 @@ const follow_unfollow = async (req, res) => {
       await UserModel.findByIdAndUpdate(req.user._id, {
         $pull: { following: id },
       });
+
       // We Should Be Remove Notification
       // const to_delete_notification = await NotificationModel.findOne({
       //     from: req.user._id,

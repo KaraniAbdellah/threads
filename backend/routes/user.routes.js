@@ -17,7 +17,7 @@ const userRouter = express.Router();
 userRouter.get("/profile/:user_id", protect_middlware, get_user_profile);
 userRouter.get("/user_posts/:user_id", protect_middlware, user_posts);
 userRouter.get("/suggested", protect_middlware, get_suggested_users);
-userRouter.get("/follow/:id", protect_middlware, follow_unfollow);
+userRouter.get("/follow_unfollow/:id", protect_middlware, follow_unfollow);
 userRouter.put("/update_user_info/:user_id", protect_middlware, update_user_info);
 userRouter.put("/update_user_profile/:user_id", protect_middlware, update_user_profile);
 

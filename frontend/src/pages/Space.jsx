@@ -11,7 +11,7 @@ import UserProfile from "../components/main_components/UserProfile";
 import SelectUserProfileContext from "../context/SelectUserProfileContext";
 
 const Space = () => {
-  const [main_state, setMain_Sate] = useState("Home");
+  const [main_state, setMain_State] = useState("Home");
   const [select_user_profile_state, setSelect_user_profile_state] =
     useState(null); // this take id of user profile selected
 
@@ -51,7 +51,7 @@ const Space = () => {
 
   return (
     <div className="flex justify-between items-start bg-zinc-800 w-full min-h-screen">
-      <spaceContext.Provider value={[main_state, setMain_Sate]}>
+      <spaceContext.Provider value={[main_state, setMain_State]}>
         <SelectUserProfileContext.Provider
           value={[select_user_profile_state, setSelect_user_profile_state]}
         >

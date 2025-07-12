@@ -11,7 +11,7 @@ import {
   FiX,
 } from "react-icons/fi";
 import { SiGoogledocs } from "react-icons/si";
-import { FaHeart } from "react-icons/fa";
+import { FaHeart, FaArrowLeft } from "react-icons/fa";
 import {
   AiOutlineHeart,
   AiOutlineComment,
@@ -24,12 +24,14 @@ import Loading from "../../pages/Loading";
 import userContext from "../../context/UserContext";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import spaceContext from "../../context/SpaceContext";
 
 const UserProfile = () => {
   const [profile, setProfile] = useState(null);
   const [select_user_profile_state, setSelect_user_profile_state] = useContext(
     SelectUserProfileContext
   );
+  const [main_state, setMain_State] = useContext(spaceContext);
   const [posts, setPosts] = useState([]);
   const user = useContext(userContext);
   const [isLoading, setIsLoading] = useState(true);
@@ -37,6 +39,7 @@ const UserProfile = () => {
   const [comment_number, setCommentNumber] = useState(4);
   const [postToShow, setPostToShow] = useState(null);
   const [isLoadingPost, setIsLoadingPost] = useState(false);
+  const [follow_state, setFollowState] = useState(null);
 
   const [commentText, setCommentText] = useState("");
 
@@ -67,11 +70,22 @@ const UserProfile = () => {
     }
   };
 
-
-  const FollowUnFollow = () => {
-    
-  }
-
+  const FollowUnFollow = async () => {
+    try {
+      const res = await axios.get(
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/user/follow_unfollow/${select_user_profile_state}`,
+        {
+          withCredentials: true,
+        }
+      );
+      setFollowState((prev) => (prev === "Follow" ? "UnFollow" : "Follow"));
+      getUserSelectDate();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const LikePost = async (post) => {
     try {
@@ -187,13 +201,24 @@ const UserProfile = () => {
       }
     }
   };
+  const GoBack = () => {
+    setMain_State((prev) => prev);
+    setSelect_user_profile_state(null);
+  }
+
+  useEffect(() => {
+    if (profile?.user?.followers?.includes(select_user_profile_state)) {
+      setFollowState(() => "UnFollow");
+    } else {
+      setFollowState(() => "Follow");
+    }
+  }, []);
 
   useEffect(() => {
     if (select_user_profile_state) {
       getUserSelectDate();
     }
   }, []);
-
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -227,10 +252,11 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="rounded-sm border border-yellow-700 bg-zinc-800 w-[55%] min-h-screen bg-gradient-to-br px-4 pt-4 border-r border-l pb-4">
+    <div className="rounded-sm border-x border-zinc-700 bg-zinc-800 w-[55%] min-h-screen bg-gradient-to-br px-4 pt-4 border-r border-l pb-4">
       <div className="bg-zinc-900 overflow-hidden shadow-xl">
         {/* Cover Image Section */}
         <div className="relative h-48 bg-gradient-to-r from-yellow-700 to-yellow-500">
+          <div onClick={GoBack} className="absolute cursor-pointer border border-zinc-00 p-3 rounded-full left-1 top-1 hover:bg-gray-200"><FaArrowLeft className="text-yellow-600"></FaArrowLeft></div>
           {profile?.user.cover_image && (
             <img
               src={profile.user.cover_image}
@@ -263,18 +289,22 @@ const UserProfile = () => {
                   <FiCheck className="w-4 h-4" />
                 </div>
               )}
-              <button
-                onClick={() => FollowUnFollow()}
-              className="ml-4 px-4 py-1 text-sm bg-yellow-400 text-black font-semibold rounded-full hover:bg-yellow-300 transition">
-                Follow
-              </button>
+              {select_user_profile_state !== user._id ? (
+                <button
+                  onClick={() => FollowUnFollow()}
+                  className="ml-4 px-4 py-1 text-sm bg-yellow-400 text-black font-semibold rounded-full hover:bg-yellow-300 transition"
+                >
+                  {follow_state}
+                </button>
+              ) : (
+                ""
+              )}
             </div>
 
             <div className="space-y-2">
               <label className="text-yellow-400 font-semibold">Bio</label>
               <p className="text-gray-300">
-                {profile?.user.bio ||
-                  "No bio available yet. Click edit to add one!"}
+                {profile?.user.bio || "No bio available yet."}
               </p>
             </div>
 
