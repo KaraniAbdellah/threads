@@ -20,7 +20,7 @@ const Followers = () => {
   }, []);
 
   return (
-    <div className="pt-4" data-aos="fade-up">
+    <div className="pt-4 " data-aos="fade-up">
       <h3 className="text-2xl font-bold text-yellow-500 mb-2">Followers</h3>
       <p className="text-white mb-4">
         {profile.user.followers.length} people you're followers
@@ -29,7 +29,7 @@ const Followers = () => {
         {profile.user.followers.map((f) => (
           <div
             key={f._id}
-            className="flex items-center justify-between bg-zinc-900 p-3 rounded-xl shadow-sm"
+            className="flex items-center  justify-between bg-zinc-900 p-3 rounded-xl shadow-sm"
           >
             <div className="flex items-center gap-4">
               <img

@@ -247,6 +247,10 @@ const Posts = () => {
 
   return (
     <div>
+      <h3 className="text-2xl font-bold text-yellow-500 mb-2 rounded-b-md">
+        Posts
+      </h3>
+      <p className="text-white mb-4">you have {posts.length} post</p>
       <div className="space-y-2" data-aos="fade-up">
         {posts.slice(0, post_number).map((post) => (
           <div
