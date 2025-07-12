@@ -18,17 +18,15 @@ import toast from "react-hot-toast";
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const profile = useContext(profileContext);
+  const [profile, setProfile] = useContext(profileContext);
   const profileImageRef = useRef(null);
   const coverImageRef = useRef(null);
-  console.log(profile);
-
 
   const [editData, setEditData] = useState({
-    user_name: profile?.user.user_name,
-    bio: profile?.user.bio,
-    profile_image: profile?.user.profile_image,
-    cover_image: profile?.user.cover_image,
+    user_name: profile?.user?.user_name,
+    bio: profile?.user?.bio,
+    profile_image: profile?.user?.profile_image,
+    cover_image: profile?.user?.cover_image,
   });
 
   // states for image uploads
@@ -41,7 +39,7 @@ const Profile = () => {
     const formData = new FormData();
     formData.append("image", file);
     formData.append("imageType", imageType);
-    formData.append("userId", profile.user._id);
+    formData.append("userId", profile.user?._id);
     setIsUploading(false);
   };
 
@@ -89,7 +87,7 @@ const Profile = () => {
       try {
         await axios.put(
           `${import.meta.env.VITE_API_URL}/api/user/update_user_profile/${
-            profile.user._id
+            profile.user?._id
           }`,
           newData,
           { withCredentials: true }
@@ -100,7 +98,7 @@ const Profile = () => {
         });
       } catch (error) {
         console.error("Error updating profile:", error);
-        toast.error("Failed to update profile.user. Please try again.", {
+        toast.error("Failed to update profile.user?. Please try again.", {
           duration: 2000,
           position: "bottom-right",
         });
@@ -152,9 +150,9 @@ const Profile = () => {
 
         {/* Cover Image Section */}
         <div className="relative h-48 bg-gradient-to-r from-yellow-700 to-yellow-500">
-          {(coverImagePreview || profile?.user.cover_image) && (
+          {(coverImagePreview || profile?.user?.cover_image) && (
             <img
-              src={coverImagePreview || profile.user.cover_image}
+              src={coverImagePreview || profile?.user?.cover_image}
               alt="Cover"
               className="w-full h-full object-cover"
             />
@@ -201,7 +199,7 @@ const Profile = () => {
           <div className="relative -mt-16 mb-4">
             <div className="relative inline-block">
               <img
-                src={profileImagePreview || profile?.user.profile_image}
+                src={profileImagePreview || profile?.user?.profile_image}
                 alt="Profile"
                 className="w-32 h-32 rounded-full border-4 border-yellow-400 bg-zinc-700 object-cover"
               />
@@ -255,7 +253,7 @@ const Profile = () => {
                   {editData?.user_name}
                 </h1>
               )}
-              {profile?.user.verfied && (
+              {profile?.user?.verfied && (
                 <div className="bg-yellow-400 text-black p-1 rounded-full">
                   <FiCheck className="w-4 h-4" />
                 </div>
@@ -285,14 +283,14 @@ const Profile = () => {
               <div className="flex items-center gap-2">
                 <FiUsers className="w-5 h-5 text-yellow-400" />
                 <span className="text-white font-semibold">
-                  {profile?.user.followers?.length || 0}
+                  {profile?.user?.followers?.length || 0}
                 </span>
                 <span className="text-gray-400">Followers</span>
               </div>
               <div className="flex items-center gap-2">
                 <FiUserPlus className="w-5 h-5 text-yellow-400" />
                 <span className="text-white font-semibold">
-                  {profile?.user.following?.length || 0}
+                  {profile?.user?.following?.length || 0}
                 </span>
                 <span className="text-gray-400">Following</span>
               </div>
@@ -309,11 +307,11 @@ const Profile = () => {
             <div className="space-y-2 text-sm text-gray-400">
               <div className="flex items-center gap-2">
                 <FiCalendar className="w-4 h-4 text-yellow-400" />
-                <span>Joined {formatDate(profile?.user.createdAt)}</span>
+                <span>Joined {formatDate(profile?.user?.createdAt)}</span>
               </div>
               <div className="flex items-center gap-2">
                 <FiEdit2 className="w-4 h-4 text-yellow-400" />
-                <span>Last updated {formatDate(profile?.user.updatedAt)}</span>
+                <span>Last updated {formatDate(profile?.user?.updatedAt)}</span>
               </div>
             </div>
           </div>

@@ -122,8 +122,8 @@ const Menu = () => {
             className="w-8 h-8 rounded-full"
           />
           <div className="text-left">
-            <p className="font-semibold">abdellah karani</p>
-            <p className="text-sm opacity-80">abdellahkarani@gmail.com</p>
+            <p className="font-semibold">@{user.user_name}</p>
+            <p className="text-sm opacity-80">{user.email}</p>
           </div>
         </button>
 

@@ -38,8 +38,7 @@ const UserProfile = () => {
   const [post_number, setPost_Number] = useState(4);
   const [comment_number, setCommentNumber] = useState(4);
   const [postToShow, setPostToShow] = useState(null);
-  const [isLoadingPost, setIsLoadingPost] = useState(false);
-  const [follow_state, setFollowState] = useState(null);
+  const [follow_state, setFollowState] = useState("Follow/UnFollow");
 
   const [commentText, setCommentText] = useState("");
 
@@ -70,6 +69,23 @@ const UserProfile = () => {
     }
   };
 
+  async function getProfileInfo() {
+    try {
+      await axios
+        .get(`${import.meta.env.VITE_API_URL}/api/user/profile/${user._id}`, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          console.log(res.data);
+          setProfile(() => res.data);
+        })
+        .catch((err) => {})
+        .finally(() => setIsLoading(() => true));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const FollowUnFollow = async () => {
     try {
       const res = await axios.get(
@@ -80,7 +96,6 @@ const UserProfile = () => {
           withCredentials: true,
         }
       );
-      setFollowState((prev) => (prev === "Follow" ? "UnFollow" : "Follow"));
       getUserSelectDate();
     } catch (error) {
       console.log(error);
@@ -201,18 +216,11 @@ const UserProfile = () => {
       }
     }
   };
+
   const GoBack = () => {
     setMain_State((prev) => prev);
     setSelect_user_profile_state(null);
-  }
-
-  useEffect(() => {
-    if (profile?.user?.followers?.includes(select_user_profile_state)) {
-      setFollowState(() => "UnFollow");
-    } else {
-      setFollowState(() => "Follow");
-    }
-  }, []);
+  };
 
   useEffect(() => {
     if (select_user_profile_state) {
@@ -256,7 +264,12 @@ const UserProfile = () => {
       <div className="bg-zinc-900 overflow-hidden shadow-xl">
         {/* Cover Image Section */}
         <div className="relative h-48 bg-gradient-to-r from-yellow-700 to-yellow-500">
-          <div onClick={GoBack} className="absolute cursor-pointer border border-zinc-00 p-3 rounded-full left-1 top-1 hover:bg-gray-200"><FaArrowLeft className="text-yellow-600"></FaArrowLeft></div>
+          <div
+            onClick={GoBack}
+            className="absolute cursor-pointer border border-zinc-00 p-3 rounded-full left-1 top-1 hover:bg-gray-200"
+          >
+            <FaArrowLeft className="text-yellow-600"></FaArrowLeft>
+          </div>
           {profile?.user.cover_image && (
             <img
               src={profile.user.cover_image}
@@ -294,7 +307,7 @@ const UserProfile = () => {
                   onClick={() => FollowUnFollow()}
                   className="ml-4 px-4 py-1 text-sm bg-yellow-400 text-black font-semibold rounded-full hover:bg-yellow-300 transition"
                 >
-                  {follow_state}
+                  {Number(profile.user.followers.length) ? "UnFollow" : "Follow"}
                 </button>
               ) : (
                 ""

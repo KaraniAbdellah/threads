@@ -28,7 +28,6 @@ const Space = () => {
           withCredentials: true,
         })
         .then((res) => {
-          console.log(res.data);
           setProfile(() => res.data);
         })
         .catch((err) => {})
@@ -56,7 +55,7 @@ const Space = () => {
           value={[select_user_profile_state, setSelect_user_profile_state]}
         >
           <Menu></Menu>
-          <profileContext.Provider value={profile}>
+          <profileContext.Provider value={[profile, setProfile]}>
             {!select_user_profile_state ? (
               <Main></Main>
             ) : (

@@ -10,7 +10,7 @@ import PostModel from "../models/Post.js";
 const get_user_profile = async (req, res) => {
   try {
     const user_id = req.params.user_id;
-    const user = await UserModel.findById(user_id).select("-password");
+    const user = await UserModel.findById(user_id).select("-password").populate("followers").populate("following");
 
     const posts = await PostModel.find({ user: user_id })
       .populate({

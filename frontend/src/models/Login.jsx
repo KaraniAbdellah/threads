@@ -17,14 +17,14 @@ const Login = () => {
   });
   const [isLoading, SetLoading] = useState(false);
   const [setLoginOrSignUp] = useContext(AuthContext);
-  
+
   const navigate = useNavigate();
   const apiURL = import.meta.env.VITE_API_URL;
   const client_id = import.meta.env.VITE_CLIENT_ID;
 
   const ForgetPassword = () => {
     navigate("/recovery");
-  }
+  };
 
   const UnShowLogin = () => {
     setLoginOrSignUp("");
@@ -44,6 +44,7 @@ const Login = () => {
           SetLoading(true);
           setLoginOrSignUp("");
           navigate("/loading");
+
           setTimeout(() => {
             navigate("/space");
           }, 2000);
@@ -94,15 +95,19 @@ const Login = () => {
     try {
       await axios
         .post(`${apiURL}/api/auth/signup_with_google`, formData, {
-          withCredentials: true
+          withCredentials: true,
         })
         .then((response) => {
           toast.success("Welcome to Threads", {
             duration: 2000,
             position: "bottom-right",
           });
-          document.cookie = `token=${response.data.token}; max-age=${60 * 60 * 24 * 15}; SameSite=Lax`;
-          SetLoading(true); setLoginOrSignUp(""); navigate("/loading");
+          document.cookie = `token=${response.data.token}; max-age=${
+            60 * 60 * 24 * 15
+          }; SameSite=Lax`;
+          SetLoading(true);
+          setLoginOrSignUp("");
+          navigate("/loading");
           setTimeout(() => {
             navigate("/space");
           }, 2000);
@@ -198,7 +203,10 @@ const Login = () => {
                 required
               />
             </div>
-            <p onClick={() => ForgetPassword()} className="mt-1 text-sm mb-4 hover:underline cursor-pointer">
+            <p
+              onClick={() => ForgetPassword()}
+              className="mt-1 text-sm mb-4 hover:underline cursor-pointer"
+            >
               Forget Password?
             </p>
 
@@ -239,7 +247,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-     </GoogleOAuthProvider>
+    </GoogleOAuthProvider>
   );
 };
 

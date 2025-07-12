@@ -303,8 +303,9 @@ const Home = () => {
   };
 
   const SelectUserProfile = (selected_user) => {
-    console.log(selected_user);
-    setSelect_user_profile_state(() => selected_user);
+    if (selected_user) {
+      setSelect_user_profile_state(() => selected_user);
+    }
   };
 
   useEffect(() => {
@@ -463,216 +464,220 @@ const Home = () => {
         </div>
 
         {/* Posts Feed */}
-        {!isLoading ? (
-          <div className="space-y-2" data-aos="fade-up">
-            {posts.slice(0, post_number).map((post) => (
-              <div
-                key={post._id}
-                id={post._id}
-                className="bg-zinc-900 rounded-md shadow-lg border border-yellow-700 hover:shadow-xl transition-all duration-300"
-              >
-                <div className="p-4">
-                  {/* Post Header */}
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex items-start space-x-3">
-                      <img
-                        onClick={() => SelectUserProfile(post.user._id)}
-                        src={post.user?.profile_image}
-                        alt={post.user?.user_name}
-                        className="w-12 h-12 rounded-full object-cover ring-2 ring-gray-100 cursor-pointer"
-                      />
-                      <div>
-                        <div className="flex items-center space-x-2">
-                          <h3 className="font-semibold text-yellow-600">
-                            {post.user?.user_name}
-                          </h3>
-                          <div className="w-5 h-5 bg-yellow-500 rounded-full flex items-center justify-center">
-                            <svg
-                              className="w-3 h-3 text-white"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </div>
-                        </div>
-                        <p className="text-gray-500 text-sm">
-                          @{post.user.user_name.split(" ")[0]} ·{" "}
-                          {formatTimeAgo(post.post_date)}
-                        </p>
-                      </div>
-                    </div>
-                    {user._id === post.user._id ? (
-                      <div className="relative">
-                        <button
-                          onClick={() => setPostToShow(post._id)}
-                          className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors"
-                        >
-                          <BsThreeDotsVertical className="w-4 h-4" />
-                        </button>
-                        {post._id === postToShow && (
-                          <div className="post_action_menu absolute top-0 right-0 bg-zinc-900 p-1 rounded-sm border z-10">
-                            <button
-                              onClick={() => EditPost(post)}
-                              className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800"
-                            >
-                              <FaEdit /> Edit
-                            </button>
-                            <button
-                              onClick={() => DeletePost(post._id)}
-                              className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800"
-                            >
-                              <FaTrash /> Delete
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-
-                  {/* Post Content */}
-                  <div className="mb-2">
-                    <p className="text-white text-lg leading-relaxed">
-                      {post.post_text}
-                    </p>
-                  </div>
-
-                  {post.post_image && (
-                    <div className="border rounded-md w-full h-full mb-4">
-                      <img
-                        className="h-full w-full object-cover"
-                        src={post.post_image}
-                        alt=""
-                      />
-                    </div>
-                  )}
-
-                  {/* Post Actions */}
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    {post.post_likes.find(
-                      (id) => id.toString() === user._id.toString()
-                    ) ? (
-                      <button
-                        onClick={() => UnLikePost(post)}
-                        className="flex items-center space-x-2 text-gray-500 hover:text-red-500 hover:bg-red-50 px-3 py-2 rounded-full transition-all group"
-                      >
-                        <FaHeart className="w-5 h-5 text-red-700 group-hover:scale-110 transition-transform" />
-                        <span className="text-sm font-medium">
-                          {post.post_likes?.length || 0}
-                        </span>
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => LikePost(post)}
-                        className="flex items-center space-x-2 text-gray-500 hover:text-red-500 hover:bg-red-50 px-3 py-2 rounded-full transition-all group"
-                      >
-                        <AiOutlineHeart className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                        <span className="text-sm font-medium">
-                          {post.post_likes?.length || 0}
-                        </span>
-                      </button>
-                    )}
-
-                    <button
-                      onClick={() => ShowCommentSection(post)}
-                      className="flex items-center space-x-2 text-gray-500 hover:text-blue-500 hover:bg-blue-50 px-3 py-2 rounded-full transition-all group"
-                    >
-                      <AiOutlineComment className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                      <span className="text-sm font-medium">
-                        {post.post_comments?.length || 0}
-                      </span>
-                    </button>
-
-                    <button
-                      onClick={NotBuildYet}
-                      className="flex items-center space-x-2 text-gray-500 hover:text-green-500 hover:bg-green-50 px-3 py-2 rounded-full transition-all group"
-                    >
-                      <AiOutlineRetweet className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                      <span className="text-sm font-medium">0</span>
-                    </button>
-
-                    <button
-                      onClick={NotBuildYet}
-                      className="flex items-center space-x-2 text-gray-500 hover:text-purple-500 hover:bg-purple-50 px-3 py-2 rounded-full transition-all group"
-                    >
-                      <IoShareOutline className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                    </button>
-                  </div>
-                </div>
-
-                <div className="comments_section hidden">
-                  <form
-                    onSubmit={(e) => CommentPost(e, post)}
-                    className="create_comment px-4 flex-col justify-end items-end"
-                  >
-                    <textarea
-                      className="w-full bg-zinc-800 border-none outline-none p-2 rounded-md text-white border resize-none"
-                      placeholder="Write your comment"
-                      onChange={(e) => setCommentText(e.target.value)}
-                      rows={2}
-                      required
-                    />
-                    <button className="mt-2 text-right px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700">
-                      Submit
-                    </button>
-                  </form>
-                  <div className="all_comments justify-start flex-col items-start m-4">
-                    {post.post_comments.length !== 0 ? (
-                      post.post_comments
-                        .slice(0, comment_number)
-                        .map((comment) => {
-                          return (
-                            <div
-                              key={comment._id}
-                              className="p-1 flex justify-start items-center my-1 bg-zinc-800 text-white w-full
-                             "
-                            >
-                              <img
-                                onClick={() =>
-                                  SelectUserProfile(comment.user._id)
-                                }
-                                className="w-10 h-10 border mr-4 rounded-full cursor-pointer"
-                                src={post.user.profile_image}
-                              />
-                              <div>
-                                <p className="text-yellow-400 font-semibold text-sm">
-                                  {comment.user.user_name}
-                                </p>
-                                <p className="text-white">{comment.text}</p>
-                              </div>
+        {posts.length !== 0 ? (
+          posts.length !== 0 && !isLoading ? (
+            <div className="space-y-2" data-aos="fade-up">
+              {posts.slice(0, post_number).map((post) => (
+                <div
+                  key={post._id}
+                  id={post._id}
+                  className="bg-zinc-900 rounded-md shadow-lg border border-yellow-700 hover:shadow-xl transition-all duration-300"
+                >
+                  <div className="p-4">
+                    {/* Post Header */}
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-start space-x-3">
+                        <img
+                          onClick={() => SelectUserProfile(post?.user?._id)}
+                          src={post.user?.profile_image}
+                          alt={post.user?.user_name}
+                          className="w-12 h-12 rounded-full object-cover ring-2 ring-gray-100 cursor-pointer"
+                        />
+                        <div>
+                          <div className="flex items-center space-x-2">
+                            <h3 className="font-semibold text-yellow-600">
+                              {post.user?.user_name}
+                            </h3>
+                            <div className="w-5 h-5 bg-yellow-500 rounded-full flex items-center justify-center">
+                              <svg
+                                className="w-3 h-3 text-white"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
                             </div>
-                          );
-                        })
-                    ) : (
-                      <p className="text-yellow-600 text-center">
-                        No Comment Found
+                          </div>
+                          <p className="text-gray-500 text-sm">
+                            @{post?.user?.user_name.split(" ")[0]} ·{" "}
+                            {formatTimeAgo(post.post_date)}
+                          </p>
+                        </div>
+                      </div>
+                      {user._id === post.user?._id ? (
+                        <div className="relative">
+                          <button
+                            onClick={() => setPostToShow(post._id)}
+                            className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-full transition-colors"
+                          >
+                            <BsThreeDotsVertical className="w-4 h-4" />
+                          </button>
+                          {post._id === postToShow && (
+                            <div className="post_action_menu absolute top-0 right-0 bg-zinc-900 p-1 rounded-sm border z-10">
+                              <button
+                                onClick={() => EditPost(post)}
+                                className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800"
+                              >
+                                <FaEdit /> Edit
+                              </button>
+                              <button
+                                onClick={() => DeletePost(post._id)}
+                                className="flex items-center w-full gap-1 px-3 py-1 text-white rounded hover:bg-zinc-800"
+                              >
+                                <FaTrash /> Delete
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+
+                    {/* Post Content */}
+                    <div className="mb-2">
+                      <p className="text-white text-lg leading-relaxed">
+                        {post.post_text}
                       </p>
+                    </div>
+
+                    {post.post_image && (
+                      <div className="border rounded-md w-full h-full mb-4">
+                        <img
+                          className="h-full w-full object-cover"
+                          src={post.post_image}
+                          alt=""
+                        />
+                      </div>
                     )}
-                    {comment_number < post.post_comments.length ? (
+
+                    {/* Post Actions */}
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                      {post.post_likes.find(
+                        (id) => id.toString() === user._id.toString()
+                      ) ? (
+                        <button
+                          onClick={() => UnLikePost(post)}
+                          className="flex items-center space-x-2 text-gray-500 hover:text-red-500 hover:bg-red-50 px-3 py-2 rounded-full transition-all group"
+                        >
+                          <FaHeart className="w-5 h-5 text-red-700 group-hover:scale-110 transition-transform" />
+                          <span className="text-sm font-medium">
+                            {post.post_likes?.length || 0}
+                          </span>
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => LikePost(post)}
+                          className="flex items-center space-x-2 text-gray-500 hover:text-red-500 hover:bg-red-50 px-3 py-2 rounded-full transition-all group"
+                        >
+                          <AiOutlineHeart className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                          <span className="text-sm font-medium">
+                            {post.post_likes?.length || 0}
+                          </span>
+                        </button>
+                      )}
+
                       <button
-                        onClick={() =>
-                          setCommentNumber(() => comment_number + 4)
-                        }
-                        className="text-yellow-600 mt-2 text-center flex m-auto"
+                        onClick={() => ShowCommentSection(post)}
+                        className="flex items-center space-x-2 text-gray-500 hover:text-blue-500 hover:bg-blue-50 px-3 py-2 rounded-full transition-all group"
                       >
-                        Load more Comment
+                        <AiOutlineComment className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                        <span className="text-sm font-medium">
+                          {post.post_comments?.length || 0}
+                        </span>
                       </button>
-                    ) : (
-                      ""
-                    )}
+
+                      <button
+                        onClick={NotBuildYet}
+                        className="flex items-center space-x-2 text-gray-500 hover:text-green-500 hover:bg-green-50 px-3 py-2 rounded-full transition-all group"
+                      >
+                        <AiOutlineRetweet className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                        <span className="text-sm font-medium">0</span>
+                      </button>
+
+                      <button
+                        onClick={NotBuildYet}
+                        className="flex items-center space-x-2 text-gray-500 hover:text-purple-500 hover:bg-purple-50 px-3 py-2 rounded-full transition-all group"
+                      >
+                        <IoShareOutline className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="comments_section hidden">
+                    <form
+                      onSubmit={(e) => CommentPost(e, post)}
+                      className="create_comment px-4 flex-col justify-end items-end"
+                    >
+                      <textarea
+                        className="w-full bg-zinc-800 border-none outline-none p-2 rounded-md text-white border resize-none"
+                        placeholder="Write your comment"
+                        onChange={(e) => setCommentText(e.target.value)}
+                        rows={2}
+                        required
+                      />
+                      <button className="mt-2 text-right px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700">
+                        Submit
+                      </button>
+                    </form>
+                    <div className="all_comments justify-start flex-col items-start m-4">
+                      {post?.post_comments?.length !== 0 ? (
+                        post.post_comments
+                          .slice(0, comment_number)
+                          .map((comment) => {
+                            return (
+                              <div
+                                key={comment?._id}
+                                className="p-1 flex justify-start items-center my-1 bg-zinc-800 text-white w-full
+                             "
+                              >
+                                <img
+                                  onClick={() =>
+                                    SelectUserProfile(comment?.user._id)
+                                  }
+                                  className="w-10 h-10 border mr-4 rounded-full cursor-pointer"
+                                  src={comment?.user?.profile_image}
+                                />
+                                <div>
+                                  <p className="text-yellow-400 font-semibold text-sm">
+                                    {comment?.user?.user_name}
+                                  </p>
+                                  <p className="text-white">{comment.text}</p>
+                                </div>
+                              </div>
+                            );
+                          })
+                      ) : (
+                        <p className="text-yellow-600 text-center">
+                          No Comment Found
+                        </p>
+                      )}
+                      {comment_number < post.post_comments.length ? (
+                        <button
+                          onClick={() =>
+                            setCommentNumber(() => comment_number + 4)
+                          }
+                          className="text-yellow-600 mt-2 text-center flex m-auto"
+                        >
+                          Load more Comment
+                        </button>
+                      ) : (
+                        ""
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-white text-center">Loading ...</p>
+          )
         ) : (
-          <p className="text-white text-center">Loading ...</p>
+          ""
         )}
 
         {posts.length === 0 && !isLoading && (

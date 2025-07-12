@@ -85,6 +85,7 @@ const signup_with_google = async (req, res) => {
     if (!hashed_password) {
       res.status(400).send({ message: "Can Not Hash The Password" });
     }
+    console.log("exiting_user", exiting_user);
 
     // Create new user
     const new_user = new UserModel({
@@ -94,9 +95,14 @@ const signup_with_google = async (req, res) => {
     });
 
     if (new_user) {
-      const token = generateCookie(new_user._id, res);
-      if (!exiting_user) await UserModel.create(new_user);
-      res.status(200).send({token: token});
+      let token;
+      if (!exiting_user) {
+        token = generateCookie(new_user._id, res);
+        await UserModel.create(new_user);
+      } else {
+        token = generateCookie(exiting_user._id, res);
+      }
+      res.status(200).send({ token: token });
       return;
     } else {
       res.status(400).send({ message: "Can Not Create User" });
@@ -135,7 +141,13 @@ const login = async (req, res) => {
 
 const get_me = async (req, res) => {
   try {
-    return res.status(200).send(req.user);
+    const user = await UserModel.findById(req.user._id);
+    if (!user)
+      return res.status(404).send({ message: "User Not Found At Database" });
+    user.profile_image = `https://robohash.org/${req.user.user_name}.png?size=150x150`;
+    user.cover_image = `https://robohash.org/${req.user.user_name}.png?size=150x150`;
+    await user.save();
+    return res.status(200).send(user);
   } catch (error) {
     console.error(error.message);
     res.status(500).send({ message: error.message });
