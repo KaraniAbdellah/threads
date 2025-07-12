@@ -260,7 +260,15 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="rounded-sm border-x border-zinc-700 bg-zinc-800 w-[55%] min-h-screen bg-gradient-to-br px-4 pt-4 border-r border-l pb-4">
+    <div
+      data-aos="fade-up"
+      className="rounded-sm border-x border-zinc-700 bg-zinc-800 w-[55%] min-h-screen bg-gradient-to-br px-4 pt-4 border-r border-l pb-4"
+    >
+      <h3 className="text-2xl font-bold text-yellow-500 mb-2 rounded-b-md">
+        {profile?.user?.user_name} Profile
+      </h3>
+      <p className="text-white mb-4">Welcome {user?.user_name} to my profile</p>
+      <div className="space-y-2" data-aos="fade-up"></div>
       <div className="bg-zinc-900 overflow-hidden shadow-xl">
         {/* Cover Image Section */}
         <div className="relative h-48 bg-gradient-to-r from-yellow-700 to-yellow-500">
@@ -307,7 +315,9 @@ const UserProfile = () => {
                   onClick={() => FollowUnFollow()}
                   className="ml-4 px-4 py-1 text-sm bg-yellow-400 text-black font-semibold rounded-full hover:bg-yellow-300 transition"
                 >
-                  {Number(profile.user.followers.length) ? "UnFollow" : "Follow"}
+                  {Number(profile.user.followers.length)
+                    ? "UnFollow"
+                    : "Follow"}
                 </button>
               ) : (
                 ""
