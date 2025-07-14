@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 import "./css/get_started_btn.css";
 import "./css/starry_background.css";
 import "./css/social_media.css";
-import UserProfile from "./pages/UserProfile";
+import UpdateUserProfile from "./pages/UpdateUserProfile";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -62,7 +62,7 @@ function App() {
             {/* <Route element={<ProtectedRoutes />}> */}
             <Route path="/space" element={<Space></Space>}></Route>
             <Route path="/loading" element={<Loading></Loading>}></Route>
-            <Route path="/user_profile" element={<UserProfile></UserProfile>}></Route>
+            <Route path="/update_profile" element={<UpdateUserProfile></UpdateUserProfile>}></Route>
             {/* </Route> */}
           </Routes>
         </userContext.Provider>

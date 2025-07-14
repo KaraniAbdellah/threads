@@ -7,6 +7,7 @@ import {
   FaBell,
   FaSignOutAlt,
 } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 import { useNavigate } from "react-router-dom";
 import spaceContext from "../../context/SpaceContext";
@@ -112,20 +113,22 @@ const Menu = () => {
       </nav>
 
       <div className="mt-auto pt-6 border-t border-zinc-700">
-        <button
-          onClick={goToProfile}
-          className="flex items-center space-x-3 w-full p-3 rounded-md hover:bg-yellow-600 transition-all duration-200"
-        >
-          <img
-            src={user.profile_image}
-            alt="User Avatar"
-            className="w-8 h-8 rounded-full"
-          />
-          <div className="text-left">
-            <p className="font-semibold">@{user.user_name}</p>
-            <p className="text-sm opacity-80">{user.email}</p>
-          </div>
-        </button>
+        <Link to="/update_profile">
+          <button
+            onClick={goToProfile}
+            className="flex items-center space-x-3 w-full p-3 rounded-md hover:bg-yellow-600 transition-all duration-200"
+          >
+            <img
+              src={user.profile_image}
+              alt="User Avatar"
+              className="w-8 h-8 rounded-full"
+            />
+            <div className="text-left">
+              <p className="font-semibold">@{user.user_name}</p>
+              <p className="text-sm opacity-80">{user.email}</p>
+            </div>
+          </button>
+        </Link>
 
         <button
           onClick={handleLogout}

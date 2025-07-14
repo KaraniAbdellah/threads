@@ -127,67 +127,28 @@ const update_user_info = async (req, res) => {
     const user = await UserModel.findById(req.params.user_id);
     if (!user) return res.status(400).send({ message: "User Not Found" });
 
-    const { user_name, email, new_password, current_password, bio, link } =
+    const { new_user_name, new_email, new_password } =
       req.body;
-    let { profile_image, cover_image } = req.body;
 
     if (
       !new_password ||
-      !current_password ||
-      !user_name ||
-      !email ||
-      new_password.length < 6
+      !new_email ||
+      !new_user_name ||
     ) {
-      console.log("Some Inputs Nedded");
       return res.status(400).send({ message: "All Filieds Required" });
     }
-
-    // Check If The Email Already Exit
-    const is_match_by_email = await UserModel.findOne({ email: email });
-    if (is_match_by_email) {
-      return res.status(400).send({ message: "Email Already Exit" });
-    }
-
-    const is_match = await bcrypt.compare(current_password, user.password);
-    if (!is_match)
-      return res
-        .status(400)
-        .send({ message: "The Current Password does Not Correct" });
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(new_password, salt);
 
-    if (profile_image) {
-      if (user.profile_image) {
-        await cloudinary.uploader.destroy(
-          user.profile_image.split("/").pop().split(".")[0]
-        );
-      }
-      const uploaded_res_profile = await cloudinary.uploader.upload(
-        profile_image
-      );
-      user.profile_image = uploaded_res_profile.secure_url;
-    }
-
-    if (cover_image) {
-      if (user.cover_image) {
-        await cloudinary.uploader.destroy(
-          user.cover_image.split("/").pop().split(".")[0]
-        );
-      }
-      const uploaded_res_cover = await cloudinary.uploader.upload(cover_image);
-      user.cover_image = uploaded_res_cover.secure_url;
-    }
-
-    user.user_name = user_name || user.user_name;
-    user.email = email || user.email;
-    user.bio = bio || user.bio;
-    user.link = link || user.link;
-
-    const updated_user = await UserModel.findByIdAndUpdate(user._id, user);
-    updated_user.password = null;
-    return res.status(200).send(updated_user);
-  } catch (error) {}
+    user.user_name = new_user_name || user.user_name;
+    user.email = new_email || user.email;
+    await user.save();
+    return res.status(200).send(user);
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).send({ error: error.message });
+  }
 };
 
 const update_user_profile = async (req, res) => {
