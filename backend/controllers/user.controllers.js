@@ -10,7 +10,10 @@ import PostModel from "../models/Post.js";
 const get_user_profile = async (req, res) => {
   try {
     const user_id = req.params.user_id;
-    const user = await UserModel.findById(user_id).select("-password").populate("followers").populate("following");
+    const user = await UserModel.findById(user_id)
+      .select("-password")
+      .populate("followers")
+      .populate("following");
 
     const posts = await PostModel.find({ user: user_id })
       .populate({
@@ -34,6 +37,7 @@ const get_user_profile = async (req, res) => {
 };
 
 const get_suggested_users = async (req, res) => {
+  console.log("Hell World");
   try {
     const userId = req.user._id;
     const following_users = await UserModel.findById(userId).select(
@@ -47,7 +51,9 @@ const get_suggested_users = async (req, res) => {
     const filtred_users = users.filter(
       (user) => !following_users.following.includes(user._id)
     );
+    console.log("filtred_users: ", filtred_users);
     const suggested_users = filtred_users.slice(0, 4);
+    console.log("suggested_users", suggested_users);
     suggested_users.forEach((user) => (user.password = null));
     res.status(200).send(suggested_users);
   } catch (error) {

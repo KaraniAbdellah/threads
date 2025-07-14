@@ -61,8 +61,8 @@ const Space = () => {
             ) : (
               <UserProfile></UserProfile>
             )}
+            <Suggestion></Suggestion>
           </profileContext.Provider>
-          <Suggestion></Suggestion>
         </SelectUserProfileContext.Provider>
       </spaceContext.Provider>
     </div>

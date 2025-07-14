@@ -21,6 +21,6 @@ export default async function protect_middlware(req, res, next) {
     req.user = user;
     next();
   } catch (error) {
-    return res.status(500).send({message: error.message});
+    return res.status(500).send({ message: error.message });
   }
 }
