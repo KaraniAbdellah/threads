@@ -60,6 +60,10 @@ const Suggestion = () => {
         position: "bottom-right",
       });
       getProfileInfo();
+      setSuggested_users(() =>
+        suggested_users.filter((s_user) => s_user._id !== select_user)
+      );
+      console.log(suggested_users);
     } catch (error) {
       console.log(error);
     }
