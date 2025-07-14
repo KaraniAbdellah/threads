@@ -127,14 +127,9 @@ const update_user_info = async (req, res) => {
     const user = await UserModel.findById(req.params.user_id);
     if (!user) return res.status(400).send({ message: "User Not Found" });
 
-    const { new_user_name, new_email, new_password } =
-      req.body;
+    const { new_user_name, new_email, new_password } = req.body;
 
-    if (
-      !new_password ||
-      !new_email ||
-      !new_user_name ||
-    ) {
+    if (!new_password || !new_email || !new_user_name) {
       return res.status(400).send({ message: "All Filieds Required" });
     }
 
