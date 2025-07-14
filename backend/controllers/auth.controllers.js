@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import UserModel from "../models/User.js";
 import bcrypt, { hash } from "bcrypt";
 import generateCookie from "../lib/utils/generateCookie.js";
-import {sendMail} from "../lib/utils/sendMail.js";
+import { sendMail } from "../lib/utils/sendMail.js";
 
 const signup = async (req, res) => {
   console.log("Request Come From Postman");
@@ -43,7 +43,7 @@ const signup = async (req, res) => {
     if (new_user) {
       const token = generateCookie(new_user._id, res);
       await UserModel.create(new_user);
-      res.status(201).send({token: token});
+      res.status(201).send({ token: token });
       return;
     } else {
       res.status(400).send({ message: "Can Not Create User" });
@@ -57,6 +57,7 @@ const signup = async (req, res) => {
 
 const logout = async (req, res) => {
   try {
+    console.log("User Want to Log out");
     res.cookie("token", "", { maxAge: 0 });
     res.status(200).send({ message: "Log Out Succeffully" });
   } catch (error) {
@@ -131,7 +132,7 @@ const login = async (req, res) => {
       return;
     }
     const token = generateCookie(user._id, res);
-    res.status(200).send({token: token});
+    res.status(200).send({ token: token });
     return;
   } catch (error) {
     console.error(error.message);
@@ -179,7 +180,7 @@ const change_password = async (req, res) => {
       console.log(user);
       const token = generateCookie(user._id, res);
       await user.save();
-      return res.status(200).send({token: token});
+      return res.status(200).send({ token: token });
     } else return res.status(404).send({ message: "User Not Found" });
   } catch (error) {
     console.error(error.message);
@@ -205,12 +206,10 @@ const forget_password = async (req, res) => {
         console.log(err);
         return res.send({ message: err.message });
       });
-
   } catch (error) {
     return res.send({ message: error.message });
   }
 };
-
 
 export {
   signup,
@@ -220,5 +219,5 @@ export {
   signup_with_google,
   check_email,
   change_password,
-  forget_password
+  forget_password,
 };

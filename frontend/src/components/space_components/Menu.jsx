@@ -13,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 import spaceContext from "../../context/SpaceContext";
 import userContext from "../../context/UserContext";
 import SelectUserProfileContext from "../../context/SelectUserProfileContext";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const Menu = () => {
   const [main_state, setMain_State] = useContext(spaceContext);
@@ -22,8 +24,19 @@ const Menu = () => {
   );
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {
+        withCredentials: true,
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error("Something Wrong, Try Again!", {
+        duration: 2000,
+        position: "bottom-right",
+      });
+    }
+    // navigate("/");
   };
 
   const setMain_State_Fun = (state) => {

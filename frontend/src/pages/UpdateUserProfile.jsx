@@ -50,7 +50,6 @@ const UpdateUserProfile = () => {
     }
   };
 
-  useEffect(() => {}, []);
   return (
     <div className="w-full h-screen bg-zinc-800 flex flex-col items-center justify-center space-y-4">
       <p className="text-yellow-400 text-xl font-bold">
