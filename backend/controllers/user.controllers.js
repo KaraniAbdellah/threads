@@ -93,7 +93,12 @@ const follow_unfollow = async (req, res) => {
       // })
       // console.log(to_delete_notification);
       // await NotificationModel.findByIdAndDelete(to_delete_notification._id);
-
+      const new_notification = new NotificationModel({
+        from: req.user._id,
+        to: user_to_modify._id,
+        type: "unfollow",
+      });
+      await new_notification.save();
       return res
         .status(200)
         .send({ user_id: user_to_modify._id, message: "Unfollow User" });
