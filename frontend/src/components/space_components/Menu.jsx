@@ -53,8 +53,18 @@ const Menu = () => {
     navigate("/user_profile");
   };
 
+  const formEmail = (email) => {
+    // abdellahkarani@gmail.com ---> abde***@***.***
+    const email_as_array = email.split("");
+    let new_email = "";
+    for (let index = 0; index < 3; index++) {
+      new_email += email_as_array[index];
+    }
+    return new_email + "***@***.***";
+  };
+
   return (
-    <div className="bg-zinc-800 w-[25%] text-white min-h-screen p-5 ">
+    <div className="bg-zinc-800 w-[20%] text-white min-h-screen p-5 ">
       <h2 className="text-2xl font-bold mb-8">Threads</h2>
       <nav className="space-y-2">
         <button
@@ -143,7 +153,7 @@ const Menu = () => {
             />
             <div className="text-left">
               <p className="font-semibold">@{user.user_name}</p>
-              <p className="text-sm opacity-80">{user.email}</p>
+              <p className="text-sm opacity-80">{formEmail(user.email)}</p>
             </div>
           </button>
         </Link>
