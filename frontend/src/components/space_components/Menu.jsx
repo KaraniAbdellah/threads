@@ -26,9 +26,14 @@ const Menu = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {
         withCredentials: true,
       });
+      toast.success("Log out Successfully", {
+        duration: 2000,
+        position: "bottom-right",
+      });
+      navigate("/");
     } catch (error) {
       console.log(error);
       toast.error("Something Wrong, Try Again!", {

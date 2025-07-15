@@ -320,7 +320,7 @@ const Posts = () => {
               </div>
 
               {/* Post Content */}
-              <div className="mb-2">
+              <div className="my-2">
                 <p className="text-white text-lg leading-relaxed">
                   {post.post_text}
                 </p>

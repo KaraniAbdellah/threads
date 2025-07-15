@@ -56,10 +56,16 @@ const signup = async (req, res) => {
 };
 
 const logout = async (req, res) => {
+  console.log("Hello Logout");
   try {
-    console.log("User Want to Log out");
-    res.cookie("token", "", { maxAge: 0 });
-    res.status(200).send({ message: "Log Out Succeffully" });
+    const refreshTokenOptions = {
+      httpOnly: true,
+      secure: true,
+      maxAge: 0,
+      sameSite: "None",
+    };
+    res.clearCookie("token", refreshTokenOptions);
+    return res.status(200).send({ message: "Log Out Succeffully" });
   } catch (error) {
     console.error(error.message);
     res.status(500).send({ message: error.message });
