@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export default function generateCookie(user_id, res) {
+export default async function generateCookie(user_id, res) {
   const token = jwt.sign({ user_id: user_id }, process.env.SECRET_KEY, {
     expiresIn: "15d"
   });

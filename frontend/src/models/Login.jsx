@@ -43,11 +43,11 @@ const Login = () => {
           });
           SetLoading(true);
           setLoginOrSignUp("");
-          navigate("/loading");
-
-          setTimeout(() => {
-            navigate("/space");
-          }, 2000);
+          // navigate("/loading");
+          // setTimeout(() => {
+          //   navigate("/space");
+          // }, 2000);
+          window.location.href = "/space";
         })
         .catch((error) => {
           let message = "Please Check Login Informations";
@@ -107,10 +107,11 @@ const Login = () => {
           }; SameSite=Lax`;
           SetLoading(true);
           setLoginOrSignUp("");
-          navigate("/loading");
-          setTimeout(() => {
-            navigate("/space");
-          }, 2000);
+          // navigate("/loading");
+          // setTimeout(() => {
+          //   navigate("/space");
+          // }, 2000);
+          window.location.href = "/space";
         })
         .catch((error) => {
           let message = "Please Check Login Informations";

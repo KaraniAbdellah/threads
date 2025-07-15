@@ -33,7 +33,7 @@ const Menu = () => {
         duration: 2000,
         position: "bottom-right",
       });
-      navigate("/");
+      window.location.href = "/";
     } catch (error) {
       console.log(error);
       toast.error("Something Wrong, Try Again!", {

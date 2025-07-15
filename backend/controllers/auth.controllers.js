@@ -90,7 +90,7 @@ const signup_with_google = async (req, res) => {
     const slatNumber = await bcrypt.genSalt(10);
     const hashed_password = await bcrypt.hash(password, slatNumber);
     if (!hashed_password) {
-      res.status(400).send({ message: "Can Not Hash The Password" });
+      return res.status(400).send({ message: "Can Not Hash The Password" });
     }
     console.log("exiting_user", exiting_user);
 
@@ -104,13 +104,13 @@ const signup_with_google = async (req, res) => {
     if (new_user) {
       let token;
       if (!exiting_user) {
-        token = generateCookie(new_user._id, res);
+        token = await generateCookie(new_user._id, res);
         await UserModel.create(new_user);
       } else {
         token = generateCookie(exiting_user._id, res);
       }
-      res.status(200).send({ token: token });
-      return;
+      console.log("We Are Redicrect User to /space");
+      return res.status(200).send({ token: token });
     } else {
       res.status(400).send({ message: "Can Not Create User" });
       return;

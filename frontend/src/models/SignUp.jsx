@@ -11,7 +11,6 @@ import { jwtDecode } from "jwt-decode";
 import { GeneratePassword } from "js-generate-password";
 import { useNavigate } from "react-router-dom";
 
-
 const SignUp = () => {
   const [formData, setFormData] = useState({
     user_name: "",
@@ -98,10 +97,13 @@ const SignUp = () => {
             duration: 2000,
             position: "bottom-right",
           });
-          SetLoading(true); setLoginOrSignUp(""); navigate("/loading");
-          setTimeout(() => {
-            navigate("/space");
-          }, 2000);
+          SetLoading(true);
+          setLoginOrSignUp("");
+          // navigate("/loading");
+          // setTimeout(() => {
+          //   navigate("/space");
+          // }, 2000);
+          window.location.href = "/space";
         })
         .catch((error) => {
           let message = "Please Check Login Informations";
