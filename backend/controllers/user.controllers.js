@@ -175,12 +175,18 @@ const user_like_post = async (req, res) => {
   try {
     const post_id = req.params.post_id;
     const user = await UserModel.findById(req.user._id);
-    const post = await PostModel.findById(post_id);
+    const post = await PostModel.findById(post_id).populate("user");
     if (!user) return res.status(404).send({ message: "User Not Found" });
     user.liked_posts.push(post_id);
     post.post_likes.push(req.user._id);
     await user.save();
     await post.save();
+    const new_notification = new NotificationModel({
+      from: req.user._id,
+      to: post.user._id,
+      type: "like",
+    });
+    await new_notification.save();
     return res.status(200).send(post);
   } catch (error) {
     console.error(error.message);
@@ -233,9 +239,15 @@ const comment_post = async (req, res) => {
   try {
     const post_id = req.params.post_id;
     const commentText = req.body.commentText;
-    const post = await PostModel.findById(post_id);
+    const post = await PostModel.findById(post_id).populate("user");
     post.post_comments.push({ text: commentText, user: req.user._id });
     await post.save();
+    const new_notification = new NotificationModel({
+      from: req.user._id,
+      to: post.user._id,
+      type: "comment",
+    });
+    await new_notification.save();
     return res.status(200).send(post);
   } catch (error) {
     console.error(error.message);
