@@ -4,12 +4,7 @@ import Loading from "./pages/Loading";
 import ForgetPassword from "./components/ForgetPassword";
 import ProtectedRoutes from "./components/ProtectRoutes";
 import { Toaster } from "react-hot-toast";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import userContext from "./context/UserContext";
@@ -53,17 +48,20 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={user ? <Navigate to="/space" /> : <Home />}
+              element={!user ? <Home /> : <Navigate to="/space" />}
             ></Route>
-            <Route
-              path="/recovery"
-              element={<ForgetPassword></ForgetPassword>}
-            ></Route>
-            {/* <Route element={<ProtectedRoutes />}> */}
-            <Route path="/space" element={<Space></Space>}></Route>
-            <Route path="/loading" element={<Loading></Loading>}></Route>
-            <Route path="/update_profile" element={<UpdateUserProfile></UpdateUserProfile>}></Route>
-            {/* </Route> */}
+            <Route element={<ProtectedRoutes />}>
+              <Route path="/space" element={<Space></Space>}></Route>
+              <Route
+                path="/recovery"
+                element={<ForgetPassword></ForgetPassword>}
+              ></Route>
+              <Route path="/loading" element={<Loading></Loading>}></Route>
+              <Route
+                path="/update_profile"
+                element={<UpdateUserProfile></UpdateUserProfile>}
+              ></Route>
+            </Route>
           </Routes>
         </userContext.Provider>
         <Toaster></Toaster>
