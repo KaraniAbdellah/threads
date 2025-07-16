@@ -64,7 +64,7 @@ const Menu = () => {
   };
 
   return (
-    <div className="bg-zinc-800 w-[20%] text-white min-h-screen p-5 ">
+    <div className="bg-zinc-800 w-[20%] hidden lg:block text-white min-h-screen p-5 ">
       <h2 className="text-2xl font-bold mb-8">Threads</h2>
       <nav className="space-y-2">
         <button

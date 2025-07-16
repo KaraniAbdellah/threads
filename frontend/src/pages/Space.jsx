@@ -49,7 +49,7 @@ const Space = () => {
   }
 
   return (
-    <div className="flex justify-between items-start bg-zinc-800 w-full min-h-screen">
+    <div className="flex justify-center items-start bg-zinc-800 w-full min-h-screen">
       <spaceContext.Provider value={[main_state, setMain_State]}>
         <SelectUserProfileContext.Provider
           value={[select_user_profile_state, setSelect_user_profile_state]}
