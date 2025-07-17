@@ -79,7 +79,6 @@ const UserProfile = () => {
           withCredentials: true,
         })
         .then((res) => {
-          console.log(res.data);
           setProfile(() => res.data);
         })
         .catch((err) => {})

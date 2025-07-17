@@ -10,6 +10,7 @@ const Suggestion = () => {
   const user = useContext(userContext);
   const [suggested_users, setSuggested_users] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [suggestion_number, setSuggestionNumber] = useState(2);
 
   const getSuggestionUsers = async () => {
     try {
@@ -18,7 +19,6 @@ const Suggestion = () => {
           withCredentials: true,
         })
         .then((res) => {
-          console.log(res.data);
           setSuggested_users(() => res.data);
         })
         .catch((err) => console.log(err))
@@ -35,7 +35,6 @@ const Suggestion = () => {
           withCredentials: true,
         })
         .then((res) => {
-          console.log(res.data);
           setProfile(() => res.data);
         })
         .catch((err) => {})
@@ -46,6 +45,7 @@ const Suggestion = () => {
   }
 
   const FollowUnFollow = async (e, select_user) => {
+    setSuggestionNumber(() => suggestion_number - 1);
     try {
       const res = await axios.get(
         `${
@@ -81,7 +81,7 @@ const Suggestion = () => {
     <div className="w-[25%] fixed top-0 right-0 hidden lg:block bg-zinc-800 rounded-sm border-l border-zinc-700 min-h-screen bg-gradient-to-br lg:px-4 pt-4 pb-4">
       <p className="text-white font-semibold mb-3 text-lg">Who to follow</p>
       {isLoading
-        ? suggested_users.map((s_user) => {
+        ? suggested_users.slice(0, suggestion_number).map((s_user) => {
             return (
               <div
                 key={s_user._id}
@@ -105,6 +105,18 @@ const Suggestion = () => {
             );
           })
         : ""}
+      {suggested_users.length >= 4 &&
+      suggestion_number != suggested_users.length ? (
+        <p
+          onClick={() => setSuggestionNumber(() => suggestion_number + 2)}
+          className="text-yellow-700 font-semibold text-center cursor-pointer"
+        >
+          Load more...
+        </p>
+      ) : (
+        ""
+      )}
+
       {suggested_users.length === 0 ? (
         <p className="text-yellow-600 font-semibold">No User Found</p>
       ) : (

@@ -85,7 +85,7 @@ const Menu = () => {
           ""
         )}
         <button
-          className="text-2xl border border-zinc-700 font-bold mb-4 hover:bg-zinc-900 p-2 transition-all rounded-md"
+          className="text-2xl border border-zinc-700 font-bold mb-4 hover:bg-zinc-900 p-2 transition-all lg:rounded-md"
           onClick={ShowMenu}
         >
           <AiFillBackward />
