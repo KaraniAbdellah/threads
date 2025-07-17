@@ -71,17 +71,20 @@ const Menu = () => {
   return (
     <div
       className={`${
-        show ? "w-[20%]" : "w-[8%]"
-      } bg-zinc-800 text-white min-h-screen p-5`}
+        show ? "" : ""
+      } bg-zinc-800 text-white min-h-screen p-5
+    z-50  w-[20%] fixed`}
     >
       <div className="flex justify-between items-start">
-        {show ? <h2 className="text-2xl font-bold mb-8">Threads</h2> : ""}
-
+        {show ? (
+          <h2 className="text-2xl font-bold mb-8 hidden lg:block">Threads</h2>
+        ) : (
+          ""
+        )}
         <button className="text-2xl font-bold mb-8" onClick={ShowMenu}>
           hide
         </button>
       </div>
-
       <nav className="space-y-2">
         <button
           onClick={() => setMain_State_Fun("Home")}
