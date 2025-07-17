@@ -18,7 +18,7 @@ const Main = () => {
     <div
       className={`${
         show_slide ? "ml-[6%] lg:ml-[20%] lg:mr-[25%]" : "ml-[10%] lg:ml-[6%] lg:mr-[25%] "
-      }  min-h-screen bg-gradient-to-br p-4 lg:px-4 lg:pt-4 border-zinc-700 pb-4`}
+      }  min-h-screen bg-gradient-to-br p-4 pl-6 lg:px-4 lg:pt-4 border-zinc-700 pb-4`}
     >
       {main_space === "Home" && <Home />}
       {main_space === "Followers" && <Followers />}

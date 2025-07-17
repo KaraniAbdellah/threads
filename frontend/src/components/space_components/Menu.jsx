@@ -74,8 +74,8 @@ const Menu = () => {
   return (
     <div
       className={`${
-        show_slide ? "w-[40%] lg:w-[20%]" : "lg:w-[6%] w-[11%]"
-      }   text-white min-h-screen lg:p-5 lg:px-2 lg:pt-5
+        show_slide ? "w-[40%] lg:w-[20%] px-3" : "lg:w-[6%] w-[11%]"
+      }   text-white min-h-screen lg:p-5 md:px-2 lg:pt-5
      fixed top-0 left-0 w-[10%] z-50 bg-zinc-800 opacity-85 border-r border-zinc-700`}
     >
       <div

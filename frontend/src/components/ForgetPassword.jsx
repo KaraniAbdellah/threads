@@ -60,7 +60,6 @@ const ForgetPassword = () => {
   async function SendCodeToEmail(OPTCode) {
     const message = "Hello " + email + " Here is your reset code " + OPTCode;
     const subject = "Rest Password";
-    console.log(message);
 
     try {
       const res = await axios.post(

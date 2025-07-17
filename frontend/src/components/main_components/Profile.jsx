@@ -86,13 +86,15 @@ const Profile = () => {
 
       // Save profile data
       try {
-        await axios.put(
+        
+        const res = await axios.put(
           `${import.meta.env.VITE_API_URL}/api/user/update_user_profile/${
             profile.user?._id
           }`,
           newData,
           { withCredentials: true }
         );
+        console.log(res);
         toast.success("Profile updated successfully", {
           duration: 2000,
           position: "bottom-right",
@@ -227,7 +229,7 @@ const Profile = () => {
             </div>
 
             {/* Edit Button */}
-            <div className="absolute top-4 right-6">
+            <div className="absolute top-4 right-3 md:top-4 md:right-6">
               <button
                 onClick={handleEdit}
                 disabled={isUploading}
@@ -238,7 +240,7 @@ const Profile = () => {
                 ) : (
                   <FiEdit2 className="w-4 h-4" />
                 )}
-                {isEditing ? "Save" : "Edit Profile"}
+                {isEditing ? "Save" : <span className="sm:block hidden">Edit Profile</span>}
               </button>
             </div>
 

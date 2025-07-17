@@ -30,7 +30,6 @@ const create_post = async (req, res) => {
       post_image: img ? img : "",
       post_date: post_date,
     });
-    console.log(new_post);
 
     await new_post.save();
     res.status(200).send(new_post);
@@ -147,8 +146,6 @@ const update_post = async (req, res) => {
   try {
     const postToUpdate = await PostModel.findById(req.params.post_id);
     const newPost = req.body;
-    console.log(newPost);
-    console.log(postToUpdate);
     if (!postToUpdate) {
       return res.status(400).send({ message: "Can Not Find This Post" });
     }

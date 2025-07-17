@@ -9,7 +9,6 @@ export default async function protect_middlware(req, res, next) {
     if (!token) {
       return res.status(400).send({ message: "No Token Provided" });
     }
-    console.log("We Have A Token");
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     if (!decoded) {
       return res.status(400).send({ message: "Invalid Token" });

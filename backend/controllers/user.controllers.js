@@ -152,11 +152,13 @@ const update_user_info = async (req, res) => {
 };
 
 const update_user_profile = async (req, res) => {
+  console.log("HELLO UPDATE USER PROFILE");
   const { bio, cover_image, profile_image, user_name } = req.body;
-  console.log(req.body);
   const user_id = req.params.user_id;
   try {
     const user = await UserModel.findById(user_id);
+    console.log(user.profile_image);
+    console.log(user.cover_image);
     // Upload Profile Image and Cover Image
     if (profile_image) {
       const profile_image_id = await cloudinary.uploader.upload(profile_image);
@@ -166,9 +168,12 @@ const update_user_profile = async (req, res) => {
       const profile_image_id = await cloudinary.uploader.upload(cover_image);
       user.cover_image = profile_image_id.secure_url;
     }
+    console.log(user.profile_image);
+    console.log(user.cover_image);
     user.bio = bio;
     user.user_name = user_name;
     await user.save();
+    console.log("NEW USER HERE: ", user);
     return res.status(200).send(user);
   } catch (error) {
     console.error(error.message);

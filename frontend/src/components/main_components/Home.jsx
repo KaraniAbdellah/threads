@@ -349,7 +349,7 @@ const Home = () => {
         {/* Create Post Section */}
         <div
           // data-aos="flip-left"
-          className="w-full items-start bg-zinc-900 rounded-sm shadow-lg border border-yellow-700 p-4 mb-6 hover:shadow-xl transition-all duration-300"
+          className="w-full items-start bg-zinc-900 rounded-sm shadow-lg border border-yellow-700 pr-4 pl-2 lg:pl-4 py-4 mb-6 hover:shadow-xl transition-all duration-300"
         >
           <div className="flex items-start justify-start">
             {user?.profile_image ? (
@@ -366,7 +366,7 @@ const Home = () => {
               ""
             )}
 
-            <div className="ml-10 md:flex-1">
+            <div className="ml-3 md:ml-10 md:flex-1 min-w-[80%]">
               <div className="flex items-center space-x-2 mb-2">
                 <HiOutlineGlobeAlt className="w-4 h-4 text-yellow-500" />
                 <span className="text-sm font-medium text-yellow-600">
@@ -380,7 +380,7 @@ const Home = () => {
                   setPostToPost({ ...postToPost, post_text: e.target.value })
                 }
                 placeholder="What's happening?"
-                className="w-full text-xl
+                className="w-full text-lg lg:text-xl
                 [&::-webkit-scrollbar]:w-2
                         [&::-webkit-scrollbar-track]:bg-yellow-100
                         [&::-webkit-scrollbar-thumb]:bg-yellow-300
@@ -457,7 +457,7 @@ const Home = () => {
                 <button
                   onClick={handlePost}
                   disabled={postToPost.post_text.length < 2}
-                  className="bg-gradient-to-r bg-yellow-700 hover:bg-yellow-600 text-white p-4 flex justify-center items-center rounded-full font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+                  className="bg-gradient-to-r bg-yellow-700 hover:bg-yellow-600 text-white p-3 md:p-4 flex justify-center items-center rounded-full font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
                 >
                   {!isLoadingPost ? (
                     IsEditPost ? (

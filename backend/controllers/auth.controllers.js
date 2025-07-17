@@ -38,7 +38,6 @@ const signup = async (req, res) => {
       email: email,
       password: hashed_password,
     });
-    console.log(new_user);
 
     if (new_user) {
       const token = generateCookie(new_user._id, res);
@@ -125,13 +124,11 @@ const login = async (req, res) => {
   console.log("request come to login");
   try {
     const { email, password } = req.body;
-    console.log(email, password);
     const user = await UserModel.findOne({ email: email });
     const is_password_correct = await bcrypt.compare(
       password,
       user?.password || ""
     );
-    console.log(user);
 
     if (!user || !is_password_correct) {
       res.status(400).send({ message: "Wrong Credential" });
@@ -151,8 +148,11 @@ const get_me = async (req, res) => {
     const user = await UserModel.findById(req.user._id);
     if (!user)
       return res.status(404).send({ message: "User Not Found At Database" });
-    user.profile_image = `https://robohash.org/${req.user.user_name}.png?size=150x150`;
-    user.cover_image = `https://robohash.org/${req.user.user_name}.png?size=150x150`;
+
+    if (user.profile_image === "null" && user.cover_image === "null") {
+      user.profile_image = `https://robohash.org/${req.user.user_name}.png?size=150x150`;
+      user.cover_image = `https://robohash.org/${req.user.user_name}.png?size=150x150`;
+    }
     await user.save();
     return res.status(200).send(user);
   } catch (error) {
@@ -183,7 +183,6 @@ const change_password = async (req, res) => {
       }
 
       user.password = hashed_password;
-      console.log(user);
       const token = generateCookie(user._id, res);
       await user.save();
       return res.status(200).send({ token: token });
@@ -205,7 +204,6 @@ const forget_password = async (req, res) => {
 
     sendMail(email, subject, message)
       .then((result) => {
-        console.log(result);
         return res.send({ message: result.message });
       })
       .catch((err) => {
