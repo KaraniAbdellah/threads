@@ -25,12 +25,15 @@ import userContext from "../../context/UserContext";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import spaceContext from "../../context/SpaceContext";
+import showSlideContext from "../../context/showSlideContext";
 
 const UserProfile = () => {
   const [profile, setProfile] = useState(null);
   const [select_user_profile_state, setSelect_user_profile_state] = useContext(
     SelectUserProfileContext
   );
+  const [show_slide, setShowSlide] = useContext(showSlideContext);
+
   const [main_state, setMain_State] = useContext(spaceContext);
   const [posts, setPosts] = useState([]);
   const user = useContext(userContext);
@@ -261,8 +264,12 @@ const UserProfile = () => {
 
   return (
     <div
-      data-aos="fade-up"
-      className="rounded-sm border-x border-zinc-700 bg-zinc-800 w-[55%] min-h-screen bg-gradient-to-br px-4 pt-4 border-r border-l pb-4"
+      className={`${
+        show_slide
+          ? "ml-[6%] lg:ml-[20%] lg:mr-[25%]"
+          : "ml-[10%] lg:ml-[6%] lg:mr-[25%] "
+      }  min-h-screen bg-gradient-to-br p-4 pl-6 lg:px-4 lg:pt-4 border-zinc-700 pb-4`}
+      // className="rounded-sm border-x border-zinc-700 bg-zinc-800 w-[55%] min-h-screen bg-gradient-to-br px-4 pt-4 border-r border-l pb-4"
     >
       <h3 className="text-2xl font-bold text-yellow-500 mb-2 rounded-b-md">
         {profile?.user?.user_name} Profile

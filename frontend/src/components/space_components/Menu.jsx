@@ -112,7 +112,7 @@ const Menu = () => {
           onClick={() => setMain_State_Fun("Followers")}
           className={`${
             main_state === "Followers"
-              ? "bg-yellow-600 flex items-center space-x-3 w-full p-3"
+              ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 lg:rounded-md"
               : "flex items-center space-x-3 w-full p-3 lg:rounded-md hover:bg-yellow-600 transition-all duration-200"
           }  ${show_slide ? "justify-start" : "justify-center"}`}
         >
@@ -175,12 +175,12 @@ const Menu = () => {
             onClick={goToProfile}
             className={` ${
               show_slide ? "justify-start" : "justify-center"
-            } flex items-center space-x-3 w-full p-2 lg:rounded-md hover:bg-yellow-600 transition-all duration-200`}
+            } flex items-center w-full p-2 lg:rounded-md hover:bg-yellow-600 transition-all duration-200`}
           >
             <img
               src={user.profile_image}
               alt="User Avatar"
-              className="w-8 h-8 rounded-full"
+              className={`${show_slide ? "mr-4" : "mr-0"} w-8 h-8 rounded-full`}
             />
             {show_slide ? (
               <div className="text-left ">

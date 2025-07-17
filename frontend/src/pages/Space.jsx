@@ -51,7 +51,7 @@ const Space = () => {
   }
 
   return (
-    <div className="bg-zinc-800 w-full min-h-screen ">
+    <div className="bg-zinc-800 w-full min-h-screen">
       <showSlideContext.Provider value={[show_slide, setShowSlide]}>
         <spaceContext.Provider value={[main_state, setMain_State]}>
           <SelectUserProfileContext.Provider
