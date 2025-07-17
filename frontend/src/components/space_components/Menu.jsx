@@ -53,10 +53,6 @@ const Menu = () => {
     setMain_State(state);
   };
 
-  const goToProfile = () => {
-    navigate("/user_profile");
-  };
-
   const formEmail = (email) => {
     // abdellahkarani@gmail.com ---> abde***@***.***
     const email_as_array = email.split("");
@@ -172,7 +168,6 @@ const Menu = () => {
       <div className="pt-2 mt-1 border-t border-zinc-700">
         <Link to="/update_profile">
           <button
-            onClick={goToProfile}
             className={` ${
               show_slide ? "justify-start" : "justify-center"
             } flex items-center w-full p-2 lg:rounded-md hover:bg-yellow-600 transition-all duration-200`}

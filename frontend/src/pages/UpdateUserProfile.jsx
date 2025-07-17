@@ -6,7 +6,6 @@ import toast from "react-hot-toast";
 import UpdateUserInfoSchema from "../YupSchema/UpdateUserInfoSchema";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import showSlideContext from "../context/showSlideContext";
 
 const UpdateUserProfile = () => {
   const [newDate, setNewData] = useState({
@@ -14,8 +13,6 @@ const UpdateUserProfile = () => {
     new_password: "",
     new_user_name: "",
   });
-  const [show_slide, setShowSlide] = useContext(showSlideContext);
-
   const user = useContext(userContext);
   const navigate = useNavigate();
 
@@ -57,8 +54,8 @@ const UpdateUserProfile = () => {
   };
 
   return (
-    <div className="w-full h-screen bg-red-800 flex flex-col items-center justify-center space-y-4">
-      <p className="text-yellow-400 text-xl font-bold">
+    <div className="w-full h-screen bg-zinc-800 flex flex-col items-center justify-center space-y-4">
+      <p className="text-yellow-400 text-xl font-bold text-center">
         Welcome {user.user_name}, you can update your profile
       </p>
 
