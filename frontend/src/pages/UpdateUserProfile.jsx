@@ -4,6 +4,8 @@ import profileContext from "../context/ProfileContext";
 import axios from "axios";
 import toast from "react-hot-toast";
 import UpdateUserInfoSchema from "../YupSchema/UpdateUserInfoSchema";
+import { FaArrowLeft } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const UpdateUserProfile = () => {
   const [newDate, setNewData] = useState({
@@ -12,6 +14,7 @@ const UpdateUserProfile = () => {
     new_user_name: "",
   });
   const user = useContext(userContext);
+  const navigate = useNavigate();
 
   const update_user_info = async () => {
     if (!newDate.new_email || !newDate.new_email || !newDate.new_password) {
@@ -26,7 +29,7 @@ const UpdateUserProfile = () => {
 
       const res = await axios.put(
         `${import.meta.env.VITE_API_URL}/api/user/update_user_info/${user._id}`,
-        newDate,
+        new Date(),
         { withCredentials: true }
       );
       toast.success("Update Information Successfully", {
@@ -89,6 +92,13 @@ const UpdateUserProfile = () => {
         className="bg-yellow-500 text-zinc-900 font-semibold px-6 py-2 rounded-md hover:bg-yellow-400"
       >
         Update Info
+      </button>
+      <button
+        onClick={() => navigate("/space")}
+        className="flex justify-between items-center bg-yellow-500 text-zinc-900 font-semibold px-6 py-2 rounded-md hover:bg-yellow-400"
+      >
+        <FaArrowLeft />
+        <span className="ml-2">Go To Space</span>
       </button>
     </div>
   );

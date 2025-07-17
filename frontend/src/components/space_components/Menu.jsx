@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   FaHome,
   FaUserFriends,
@@ -23,6 +23,7 @@ const Menu = () => {
     SelectUserProfileContext
   );
   const navigate = useNavigate();
+  const [show, setShow] = useState(true);
 
   const handleLogout = async () => {
     try {
@@ -63,9 +64,24 @@ const Menu = () => {
     return new_email + "***@***.***";
   };
 
+  const ShowMenu = () => {
+    setShow(!show);
+  };
+
   return (
-    <div className="bg-zinc-800 w-[20%] hidden lg:block text-white min-h-screen p-5 ">
-      <h2 className="text-2xl font-bold mb-8">Threads</h2>
+    <div
+      className={`${
+        show ? "w-[20%]" : "w-[8%]"
+      } bg-zinc-800 text-white min-h-screen p-5`}
+    >
+      <div className="flex justify-between items-start">
+        {show ? <h2 className="text-2xl font-bold mb-8">Threads</h2> : ""}
+
+        <button className="text-2xl font-bold mb-8" onClick={ShowMenu}>
+          hide
+        </button>
+      </div>
+
       <nav className="space-y-2">
         <button
           onClick={() => setMain_State_Fun("Home")}
@@ -76,7 +92,7 @@ const Menu = () => {
           }`}
         >
           <FaHome size={20} />
-          <span>Home</span>
+          {show ? <span>Home</span> : ""}
         </button>
 
         <button
@@ -88,7 +104,7 @@ const Menu = () => {
           }`}
         >
           <FaUserFriends />
-          <span>Followers</span>
+          {show ? <span>Followers</span> : ""}
         </button>
 
         <button
@@ -100,7 +116,7 @@ const Menu = () => {
           }`}
         >
           <FaUserFriends />
-          <span>Following</span>
+          {show ? <span>Following</span> : ""}
         </button>
 
         <button
@@ -112,7 +128,7 @@ const Menu = () => {
           }`}
         >
           <FaRegUserCircle />
-          <span>Profile</span>
+          {show ? <span>Profile</span> : ""}
         </button>
 
         <button
@@ -124,7 +140,7 @@ const Menu = () => {
           }`}
         >
           <FaRegComments />
-          <span>Posts</span>
+          {show ? <span>Posts</span> : ""}
         </button>
 
         <button
@@ -136,7 +152,7 @@ const Menu = () => {
           }`}
         >
           <FaBell />
-          <span>Notifications</span>
+          {show ? <span>Notifications</span> : ""}
         </button>
       </nav>
 
@@ -151,10 +167,14 @@ const Menu = () => {
               alt="User Avatar"
               className="w-8 h-8 rounded-full"
             />
-            <div className="text-left">
-              <p className="font-semibold">@{user.user_name}</p>
-              <p className="text-sm opacity-80">{formEmail(user.email)}</p>
-            </div>
+            {show ? (
+              <div className="text-left">
+                <p className="font-semibold">@{user.user_name}</p>
+                <p className="text-sm opacity-80">{formEmail(user.email)}</p>
+              </div>
+            ) : (
+              ""
+            )}
           </button>
         </Link>
 
@@ -163,7 +183,7 @@ const Menu = () => {
           className="flex items-center space-x-3 w-full mt-4 p-3 text-zinc-800 bg-white rounded-md hover:bg-red-600 hover:text-white transition-all duration-200"
         >
           <FaSignOutAlt />
-          <span>Logout</span>
+          {show ? <span>Logout</span> : ""}
         </button>
       </div>
     </div>

@@ -77,7 +77,7 @@ const Suggestion = () => {
   }
 
   return (
-    <div className="bg-zinc-800 hidden lg:block w-[25%] rounded-sm border-x border-zinc-70 min-h-screen bg-gradient-to-br px-4 pt-4 border-r border-l border-zinc-900 pb-4">
+    <div className="bg-zinc-800 w-[25%] rounded-sm border-x border-zinc-70 min-h-screen bg-gradient-to-br px-4 pt-4 border-r border-l border-zinc-900 pb-4">
       <p className="text-white font-semibold mb-3 text-lg">Who to follow</p>
       {isLoading
         ? suggested_users.map((s_user) => {
