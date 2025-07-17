@@ -22,6 +22,9 @@ import {
   AiOutlineComment,
   AiOutlineRetweet,
 } from "react-icons/ai";
+import { FaRegPaperPlane } from "react-icons/fa";
+import { ImSpinner11 } from "react-icons/im";
+import {} from "react-icons/fa";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -345,10 +348,10 @@ const Home = () => {
       <div className="pt-4">
         {/* Create Post Section */}
         <div
-          data-aos="flip-left"
-          className="bg-zinc-900 rounded-sm shadow-lg border border-yellow-700 p-4 mb-6 hover:shadow-xl transition-all duration-300"
+          // data-aos="flip-left"
+          className="w-full items-start bg-zinc-900 rounded-sm shadow-lg border border-yellow-700 p-4 mb-6 hover:shadow-xl transition-all duration-300"
         >
-          <div className="flex items-start space-x-4">
+          <div className="flex items-start justify-start">
             {user?.profile_image ? (
               <div className="relative">
                 <img
@@ -363,7 +366,7 @@ const Home = () => {
               ""
             )}
 
-            <div className="flex-1">
+            <div className="ml-10 md:flex-1">
               <div className="flex items-center space-x-2 mb-2">
                 <HiOutlineGlobeAlt className="w-4 h-4 text-yellow-500" />
                 <span className="text-sm font-medium text-yellow-600">
@@ -406,7 +409,9 @@ const Home = () => {
                     className="flex items-center space-x-2 text-blue-500 hover:bg-blue-200 px-3 py-2 rounded-full transition-colors"
                   >
                     <HiOutlinePhotograph className="w-5 h-5" />
-                    <span className="text-sm font-medium">Photo</span>
+                    <span className="text-sm font-medium lg:block hidden">
+                      Photo
+                    </span>
                   </label>
                   <input
                     value={postToPost?.profile_image}
@@ -431,7 +436,9 @@ const Home = () => {
                     className="flex items-center space-x-2 text-green-500 hover:bg-green-200 px-3 py-2 rounded-full transition-colors"
                   >
                     <HiOutlineVideoCamera className="w-5 h-5" />
-                    <span className="text-sm font-medium">Video</span>
+                    <span className="text-sm font-medium lg:block hidden">
+                      Video
+                    </span>
                   </button>
                   <button
                     onClick={NotBuildYet}
@@ -450,13 +457,32 @@ const Home = () => {
                 <button
                   onClick={handlePost}
                   disabled={postToPost.post_text.length < 2}
-                  className="bg-gradient-to-r bg-yellow-700 hover:bg-yellow-600 text-white px-8 py-2.5 rounded-full font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+                  className="bg-gradient-to-r bg-yellow-700 hover:bg-yellow-600 text-white p-4 flex justify-center items-center rounded-full font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
                 >
-                  {!isLoadingPost
-                    ? IsEditPost
-                      ? "Edit"
-                      : "Post"
-                    : "Processing ..."}
+                  {!isLoadingPost ? (
+                    IsEditPost ? (
+                      <p>
+                        <span className="md:block hidden">Edit</span>
+                        <span className="block md:hidden">
+                          <FaEdit />
+                        </span>
+                      </p>
+                    ) : (
+                      <p>
+                        <span className="md:block hidden">Post</span>
+                        <span className="block md:hidden">
+                          <FaRegPaperPlane />
+                        </span>
+                      </p>
+                    )
+                  ) : (
+                    <p>
+                      <span className="md:block hidden">Processing ...</span>
+                      <span className="block md:hidden">
+                        <ImSpinner11 />
+                      </span>
+                    </p>
+                  )}
                 </button>
               </div>
             </div>

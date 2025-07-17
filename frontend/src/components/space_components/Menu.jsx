@@ -7,8 +7,9 @@ import {
   FaBell,
   FaSignOutAlt,
 } from "react-icons/fa";
+import { SlUserFollowing } from "react-icons/sl";
 import { Link } from "react-router-dom";
-import { MdOutlineSlideshow } from "react-icons/md";
+import { AiFillBackward } from "react-icons/ai";
 
 import { useNavigate } from "react-router-dom";
 import spaceContext from "../../context/SpaceContext";
@@ -74,13 +75,13 @@ const Menu = () => {
     <div
       className={`${
         show_slide ? "w-[40%] lg:w-[20%]" : "lg:w-[6%] w-[11%]"
-      }   text-white min-h-screen lg:p-5 px-2 pt-5 
+      }   text-white min-h-screen lg:p-5 lg:px-2 lg:pt-5
      fixed top-0 left-0 w-[10%] z-50 bg-zinc-800 opacity-85 border-r border-zinc-700`}
     >
       <div
         className={`${
           show_slide ? "justify-between" : "justify-center"
-        } flex items-center`}
+        } flex items-center mt-5 lg:mt-3`}
       >
         {show_slide ? (
           <h2 className="font-bold mb-4 lg:text-2xl text-lg">Threads</h2>
@@ -88,10 +89,10 @@ const Menu = () => {
           ""
         )}
         <button
-          className="text-2xl font-bold mb-4 hover:bg-zinc-900 p-2 transition-all rounded-md"
+          className="text-2xl border border-zinc-700 font-bold mb-4 hover:bg-zinc-900 p-2 transition-all rounded-md"
           onClick={ShowMenu}
         >
-          <MdOutlineSlideshow />
+          <AiFillBackward />
         </button>
       </div>
       <nav className="space-y-2">
@@ -99,8 +100,8 @@ const Menu = () => {
           onClick={() => setMain_State_Fun("Home")}
           className={`${
             main_state === "Home"
-              ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 rounded-md"
-              : "flex items-center space-x-3 w-full p-3 rounded-md hover:bg-yellow-600 transition-all duration-200"
+              ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 lg:rounded-md"
+              : "flex items-center space-x-3 w-full p-3 lg:rounded-md hover:bg-yellow-600 transition-all duration-200"
           } ${show_slide ? "justify-start" : "justify-center"}`}
         >
           <FaHome />
@@ -111,11 +112,11 @@ const Menu = () => {
           onClick={() => setMain_State_Fun("Followers")}
           className={`${
             main_state === "Followers"
-              ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 rounded-md"
-              : "flex items-center space-x-3 w-full p-3 rounded-md hover:bg-yellow-600 transition-all duration-200"
+              ? "bg-yellow-600 flex items-center space-x-3 w-full p-3"
+              : "flex items-center space-x-3 w-full p-3 lg:rounded-md hover:bg-yellow-600 transition-all duration-200"
           }  ${show_slide ? "justify-start" : "justify-center"}`}
         >
-          <FaUserFriends />
+          <SlUserFollowing />
           {show_slide ? <span className="">Followers</span> : ""}
         </button>
 
@@ -123,8 +124,8 @@ const Menu = () => {
           onClick={() => setMain_State_Fun("Following")}
           className={`${
             main_state === "Following"
-              ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 rounded-md"
-              : "flex items-center space-x-3 w-full p-3 rounded-md hover:bg-yellow-600 transition-all duration-200"
+              ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 lg:rounded-md"
+              : "flex items-center space-x-3 w-full p-3 lg:rounded-md hover:bg-yellow-600 transition-all duration-200"
           }  ${show_slide ? "justify-start" : "justify-center"}`}
         >
           <FaUserFriends />
@@ -135,8 +136,8 @@ const Menu = () => {
           onClick={() => setMain_State_Fun("Profile")}
           className={`${
             main_state === "Profile"
-              ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 rounded-md"
-              : "flex items-center space-x-3 w-full p-3 rounded-md hover:bg-yellow-600 transition-all duration-200"
+              ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 lg:rounded-md"
+              : "flex items-center space-x-3 w-full p-3 lg:rounded-md hover:bg-yellow-600 transition-all duration-200"
           }  ${show_slide ? "justify-start" : "justify-center"}`}
         >
           <FaRegUserCircle />
@@ -147,8 +148,8 @@ const Menu = () => {
           onClick={() => setMain_State_Fun("Posts")}
           className={`${
             main_state === "Posts"
-              ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 rounded-md"
-              : "flex items-center space-x-3 w-full p-3 rounded-md hover:bg-yellow-600 transition-all duration-200"
+              ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 lg:rounded-md"
+              : "flex items-center space-x-3 w-full p-3 lg:rounded-md hover:bg-yellow-600 transition-all duration-200"
           }  ${show_slide ? "justify-start" : "justify-center"}`}
         >
           <FaRegComments />
@@ -159,8 +160,8 @@ const Menu = () => {
           onClick={() => setMain_State_Fun("Notifications")}
           className={`${
             main_state === "Notifications"
-              ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 rounded-md"
-              : "flex items-center space-x-3 w-full p-3 rounded-md hover:bg-yellow-600 transition-all duration-200"
+              ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 lg:rounded-md"
+              : "flex items-center space-x-3 w-full p-3 lg:rounded-md hover:bg-yellow-600 transition-all duration-200"
           }  ${show_slide ? "justify-start" : "justify-center"}`}
         >
           <FaBell />
@@ -174,7 +175,7 @@ const Menu = () => {
             onClick={goToProfile}
             className={` ${
               show_slide ? "justify-start" : "justify-center"
-            } flex items-center space-x-3 w-full p-2 rounded-md hover:bg-yellow-600 transition-all duration-200`}
+            } flex items-center space-x-3 w-full p-2 lg:rounded-md hover:bg-yellow-600 transition-all duration-200`}
           >
             <img
               src={user.profile_image}
@@ -194,7 +195,7 @@ const Menu = () => {
 
         <button
           onClick={handleLogout}
-          className="flex items-center space-x-3 w-full mt-4 p-3 text-zinc-800 bg-white rounded-md hover:bg-red-600 hover:text-white transition-all duration-200"
+          className="flex items-center justify-center space-x-3 lg:rounded-md w-full mt-4 p-3 text-zinc-800 bg-white hover:bg-red-600 hover:text-white transition-all duration-200"
         >
           <FaSignOutAlt />
           {show_slide ? <span className="">Logout</span> : ""}
