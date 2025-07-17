@@ -9,6 +9,7 @@ import profileContext from "../context/ProfileContext";
 import Loading from "../pages/Loading";
 import UserProfile from "../components/main_components/UserProfile";
 import SelectUserProfileContext from "../context/SelectUserProfileContext";
+import showSlideContext from "../context/showSlideContext";
 
 const Space = () => {
   const [main_state, setMain_State] = useState("Home");
@@ -19,6 +20,7 @@ const Space = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const user = useContext(userContext);
+  const [show_slide, setShowSlide] = useState(true);
   const select_user_profile = useContext(SelectUserProfileContext);
 
   async function getProfileInfo() {
@@ -49,22 +51,25 @@ const Space = () => {
   }
 
   return (
-    <div className="bg-zinc-800 w-full min-h-screen relative flex justify-between items-start">
-      <spaceContext.Provider value={[main_state, setMain_State]}>
-        <SelectUserProfileContext.Provider
-          value={[select_user_profile_state, setSelect_user_profile_state]}
-        >
-          <Menu></Menu>
-          <profileContext.Provider value={[profile, setProfile]}>
-            {!select_user_profile_state ? (
-              <Main></Main>
-            ) : (
-              <UserProfile></UserProfile>
-            )}
-            <Suggestion></Suggestion>
-          </profileContext.Provider>
-        </SelectUserProfileContext.Provider>
-      </spaceContext.Provider>
+    <div className="bg-zinc-800  w-full min-h-screen ">
+      <showSlideContext.Provider value={[show_slide, setShowSlide]}>
+        <spaceContext.Provider value={[main_state, setMain_State]}>
+          <SelectUserProfileContext.Provider
+            value={[select_user_profile_state, setSelect_user_profile_state]}
+          >
+            {" "}
+            <Menu></Menu>
+            <profileContext.Provider value={[profile, setProfile]}>
+              {!select_user_profile_state ? (
+                <Main></Main>
+              ) : (
+                <UserProfile></UserProfile>
+              )}
+              <Suggestion></Suggestion>
+            </profileContext.Provider>
+          </SelectUserProfileContext.Provider>
+        </spaceContext.Provider>
+      </showSlideContext.Provider>
     </div>
   );
 };

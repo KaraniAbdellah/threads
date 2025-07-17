@@ -8,6 +8,7 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { MdOutlineSlideshow } from "react-icons/md";
 
 import { useNavigate } from "react-router-dom";
 import spaceContext from "../../context/SpaceContext";
@@ -15,6 +16,7 @@ import userContext from "../../context/UserContext";
 import SelectUserProfileContext from "../../context/SelectUserProfileContext";
 import axios from "axios";
 import toast from "react-hot-toast";
+import showSlideContext from "../../context/showSlideContext";
 
 const Menu = () => {
   const [main_state, setMain_State] = useContext(spaceContext);
@@ -23,7 +25,7 @@ const Menu = () => {
     SelectUserProfileContext
   );
   const navigate = useNavigate();
-  const [show, setShow] = useState(true);
+  const [show_slide, setShowSlide] = useContext(showSlideContext);
 
   const handleLogout = async () => {
     try {
@@ -65,24 +67,28 @@ const Menu = () => {
   };
 
   const ShowMenu = () => {
-    setShow(!show);
+    setShowSlide(!show_slide);
   };
 
+  
   return (
     <div
       className={`${
-        show ? "" : ""
-      } bg-zinc-800 text-white min-h-screen p-5
-    z-50  w-[20%] fixed`}
+        show_slide ? "w-[20%]" : "w-[10%]"
+      } bg-zinc-800 bg-green-500 text-white min-h-screen p-5 
+     fixed top-0 left-0`}
     >
       <div className="flex justify-between items-start">
-        {show ? (
+        {show_slide ? (
           <h2 className="text-2xl font-bold mb-8 hidden lg:block">Threads</h2>
         ) : (
           ""
         )}
-        <button className="text-2xl font-bold mb-8" onClick={ShowMenu}>
-          hide
+        <button
+          className="text-2xl font-bold mb-8 hover:bg-zinc-900 p-2 transition-all rounded-md"
+          onClick={ShowMenu}
+        >
+          <MdOutlineSlideshow />
         </button>
       </div>
       <nav className="space-y-2">
@@ -90,12 +96,12 @@ const Menu = () => {
           onClick={() => setMain_State_Fun("Home")}
           className={`${
             main_state === "Home"
-              ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 rounded-md"
+              ? "bg-yellow-600 flex items-center justify-start space-x-3 w-full p-3 rounded-md"
               : "flex items-center space-x-3 w-full p-3 rounded-md hover:bg-yellow-600 transition-all duration-200"
           }`}
         >
           <FaHome size={20} />
-          {show ? <span>Home</span> : ""}
+          {show_slide ? <span>Home</span> : ""}
         </button>
 
         <button
@@ -107,7 +113,7 @@ const Menu = () => {
           }`}
         >
           <FaUserFriends />
-          {show ? <span>Followers</span> : ""}
+          {show_slide ? <span>Followers</span> : ""}
         </button>
 
         <button
@@ -119,7 +125,7 @@ const Menu = () => {
           }`}
         >
           <FaUserFriends />
-          {show ? <span>Following</span> : ""}
+          {show_slide ? <span>Following</span> : ""}
         </button>
 
         <button
@@ -131,7 +137,7 @@ const Menu = () => {
           }`}
         >
           <FaRegUserCircle />
-          {show ? <span>Profile</span> : ""}
+          {show_slide ? <span>Profile</span> : ""}
         </button>
 
         <button
@@ -143,7 +149,7 @@ const Menu = () => {
           }`}
         >
           <FaRegComments />
-          {show ? <span>Posts</span> : ""}
+          {show_slide ? <span>Posts</span> : ""}
         </button>
 
         <button
@@ -155,22 +161,22 @@ const Menu = () => {
           }`}
         >
           <FaBell />
-          {show ? <span>Notifications</span> : ""}
+          {show_slide ? <span>Notifications</span> : ""}
         </button>
       </nav>
 
-      <div className="mt-auto pt-6 border-t border-zinc-700">
+      <div className="pt-2 mt-1 border-t border-zinc-700">
         <Link to="/update_profile">
           <button
             onClick={goToProfile}
-            className="flex items-center space-x-3 w-full p-3 rounded-md hover:bg-yellow-600 transition-all duration-200"
+            className="flex items-center space-x-3 w-full p-2 rounded-md hover:bg-yellow-600 transition-all duration-200"
           >
             <img
               src={user.profile_image}
               alt="User Avatar"
               className="w-8 h-8 rounded-full"
             />
-            {show ? (
+            {show_slide ? (
               <div className="text-left">
                 <p className="font-semibold">@{user.user_name}</p>
                 <p className="text-sm opacity-80">{formEmail(user.email)}</p>
@@ -186,7 +192,7 @@ const Menu = () => {
           className="flex items-center space-x-3 w-full mt-4 p-3 text-zinc-800 bg-white rounded-md hover:bg-red-600 hover:text-white transition-all duration-200"
         >
           <FaSignOutAlt />
-          {show ? <span>Logout</span> : ""}
+          {show_slide ? <span>Logout</span> : ""}
         </button>
       </div>
     </div>
