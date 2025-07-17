@@ -43,7 +43,7 @@ function App() {
   }
   return (
     <BrowserRouter>
-      <>
+      <div className="min-h-screen w-full bg-zinc-800">
         <userContext.Provider value={user}>
           <Routes>
             <Route
@@ -65,7 +65,7 @@ function App() {
           </Routes>
         </userContext.Provider>
         <Toaster></Toaster>
-      </>
+      </div>
     </BrowserRouter>
   );
 }

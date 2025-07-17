@@ -70,22 +70,25 @@ const Menu = () => {
     setShowSlide(!show_slide);
   };
 
-  
   return (
     <div
       className={`${
-        show_slide ? "w-[20%]" : "w-[10%]"
-      } bg-zinc-800 bg-green-500 text-white min-h-screen p-5 
-     fixed top-0 left-0`}
+        show_slide ? "w-[40%] lg:w-[20%]" : "lg:w-[6%] w-[11%]"
+      }   text-white min-h-screen lg:p-5 px-2 pt-5 
+     fixed top-0 left-0 w-[10%] z-50 bg-zinc-800 opacity-85 border-r border-zinc-700`}
     >
-      <div className="flex justify-between items-start">
+      <div
+        className={`${
+          show_slide ? "justify-between" : "justify-center"
+        } flex items-center`}
+      >
         {show_slide ? (
-          <h2 className="text-2xl font-bold mb-8 hidden lg:block">Threads</h2>
+          <h2 className="font-bold mb-4 lg:text-2xl text-lg">Threads</h2>
         ) : (
           ""
         )}
         <button
-          className="text-2xl font-bold mb-8 hover:bg-zinc-900 p-2 transition-all rounded-md"
+          className="text-2xl font-bold mb-4 hover:bg-zinc-900 p-2 transition-all rounded-md"
           onClick={ShowMenu}
         >
           <MdOutlineSlideshow />
@@ -96,11 +99,11 @@ const Menu = () => {
           onClick={() => setMain_State_Fun("Home")}
           className={`${
             main_state === "Home"
-              ? "bg-yellow-600 flex items-center justify-start space-x-3 w-full p-3 rounded-md"
+              ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 rounded-md"
               : "flex items-center space-x-3 w-full p-3 rounded-md hover:bg-yellow-600 transition-all duration-200"
-          }`}
+          } ${show_slide ? "justify-start" : "justify-center"}`}
         >
-          <FaHome size={20} />
+          <FaHome />
           {show_slide ? <span>Home</span> : ""}
         </button>
 
@@ -110,10 +113,10 @@ const Menu = () => {
             main_state === "Followers"
               ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 rounded-md"
               : "flex items-center space-x-3 w-full p-3 rounded-md hover:bg-yellow-600 transition-all duration-200"
-          }`}
+          }  ${show_slide ? "justify-start" : "justify-center"}`}
         >
           <FaUserFriends />
-          {show_slide ? <span>Followers</span> : ""}
+          {show_slide ? <span className="">Followers</span> : ""}
         </button>
 
         <button
@@ -122,10 +125,10 @@ const Menu = () => {
             main_state === "Following"
               ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 rounded-md"
               : "flex items-center space-x-3 w-full p-3 rounded-md hover:bg-yellow-600 transition-all duration-200"
-          }`}
+          }  ${show_slide ? "justify-start" : "justify-center"}`}
         >
           <FaUserFriends />
-          {show_slide ? <span>Following</span> : ""}
+          {show_slide ? <span className="">Following</span> : ""}
         </button>
 
         <button
@@ -134,10 +137,10 @@ const Menu = () => {
             main_state === "Profile"
               ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 rounded-md"
               : "flex items-center space-x-3 w-full p-3 rounded-md hover:bg-yellow-600 transition-all duration-200"
-          }`}
+          }  ${show_slide ? "justify-start" : "justify-center"}`}
         >
           <FaRegUserCircle />
-          {show_slide ? <span>Profile</span> : ""}
+          {show_slide ? <span className="">Profile</span> : ""}
         </button>
 
         <button
@@ -146,10 +149,10 @@ const Menu = () => {
             main_state === "Posts"
               ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 rounded-md"
               : "flex items-center space-x-3 w-full p-3 rounded-md hover:bg-yellow-600 transition-all duration-200"
-          }`}
+          }  ${show_slide ? "justify-start" : "justify-center"}`}
         >
           <FaRegComments />
-          {show_slide ? <span>Posts</span> : ""}
+          {show_slide ? <span className="">Posts</span> : ""}
         </button>
 
         <button
@@ -158,10 +161,10 @@ const Menu = () => {
             main_state === "Notifications"
               ? "bg-yellow-600 flex items-center space-x-3 w-full p-3 rounded-md"
               : "flex items-center space-x-3 w-full p-3 rounded-md hover:bg-yellow-600 transition-all duration-200"
-          }`}
+          }  ${show_slide ? "justify-start" : "justify-center"}`}
         >
           <FaBell />
-          {show_slide ? <span>Notifications</span> : ""}
+          {show_slide ? <span className="">Notifications</span> : ""}
         </button>
       </nav>
 
@@ -169,7 +172,9 @@ const Menu = () => {
         <Link to="/update_profile">
           <button
             onClick={goToProfile}
-            className="flex items-center space-x-3 w-full p-2 rounded-md hover:bg-yellow-600 transition-all duration-200"
+            className={` ${
+              show_slide ? "justify-start" : "justify-center"
+            } flex items-center space-x-3 w-full p-2 rounded-md hover:bg-yellow-600 transition-all duration-200`}
           >
             <img
               src={user.profile_image}
@@ -177,7 +182,7 @@ const Menu = () => {
               className="w-8 h-8 rounded-full"
             />
             {show_slide ? (
-              <div className="text-left">
+              <div className="text-left ">
                 <p className="font-semibold">@{user.user_name}</p>
                 <p className="text-sm opacity-80">{formEmail(user.email)}</p>
               </div>
@@ -192,7 +197,7 @@ const Menu = () => {
           className="flex items-center space-x-3 w-full mt-4 p-3 text-zinc-800 bg-white rounded-md hover:bg-red-600 hover:text-white transition-all duration-200"
         >
           <FaSignOutAlt />
-          {show_slide ? <span>Logout</span> : ""}
+          {show_slide ? <span className="">Logout</span> : ""}
         </button>
       </div>
     </div>

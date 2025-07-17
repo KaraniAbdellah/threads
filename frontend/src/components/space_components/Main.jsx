@@ -17,8 +17,8 @@ const Main = () => {
   return (
     <div
       className={`${
-        show_slide ? "ml-[20%] lg:mr-[25%]" : "ml-[10%] lg:mr-[25%]"
-      }  min-h-screen bg-gradient-to-br p-2 lg:px-4 lg:pt-4 border-r border-l border-zinc-700 pb-4 bg-red-500`}
+        show_slide ? "ml-[6%] lg:ml-[20%] lg:mr-[25%]" : "ml-[10%] lg:ml-[6%] lg:mr-[25%] "
+      }  min-h-screen bg-gradient-to-br p-4 lg:px-4 lg:pt-4 border-zinc-700 pb-4`}
     >
       {main_space === "Home" && <Home />}
       {main_space === "Followers" && <Followers />}
