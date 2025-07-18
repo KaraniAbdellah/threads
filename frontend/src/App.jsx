@@ -50,12 +50,12 @@ function App() {
               path="/"
               element={!user ? <Home /> : <Navigate to="/space" />}
             ></Route>
+            <Route
+              path="/recovery"
+              element={<ForgetPassword></ForgetPassword>}
+            ></Route>
             <Route element={<ProtectedRoutes />}>
               <Route path="/space" element={<Space></Space>}></Route>
-              <Route
-                path="/recovery"
-                element={<ForgetPassword></ForgetPassword>}
-              ></Route>
               <Route path="/loading" element={<Loading></Loading>}></Route>
               <Route
                 path="/update_profile"

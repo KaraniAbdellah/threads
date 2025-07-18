@@ -132,6 +132,7 @@ const Home = () => {
     if (IsEditPost) {
       console.log("Must Edit This Post ", IsEditPost);
       EditThisPost(postToSend);
+      setIsEditPost(false);
     } else {
       createThisPost(postToSend);
     }

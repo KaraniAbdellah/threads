@@ -10,7 +10,7 @@ const Suggestion = () => {
   const user = useContext(userContext);
   const [suggested_users, setSuggested_users] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [suggestion_number, setSuggestionNumber] = useState(2);
+  const [suggestion_number, setSuggestionNumber] = useState(4);
 
   const getSuggestionUsers = async () => {
     try {
