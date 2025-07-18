@@ -3,8 +3,6 @@
 
 <h1>Chill 🧵 Threads</h1>
 
-<p>Your space to share, connect, and grow.</p>
-
 <p>Post ✍️ | Like ❤️ | Comment 💬 | Follow 🔔</p>
 
 <p>⭐⭐⭐⭐⭐</p>
