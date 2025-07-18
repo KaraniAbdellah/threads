@@ -1,7 +1,7 @@
 <div align="center">
 
 
-<h1>Threads ── ⋆⋅☆⋅⋆ ──</h1>
+<h1>Chill 🧵 Threads</h1>
 
 <p>Your space to share, connect, and grow.</p>
 
