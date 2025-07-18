@@ -1,10 +1,17 @@
 <div align="center">
 
-<h3>Threads Social -ˋˏ✄┈┈┈┈ Media App</h3>
-<p>Make your threads happening now</p>
+<h3>✨ Welcome to</h3>
+
+<h1>SocialVerse ── ⋆⋅☆⋅⋆ ──</h1>
+
+<p>Your space to share, connect, and grow.</p>
+
+<p>Post ✍️ | Like ❤️ | Comment 💬 | Follow 🔔</p>
+
 <p>⭐⭐⭐⭐⭐</p>
 
 </div>
+
 
 
 <ul>
