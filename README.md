@@ -1,8 +1,7 @@
 <div align="center">
 
-<h3>✨ Welcome to</h3>
 
-<h1>SocialVerse ── ⋆⋅☆⋅⋆ ──</h1>
+<h1>Threads ── ⋆⋅☆⋅⋆ ──</h1>
 
 <p>Your space to share, connect, and grow.</p>
 
@@ -11,7 +10,7 @@
 <p>⭐⭐⭐⭐⭐</p>
 
 </div>
-
+<br/><br/>
 
 
 <ul>
