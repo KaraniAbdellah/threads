@@ -1,8 +1,10 @@
-<p align="center">
-  <h3>Threads Social -ˋˏ✄┈┈┈┈ Media App</h3>
-  <p>make your threads happening now</p>
-  <p>⭐⭐⭐⭐⭐</p>
-</p>
+<div align="center">
+
+<h3>Threads Social -ˋˏ✄┈┈┈┈ Media App</h3>
+<p>Make your threads happening now</p>
+<p>⭐⭐⭐⭐⭐</p>
+
+</div>
 
 
 <ul>
