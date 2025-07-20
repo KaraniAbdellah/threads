@@ -6,7 +6,7 @@ export default async function generateCookie(user_id, res) {
   });
   res.cookie("token", token, {
     httpOnly: true,
-    secure: true,
+    secure: true, // send cookie under https
     sameSite: "None",     // Allows cross-site cookies
     maxAge: 15 * 24 * 60 * 60 * 1000,
   });
