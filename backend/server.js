@@ -34,11 +34,11 @@ server.use("/api/user", userRouter);
 server.use("/api/post", postRouter);
 server.use("/api/notification", notificationRouter);
 
-server.get("/", function () {
-  console.log("Hello World");
-});
+server.get("/", function (req, res) {
+  return res.send({ message: "Hello From Thread Server" });
+});s
 
-server.listen(process.env.PORT, (err) => {
+server.listen(process.env.PORT || 3000, (err) => {
   err
     ? console.log(`Error While Starting The Server ${err}`)
     : console.log(`Server Running In Port ${process.env.PORT}`);
