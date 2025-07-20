@@ -199,7 +199,7 @@ const forget_password = async (req, res) => {
     const { email, subject, message } = req.body;
 
     if (!email || !subject || !message) {
-      return res.send({ message: "Please Fill All Inputs" });
+      return res.status(500).send({ message: "Please Fill All Inputs" });
     }
 
     sendMail(email, subject, message)
@@ -208,10 +208,10 @@ const forget_password = async (req, res) => {
       })
       .catch((err) => {
         console.log(err);
-        return res.send({ message: err.message });
+        return res.status(500).send({ message: err.message });
       });
-  } catch (error) {
-    return res.send({ message: error.message });
+  } catch (error) { 
+    return res.status(500).send({ message: error.message });
   }
 };
 

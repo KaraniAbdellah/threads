@@ -34,10 +34,16 @@ server.use("/api/user", userRouter);
 server.use("/api/post", postRouter);
 server.use("/api/notification", notificationRouter);
 
-server.get("/", function (req, res) {
-  return res.send({ message: "Hello From Thread Server" });
-});
 
-connectDb(); // Call your DB connect function
-export default server; // Export for Vercel
+
+// connectDb(); // Call your DB connect function
+// export default server; // Export for Vercel
+
+
+server.listen(process.env.PORT, (err) => {
+    err
+        ? console.log(`Error While Starting The Server ${err}`)
+        : console.log(`Server Running In Port ${process.env.PORT}`);
+    connectDb();
+});
 

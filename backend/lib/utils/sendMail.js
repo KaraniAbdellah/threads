@@ -6,12 +6,12 @@ export function sendMail(email, subject, message) {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "alibabattying@gmail.com",
-        pass: "noka rlfz zkdw dbdk" // this app password
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS // this app password
       }
     });
     const mail_config = {
-        from: "alibabattying@gmail.com",
+        from: process.env.EMAIL_USER,
         to: email,
         subject: subject,
         text: message
