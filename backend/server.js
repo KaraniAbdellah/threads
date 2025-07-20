@@ -23,7 +23,7 @@ const server = express();
 // Allows cookies and credentials and Allow request from any origin
 server.use(
   cors({
-    origin: ["http://localhost:5173", "https://tthreads-eight.vercel.app"],
+    origin: ["http://localhost:5173", "https://threads-gb5s.vercel.app"],
     credentials: true,
   })
 );
