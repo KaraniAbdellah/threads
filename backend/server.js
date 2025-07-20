@@ -23,7 +23,7 @@ const server = express();
 // Allows cookies and credentials and Allow request from any origin
 server.use(
   cors({
-    origin: "*",
+    origin: true,
     credentials: true,
   })
 );
@@ -36,7 +36,7 @@ server.use("/api/notification", notificationRouter);
 
 server.get("/", function (req, res) {
   return res.send({ message: "Hello From Thread Server" });
-});s
+});
 
 server.listen(process.env.PORT || 3000, (err) => {
   err
