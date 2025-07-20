@@ -38,9 +38,6 @@ server.get("/", function (req, res) {
   return res.send({ message: "Hello From Thread Server" });
 });
 
-server.listen(process.env.PORT || 3000, (err) => {
-  err
-    ? console.log(`Error While Starting The Server ${err}`)
-    : console.log(`Server Running In Port ${process.env.PORT}`);
-  connectDb();
-});
+connectDb(); // Call your DB connect function
+export default server; // Export for Vercel
+
