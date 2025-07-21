@@ -18,7 +18,7 @@ export function sendMail(email, subject, message) {
     }
     transporter.sendMail(mail_config, (error, info) => {
         if (error) {
-            console.log(error);
+            
             return reject({message: "An Error During Sending email"});
         }
         return resolve({message: "Email Send Successfully"});

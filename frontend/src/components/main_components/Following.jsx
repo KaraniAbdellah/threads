@@ -25,7 +25,7 @@ const Following = () => {
         .catch((err) => {})
         .finally(() => setIsLoading(() => true));
     } catch (error) {
-      console.log(error);
+      
     }
   }
 
@@ -41,7 +41,7 @@ const Following = () => {
       );
       getProfileInfo();
     } catch (error) {
-      console.log(error);
+      
     }
   };
 

@@ -66,7 +66,7 @@ const ForgetPassword = () => {
         `${import.meta.env.VITE_API_URL}/api/auth/forget_password`,
         { email: email, message: message, subject: subject }
       );
-      console.log(res);
+      
       toast.success("Code Sent Successfully", {
         duration: 2000,
         position: "bottom-right",
@@ -76,7 +76,7 @@ const ForgetPassword = () => {
         duration: 2000,
         position: "bottom-right",
       });
-      console.log("Error" + error);
+      
     }
   }
 
@@ -93,7 +93,7 @@ const ForgetPassword = () => {
   const CheckOPTCode = async (e) => {
     e.preventDefault();
     if (CodeOPT == generated_opt_code) {
-      console.log("Code Coorect");
+      
       setFormState(() => "password");
     } else {
       toast.error("Incorrect code", {
@@ -107,7 +107,7 @@ const ForgetPassword = () => {
     e.preventDefault();
     try {
       ChangePasswordSchema.validateSync(newPassword);
-      console.log("Change The Password Succefully");
+      
       await axios
         .post(`${import.meta.env.VITE_API_URL}/api/auth/change_password`, {
           email: email,

@@ -61,13 +61,13 @@ const UserProfile = () => {
         }/api/user/profile/${select_user_profile_state}`,
         { withCredentials: true }
       );
-      console.log(res);
+      
       setProfile(res.data);
       // Set posts from the profile data
       setPosts(res.data.posts || []);
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      
       setIsLoading(false);
     }
   };
@@ -84,7 +84,7 @@ const UserProfile = () => {
         .catch((err) => {})
         .finally(() => setIsLoading(() => true));
     } catch (error) {
-      console.log(error);
+      
     }
   }
 
@@ -100,7 +100,7 @@ const UserProfile = () => {
       );
       getUserSelectDate();
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -111,12 +111,12 @@ const UserProfile = () => {
           withCredentials: true,
         })
         .then((res) => {
-          console.log(res);
+          
           // Refresh the profile data to get updated posts
           getUserSelectDate();
         })
         .catch((err) => {
-          console.log(err);
+          
           toast.error("Something went wrong, please try again", {
             duration: 2000,
             position: "bottom-right",
@@ -140,12 +140,12 @@ const UserProfile = () => {
           }
         )
         .then((res) => {
-          console.log(res);
+          
           // Refresh the profile data to get updated posts
           getUserSelectDate();
         })
         .catch((err) => {
-          console.log(err);
+          
           toast.error("Something went wrong, please try again", {
             duration: 2000,
             position: "bottom-right",
@@ -172,7 +172,7 @@ const UserProfile = () => {
           }
         )
         .then((res) => {
-          console.log(res);
+          
           // Refresh the profile data to get updated posts
           getUserSelectDate();
           setCommentText(() => "");
@@ -184,7 +184,7 @@ const UserProfile = () => {
           });
         });
     } catch (error) {
-      console.log(error);
+      
       toast.error("Something went wrong, please try again", {
         duration: 2000,
         position: "bottom-right",

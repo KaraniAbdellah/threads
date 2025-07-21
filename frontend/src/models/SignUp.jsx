@@ -43,7 +43,7 @@ const SignUp = () => {
           setLoginOrSignUp("login");
         })
         .catch((error) => {
-          console.log(error.message);
+          
           let message =
             "Please enter a valid email. Username must be at least 6 characters and not already taken.";
           if (error.message == "Network Error") {

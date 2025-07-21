@@ -16,11 +16,11 @@ const Notifications = () => {
           withCredentials: true,
         }
       );
-      console.log(res.data);
+      
       setNotifications(() => res.data);
       setLoading(() => false);
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -44,7 +44,7 @@ const Notifications = () => {
         duration: 2000,
         position: "bottom-right",
       });
-      console.log(error);
+      
     }
   };
 

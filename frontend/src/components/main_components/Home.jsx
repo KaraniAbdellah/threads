@@ -108,14 +108,14 @@ const Home = () => {
         })
         .finally(() => setIsLoadingPost(() => false))
         .catch((err) => {
-          console.log(err);
+          
           toast.error("Failed Updating Post", {
             duration: 2000,
             position: "bottom-right",
           });
         });
     } catch (error) {
-      console.log(error);
+      
       toast.error("Failed Updating Post", {
         duration: 2000,
         position: "bottom-right",
@@ -130,7 +130,7 @@ const Home = () => {
       user: user._id,
     };
     if (IsEditPost) {
-      console.log("Must Edit This Post ", IsEditPost);
+      
       EditThisPost(postToSend);
       setIsEditPost(false);
     } else {
@@ -139,7 +139,7 @@ const Home = () => {
   };
 
   const selectImage = () => {
-    console.log("Select Your Image");
+    
   };
 
   const GetAllPosts = async () => {
@@ -152,11 +152,11 @@ const Home = () => {
           setPosts(res.data);
         })
         .catch((err) => {
-          console.log(err);
+          
         })
         .finally(() => setIsLoading(false));
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -201,11 +201,11 @@ const Home = () => {
           withCredentials: true,
         })
         .then((res) => {
-          console.log(res);
+          
           GetAllPosts();
         })
         .catch((err) => {
-          console.log(err);
+          
           toast.error("Something went wrong, please try again", {
             duration: 2000,
             position: "bottom-right",
@@ -229,11 +229,11 @@ const Home = () => {
           }
         )
         .then((res) => {
-          console.log(res);
+          
           GetAllPosts();
         })
         .catch((err) => {
-          console.log(err);
+          
           toast.error("Something went wrong, please try again", {
             duration: 2000,
             position: "bottom-right",
@@ -260,7 +260,7 @@ const Home = () => {
           }
         )
         .then((res) => {
-          console.log(res);
+          
           GetAllPosts();
           setCommentText(() => "");
         })
@@ -271,7 +271,7 @@ const Home = () => {
           });
         });
     } catch (error) {
-      console.log(error);
+      
       toast.error("Something went wrong, please try again", {
         duration: 2000,
         position: "bottom-right",

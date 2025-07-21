@@ -94,7 +94,7 @@ const Profile = () => {
           newData,
           { withCredentials: true }
         );
-        console.log(res);
+        
         toast.success("Profile updated successfully", {
           duration: 2000,
           position: "bottom-right",

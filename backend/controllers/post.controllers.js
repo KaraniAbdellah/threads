@@ -34,7 +34,7 @@ const create_post = async (req, res) => {
     await new_post.save();
     res.status(200).send(new_post);
   } catch (error) {
-    console.log(error.message);
+    
     res.status(500).send({ message: error.message });
   }
 };
@@ -81,7 +81,7 @@ const like_unlike_post = async (req, res) => {
       res.status(200).send({ message: "Post Liked Succeffully" });
     }
   } catch (error) {
-    console.log(error.message);
+    
     res.status(500).send({ message: error.message });
   }
 };
@@ -110,13 +110,13 @@ const comment_post = async (req, res) => {
     });
     return res.status(200).send(post);
   } catch (error) {
-    console.log(error.message);
+    
     res.status(500).send({ message: error.message });
   }
 };
 
 const delete_post = async (req, res) => {
-  console.log(req.params.post_id);
+  
   try {
     const post = await PostModel.findById(req.params.post_id);
     const user = await UserModel.findById(req.user._id);
@@ -137,7 +137,7 @@ const delete_post = async (req, res) => {
     await user.save();
     return res.status(200).send(post);
   } catch (error) {
-    console.log(error.message);
+    
     res.status(500).send({ message: error.message });
   }
 };
@@ -165,7 +165,7 @@ const update_post = async (req, res) => {
     await PostModel.findByIdAndUpdate(req.params.post_id, newPost);
     return res.status(200).send(postToUpdate);
   } catch (error) {
-    console.log(error.message);
+    
     res.status(500).send({ message: error.message });
   }
 };
@@ -186,7 +186,7 @@ const get_all_posts = async (req, res) => {
     if (posts.length === 0) return res.status(200).send([]);
     res.status(200).json(posts);
   } catch (error) {
-    console.log(error.message);
+    
     res.status(500).send({ message: error.message });
   }
 };
@@ -207,7 +207,7 @@ const get_liked_posts = async (req, res) => {
       });
     return res.status(200).send(liked_posts);
   } catch (error) {
-    console.log(error.message);
+    
     res.status(500).send({ message: error.message });
   }
 };
@@ -231,7 +231,7 @@ const get_following_posts = async (req, res) => {
 
     return res.status(200).send(feed_posts);
   } catch (error) {
-    console.log(error.message);
+    
     res.status(500).send({ message: error.message });
   }
 };
@@ -255,7 +255,7 @@ const get_user_post = async (req, res) => {
 
     return res.status(200).send(feed_posts);
   } catch (error) {
-    console.log(error.message);
+    
     res.status(500).send({ message: error.message });
   }
 };

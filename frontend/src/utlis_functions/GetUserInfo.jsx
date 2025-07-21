@@ -6,7 +6,7 @@ export default async function getUserInfo() {
             withCredentials: true,
         });
     } catch (error) {
-        console.log(error);
+        
     }
 }
 

@@ -35,7 +35,7 @@ const Space = () => {
         .catch((err) => {})
         .finally(() => setIsLoading(() => true));
     } catch (error) {
-      console.log(error);
+      
     }
   }
 

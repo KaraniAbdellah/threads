@@ -27,7 +27,7 @@ const delete_notification = async (req, res) => {
     await NotificationModel.deleteMany({ to: userId });
     res.status(200).json({ message: "Notifications deleted successfully" });
   } catch (error) {
-    console.log("Error in deleteNotifications function", error.message);
+    
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

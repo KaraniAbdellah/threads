@@ -21,10 +21,10 @@ const Suggestion = () => {
         .then((res) => {
           setSuggested_users(() => res.data);
         })
-        .catch((err) => console.log(err))
+        .catch((err) => 
         .finally(() => setIsLoading(() => true));
     } catch (error) {
-      console.log(error.message);
+      
     }
   };
 
@@ -40,7 +40,7 @@ const Suggestion = () => {
         .catch((err) => {})
         .finally(() => setIsLoading(() => true));
     } catch (error) {
-      console.log(error);
+      
     }
   }
 
@@ -63,9 +63,9 @@ const Suggestion = () => {
       setSuggested_users(() =>
         suggested_users.filter((s_user) => s_user._id !== select_user)
       );
-      console.log(suggested_users);
+      
     } catch (error) {
-      console.log(error);
+      
     }
   };
 

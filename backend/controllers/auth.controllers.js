@@ -6,7 +6,7 @@ import generateCookie from "../lib/utils/generateCookie.js";
 import { sendMail } from "../lib/utils/sendMail.js";
 
 const signup = async (req, res) => {
-  console.log("Request Come From Postman");
+  
   try {
     const { email, password, user_name } = req.body;
 
@@ -55,7 +55,7 @@ const signup = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  console.log("Hello Logout");
+  
   try {
     const refreshTokenOptions = {
       httpOnly: true,
@@ -91,7 +91,7 @@ const signup_with_google = async (req, res) => {
     if (!hashed_password) {
       return res.status(400).send({ message: "Can Not Hash The Password" });
     }
-    console.log("exiting_user", exiting_user);
+    
 
     // Create new user
     const new_user = new UserModel({
@@ -108,7 +108,7 @@ const signup_with_google = async (req, res) => {
       } else {
         token = generateCookie(exiting_user._id, res);
       }
-      console.log("We Are Redicrect User to /space");
+      
       return res.status(200).send({ token: token });
     } else {
       res.status(400).send({ message: "Can Not Create User" });
@@ -121,7 +121,7 @@ const signup_with_google = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  console.log("request come to login");
+  
   try {
     const { email, password } = req.body;
     const user = await UserModel.findOne({ email: email });
@@ -195,7 +195,7 @@ const change_password = async (req, res) => {
 
 const forget_password = async (req, res) => {
   try {
-    console.log("Request Come to Forget Password");
+    
     const { email, subject, message } = req.body;
 
     if (!email || !subject || !message) {
@@ -207,7 +207,7 @@ const forget_password = async (req, res) => {
         return res.send({ message: result.message });
       })
       .catch((err) => {
-        console.log(err);
+        
         return res.status(500).send({ message: err.message });
       });
   } catch (error) { 

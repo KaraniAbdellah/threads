@@ -31,7 +31,7 @@ function App() {
         .catch((err) => {})
         .finally(() => setIsLoading(() => true));
     } catch (error) {
-      console.log(error);
+      
     }
   }
   useEffect(() => {

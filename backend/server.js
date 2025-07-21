@@ -36,14 +36,13 @@ server.use("/api/notification", notificationRouter);
 
 
 
-// connectDb(); // Call your DB connect function
-// export default server; // Export for Vercel
+connectDb(); // Call your DB connect function
+export default server; // Export for Vercel
 
 
-server.listen(process.env.PORT, (err) => {
-    err
-        ? console.log(`Error While Starting The Server ${err}`)
-        : console.log(`Server Running In Port ${process.env.PORT}`);
-    connectDb();
-});
-
+// server.listen(process.env.PORT, (err) => {
+//     err
+//         ? 
+//         : 
+//     connectDb();
+// });

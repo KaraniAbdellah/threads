@@ -59,11 +59,11 @@ const Posts = () => {
           setPosts(res.data);
         })
         .catch((err) => {
-          console.log(err);
+          
         })
         .finally(() => setIsLoading(false));
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
@@ -107,11 +107,11 @@ const Posts = () => {
           withCredentials: true,
         })
         .then((res) => {
-          console.log(res);
+          
           GetAllPosts();
         })
         .catch((err) => {
-          console.log(err);
+          
           toast.error("Something went wrong, please try again", {
             duration: 2000,
             position: "bottom-right",
@@ -135,11 +135,11 @@ const Posts = () => {
           }
         )
         .then((res) => {
-          console.log(res);
+          
           GetAllPosts();
         })
         .catch((err) => {
-          console.log(err);
+          
           toast.error("Something went wrong, please try again", {
             duration: 2000,
             position: "bottom-right",
@@ -166,7 +166,7 @@ const Posts = () => {
           }
         )
         .then((res) => {
-          console.log(res);
+          
           GetAllPosts();
           setCommentText(() => "");
         })
@@ -177,7 +177,7 @@ const Posts = () => {
           });
         });
     } catch (error) {
-      console.log(error);
+      
       toast.error("Something went wrong, please try again", {
         duration: 2000,
         position: "bottom-right",

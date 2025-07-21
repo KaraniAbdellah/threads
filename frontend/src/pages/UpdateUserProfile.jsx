@@ -49,7 +49,7 @@ const UpdateUserProfile = () => {
           position: "bottom-right",
         }
       );
-      console.log(error.message);
+      
     }
   };
 
