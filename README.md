@@ -19,7 +19,7 @@
   <li>Log in and out with strong authentication.</li>
   <li>Recover your account if you forget your password.</li>
   <li>And more...</li>
-  <li><a href="https://threads-gb5s.vercel.app">LIVE DEMO</a></li>
+  <li><a href="https://threads-alpha-five.vercel.app/">LIVE DEMO</a></li>
 </ul>
 
 
