@@ -69,6 +69,7 @@ Create `.env` files in both `frontend` and `backend` folders.
 
 ```env
 VITE_API_URL="http://127.0.0.1:3000"
+# For google authentification
 VITE_CLIENT_SECRET=YOUR_GOOGLE_SECRET
 VITE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
 ```
@@ -80,9 +81,15 @@ PORT=3000
 SECRET_KEY=YOUR_SECRET_KEY
 DB_URL=mongodb://127.0.0.1:27017/threads
 NODE_ENV=development
-CLOUDINARY_COULD=YOUR_CLOUD_NAME
+
+# Cloudinary service (for storing images)
+CLOUDINARY_CLOUD=YOUR_CLOUD_NAME
 CLOUDINARY_API_KEY=YOUR_API_KEY
-CLOUDINARY_API_SCRET_KEY=YOUR_SECRET_KEY
+CLOUDINARY_API_SECRET=YOUR_SECRET_KEY
+
+# Nodemailer (for sending password recovery emails)
+EMAIL_USER=YOUR_EMAIL_FOR_SENDING
+EMAIL_PASS=YOUR_APP_PASSWORD
 ```
 
 #### 2. Run the Project
