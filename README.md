@@ -79,7 +79,7 @@ VITE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
 ```env
 PORT=3000
 SECRET_KEY=YOUR_SECRET_KEY
-DB_URL=mongodb://127.0.0.1:27017/threads
+DB_URL=YOUR_DB_URL (ex: mongodb://127.0.0.1:27017/threads)
 NODE_ENV=development
 
 # Cloudinary service (for storing images)
