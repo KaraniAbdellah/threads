@@ -36,8 +36,8 @@ server.use("/api/notification", notificationRouter);
 
 
 
-connectDb(); // Call your DB connect function
-export default server; // Export for Vercel
+connectDb();
+export default server;
 
 
 // server.listen(process.env.PORT, (err) => {

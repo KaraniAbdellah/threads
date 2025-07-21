@@ -21,10 +21,18 @@ const Suggestion = () => {
         .then((res) => {
           setSuggested_users(() => res.data);
         })
-        .catch((err) => 
+        .catch(() => {
+          toast.error("Can get suggestion users please try again", {
+            duration: 2000,
+            position: "bottom-right",
+          });
+        })
         .finally(() => setIsLoading(() => true));
     } catch (error) {
-      
+      toast.error("Something went error please try again", {
+        duration: 2000,
+        position: "bottom-right",
+      });
     }
   };
 
@@ -37,10 +45,18 @@ const Suggestion = () => {
         .then((res) => {
           setProfile(() => res.data);
         })
-        .catch((err) => {})
+        .catch((err) => {
+          toast.error("Something went error please try again", {
+            duration: 2000,
+            position: "bottom-right",
+          });
+        })
         .finally(() => setIsLoading(() => true));
     } catch (error) {
-      
+      toast.error("Something went error please try again", {
+        duration: 2000,
+        position: "bottom-right",
+      });
     }
   }
 
@@ -63,9 +79,11 @@ const Suggestion = () => {
       setSuggested_users(() =>
         suggested_users.filter((s_user) => s_user._id !== select_user)
       );
-      
     } catch (error) {
-      
+      toast.error("Something went error please try again", {
+        duration: 2000,
+        position: "bottom-right",
+      });
     }
   };
 
