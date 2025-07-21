@@ -19,8 +19,13 @@
   <li>Log in and out with strong authentication.</li>
   <li>Recover your account if you forget your password.</li>
   <li>And more...</li>
-  <li><a href="https://threads-alpha-five.vercel.app/">LIVE DEMO</a></li>
+  <li>
+    <strong><a href="https://threads-alpha-five.vercel.app/" target="_blank">LIVE DEMO</a></strong><br>
+    <small>Email:</small> <code>test123@gmail.com</code> &nbsp; <small>Password:</small> <code>Test1234</code>
+  </li>
 </ul>
+
+
 
 
 ### Screenshots:
