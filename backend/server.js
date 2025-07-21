@@ -34,18 +34,17 @@ server.use("/api/user", userRouter);
 server.use("/api/post", postRouter);
 server.use("/api/notification", notificationRouter);
 
-
-server.get("/", function(req, res) {
-  res.status(200).send({message: "Hello from thread server"});
+server.get("/", function (req, res) {
+  res.status(200).send({ message: "Hello from thread server" });
 });
 
 connectDb();
 export default server;
 
-
-// server.listen(process.env.PORT, (err) => {
-//     err
-//         ? 
-//         : 
+// server.listen(process.env.PORT || 3000, function (err) {
+//   if (err) console.log("Error in server setup");
+//   else {
+//     console.log("Server listening on Port", process.env.PORT);
 //     connectDb();
+//   }
 // });
