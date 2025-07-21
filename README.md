@@ -3,7 +3,7 @@
 
 <h1>Chill 🧵 Threads</h1>
 
-<p>Post ✍️ | Like ❤️ | Comment 💬 | Follow 🔔</p>
+<p>Share ✍️ | Like ❤️ | Comment 💬 | Follow 🔔</p>
 
 <p>⭐⭐⭐⭐⭐</p>
 
