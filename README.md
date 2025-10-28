@@ -26,8 +26,6 @@
 </ul>
 
 
-
-
 ### Screenshots:
 
 #### 🏠 Home  
